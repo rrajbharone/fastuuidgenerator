@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getTranslations } from '../i18n/utils';
+
+const t = getTranslations('en');
+---
+
+<BaseLayout
+  title="404 Page Not Found | FastUUIDGenerator"
+  description="The requested page could not be found on FastUUIDGenerator."
+  lang="en"
+  canonicalPath="/404/"
+  isMultilingualTool={false}
+  showLangSelector={false}
+>
+  <div class="container" style="padding: 6rem 1.25rem; text-align: center; max-width: 600px;">
+    <span class="badge badge-danger" style="margin-bottom: 1rem; font-size: 0.9rem;">404 Error</span>
+    <h1 style="font-size: 3rem; margin-bottom: 1rem;">Page Not Found</h1>
+    <p style="margin-bottom: 2rem; font-size: 1.1rem; color: var(--text-secondary);">
+      The page you are looking for does not exist or has been moved.
+    </p>
+    <div style="display: flex; justify-content: center; gap: 1rem;">
+      <a href="/uuid-generator/" class="btn btn-primary">Go to UUID Generator</a>
+      <a href="/blog/" class="btn btn-secondary">Explore Blog</a>
+    </div>
+  </div>
+</BaseLayout>

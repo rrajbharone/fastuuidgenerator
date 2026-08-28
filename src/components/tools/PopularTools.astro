@@ -1,0 +1,314 @@
+---
+import type { LanguageCode } from '../../i18n/languages';
+import type { TranslationDictionary } from '../../i18n/schema';
+import { getLocalizedPath } from '../../i18n/utils';
+
+interface Props {
+  lang: LanguageCode;
+  t: TranslationDictionary;
+  currentPath?: string;
+  showAll?: boolean;
+}
+
+const { lang, t, currentPath = '', showAll = false } = Astro.props;
+
+const allTools = [
+  {
+    slug: 'base64-uuid-generator',
+    title: t.popularTools.base64GenTitle,
+    description: t.popularTools.base64GenDesc,
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>`,
+    badge: 'URL-Safe 22',
+  },
+  {
+    slug: 'bulk-uuid-generator',
+    title: t.popularTools.bulkGenTitle,
+    description: t.popularTools.bulkGenDesc,
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
+    badge: 'Batch',
+  },
+  {
+    slug: 'uuid-validator',
+    title: t.popularTools.validatorTitle,
+    description: t.popularTools.validatorDesc,
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
+    badge: 'Verify',
+  },
+  {
+    slug: 'uuid-v4-generator',
+    title: t.popularTools.uuidV4Title,
+    description: t.popularTools.uuidV4Desc,
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M12 8v8"></path><path d="m8 12 4-4 4 4"></path></svg>`,
+    badge: 'Random',
+  },
+  {
+    slug: 'uuid-v7-generator',
+    title: t.popularTools.uuidV7Title,
+    description: t.popularTools.uuidV7Desc,
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
+    badge: 'RFC 9562',
+  },
+  {
+    slug: 'guid-generator',
+    title: t.popularTools.guidGenTitle,
+    description: t.popularTools.guidGenDesc,
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>`,
+    badge: '.NET / C#',
+  },
+  {
+    slug: 'uuid-decoder',
+    title: t.popularTools.decoderTitle,
+    description: t.popularTools.decoderDesc,
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
+    badge: 'Analyze',
+  },
+];
+
+// If showAll is false, show only the 3 most popular tools: Base64, Bulk, and Validator
+const tools = showAll ? allTools : allTools.slice(0, 3);
+---
+
+<section class="popular-tools-section" aria-labelledby="tools-showcase-heading">
+  <div class="popular-tools-header">
+    <h2 id="tools-showcase-heading" class="popular-tools-title">{t.popularTools.sectionTitle}</h2>
+    <p class="popular-tools-subtitle">{t.popularTools.sectionSubtitle}</p>
+  </div>
+
+  <div class="popular-tools-grid">
+    {tools.map((tool) => {
+      const toolHref = getLocalizedPath(tool.slug, lang);
+      const isCurrent = currentPath === toolHref;
+      return (
+        <a
+          href={toolHref}
+          class={`popular-tool-card ${isCurrent ? 'active' : ''}`}
+          aria-label={`${tool.title} - ${tool.description}`}
+        >
+          <div class="tool-card-top">
+            <div class="tool-card-icon" set:html={tool.icon} />
+            <span class="badge badge-neutral">{tool.badge}</span>
+          </div>
+
+          <div class="tool-card-body">
+            <h3 class="tool-card-title">{tool.title}</h3>
+            <p class="tool-card-desc">{tool.description}</p>
+          </div>
+
+          <div class="tool-card-footer">
+            <span class="tool-card-cta">
+              {t.popularTools.openTool}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </span>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+
+  {!showAll && (
+    <div class="more-tools-wrapper">
+      <a href={getLocalizedPath('tools', lang)} class="btn btn-secondary more-tools-btn" aria-label={t.popularTools.moreTools}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        <span>{t.popularTools.moreTools}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  )}
+</section>
+
+<style>
+  .popular-tools-section {
+    margin: 3rem 0 3.5rem;
+    padding-top: 1rem;
+  }
+
+  .popular-tools-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 2rem;
+  }
+
+  .popular-tools-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .popular-tools-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+
+  .popular-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 1024px) {
+    .popular-tools-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .popular-tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .popular-tools-grid {
+      grid-template-columns: 1fr;
+      gap: 0.875rem;
+    }
+    .popular-tools-title {
+      font-size: 1.45rem;
+    }
+  }
+
+  .popular-tool-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.4rem;
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    cursor: pointer;
+  }
+
+  .popular-tool-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-focus);
+    background: var(--bg-elevated);
+    box-shadow: 0 12px 30px 0 rgba(37, 99, 235, 0.12);
+  }
+
+  .popular-tool-card.active {
+    border-color: var(--brand-primary);
+    background: var(--bg-elevated);
+  }
+
+  .tool-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .tool-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: var(--brand-glow);
+    color: var(--brand-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-glass);
+  }
+
+  .tool-card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+  }
+
+  .tool-card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+  }
+
+  .tool-card-footer {
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .tool-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--brand-primary);
+    transition: gap 0.15s ease;
+  }
+
+  .popular-tool-card:hover .tool-card-cta {
+    gap: 0.65rem;
+    color: var(--brand-primary-hover);
+  }
+
+  .more-tools-wrapper {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .more-tools-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    color: var(--text-primary);
+    text-decoration: none;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.2s ease;
+  }
+
+  .more-tools-btn:hover {
+    background: var(--bg-elevated);
+    border-color: var(--border-focus);
+    color: var(--brand-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px 0 rgba(37, 99, 235, 0.14);
+  }
+
+  .more-tools-btn svg {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .more-tools-btn:hover svg:last-child {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 580px) {
+    .more-tools-wrapper {
+      margin-top: 1.5rem;
+    }
+    .more-tools-btn {
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+---
+
+<LegalLayout
+  title="Privacy Policy"
+  description="FastUUIDGenerator privacy policy. Read how we protect your privacy with 100% client-side computing and zero server storage."
+  canonicalPath="/privacy-policy/"
+>
+  <h2>1. Zero Data Collection Policy</h2>
+  <p>
+    FastUUIDGenerator operates under a strict <strong>Zero-Collection Policy</strong>. All UUID, GUID, validation, and decoding operations are executed exclusively within your client web browser using the standard Web Cryptography API.
+  </p>
+
+  <h2>2. No Server-Side Logging or Telemetry</h2>
+  <p>
+    We do not transmit, log, intercept, or store any generated keys, decoded timestamp values, or validation payloads on any backend server or third-party database.
+  </p>
+
+  <h2>3. Local Storage</h2>
+  <p>
+    We use your browser's local storage (<code>localStorage</code>) strictly to preserve your selected theme preference (Light / Dark mode). No tracking identifiers, cookies, or profiling data are stored.
+  </p>
+
+  <h2>4. Third-Party Services</h2>
+  <p>
+    This website is hosted on high-performance static content delivery networks (CDNs). Standard ephemeral HTTP request access logs (such as IP addresses and User-Agent headers) may be recorded by the edge CDN strictly for DDoS mitigation and network security purposes in compliance with industry standards.
+  </p>
+
+  <h2>5. Changes to This Policy</h2>
+  <p>
+    Any future modifications to this policy will be posted on this page with an updated revision date.
+  </p>
+</LegalLayout>

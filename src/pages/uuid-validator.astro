@@ -1,0 +1,24 @@
+---
+import { getTranslations } from '../i18n/utils';
+import ToolLayout from '../layouts/ToolLayout.astro';
+import UuidValidator from '../components/tools/UuidValidator.astro';
+
+const lang = 'en';
+const t = getTranslations(lang);
+const canonicalPath = '/uuid-validator/';
+---
+
+<ToolLayout
+  title={t.seo.uuidValidatorTitle}
+  description={t.seo.uuidValidatorDescription}
+  heroTitle={t.validator.title}
+  heroSubtitle={t.validator.subtitle}
+  lang={lang}
+  canonicalPath={canonicalPath}
+  breadcrumbs={[
+    { name: t.site.name, url: 'https://fastuuidgenerator.com/' },
+    { name: t.nav.validator, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <UuidValidator t={t} lang={lang} />
+</ToolLayout>

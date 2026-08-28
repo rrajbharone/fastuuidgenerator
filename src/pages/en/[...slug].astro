@@ -1,0 +1,46 @@
+---
+export function getStaticPaths() {
+  const routes = [
+    { slug: undefined, target: '/' },
+    { slug: 'uuid-generator', target: '/uuid-generator/' },
+    { slug: 'uuid-v4-generator', target: '/uuid-v4-generator/' },
+    { slug: 'uuid-v7-generator', target: '/uuid-v7-generator/' },
+    { slug: 'bulk-uuid-generator', target: '/bulk-uuid-generator/' },
+    { slug: 'guid-generator', target: '/guid-generator/' },
+    { slug: 'base64-uuid-generator', target: '/base64-uuid-generator/' },
+    { slug: 'uuid-validator', target: '/uuid-validator/' },
+    { slug: 'uuid-decoder', target: '/uuid-decoder/' },
+    { slug: 'tools', target: '/tools/' },
+  ];
+
+  return routes.map((r) => ({
+    params: { slug: r.slug },
+    props: { target: r.target },
+  }));
+}
+
+interface Props {
+  target: string;
+}
+
+const { target } = Astro.props;
+const siteUrl = 'https://fastuuidgenerator.com';
+const fullTarget = `${siteUrl}${target}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <link rel="canonical" href={fullTarget} />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <meta name="robots" content="noindex, follow" />
+    <script is:inline define:vars={{ target }}>
+      window.location.replace(target);
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to <a href={target}>{fullTarget}</a>...</p>
+  </body>
+</html>

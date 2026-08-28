@@ -1,0 +1,347 @@
+---
+import type { LanguageCode } from '../../i18n/languages';
+import type { TranslationDictionary } from '../../i18n/schema';
+import { getLocalizedPath } from '../../i18n/utils';
+import ThemeToggle from './ThemeToggle.astro';
+import LanguageSelector from './LanguageSelector.astro';
+
+interface Props {
+  currentLang: LanguageCode;
+  currentPath: string;
+  t: TranslationDictionary;
+  showLangSelector?: boolean;
+}
+
+const { currentLang, currentPath, t, showLangSelector = true } = Astro.props;
+
+// Desktop Navigation: Minimal and clean, aligned to the right
+const desktopNavItems = [
+  { href: getLocalizedPath('guid-generator', currentLang), label: t.nav.guid },
+  { href: getLocalizedPath('uuid-decoder', currentLang), label: t.nav.decoder },
+  { href: '/blog/', label: t.nav.blog },
+  { href: getLocalizedPath('tools', currentLang), label: t.nav.tools },
+];
+
+// Mobile Drawer Navigation: Comprehensive access to all utilities
+const mobileNavItems = [
+  { href: getLocalizedPath('uuid-generator', currentLang), label: t.nav.generator },
+  { href: getLocalizedPath('uuid-v4-generator', currentLang), label: t.nav.uuidV4 },
+  { href: getLocalizedPath('uuid-v7-generator', currentLang), label: t.nav.uuidV7 },
+  { href: getLocalizedPath('bulk-uuid-generator', currentLang), label: t.nav.bulk },
+  { href: getLocalizedPath('guid-generator', currentLang), label: t.nav.guid },
+  { href: getLocalizedPath('base64-uuid-generator', currentLang), label: t.nav.base64Uuid },
+  { href: getLocalizedPath('uuid-validator', currentLang), label: t.nav.validator },
+  { href: getLocalizedPath('uuid-decoder', currentLang), label: t.nav.decoder },
+  { href: '/blog/', label: t.nav.blog },
+  { href: getLocalizedPath('tools', currentLang), label: t.nav.tools },
+];
+
+const homeHref = getLocalizedPath('', currentLang);
+---
+
+<header class="site-header" id="main-header">
+  <div class="container">
+    <nav class="nav-container" aria-label="Main Navigation">
+      <!-- Left: Brand Logo -->
+      <a href={homeHref} class="brand-logo" aria-label={t.site.name}>
+        <span class="brand-logo-icon">U</span>
+        <span class="brand-name">{t.site.name}</span>
+      </a>
+
+      <!-- Right: Navigation Links + Language Switcher + Theme Toggle + Mobile Menu -->
+      <div class="nav-right">
+        <!-- Desktop Links aligned to the right -->
+        <ul class="nav-links desktop-nav" role="menubar">
+          {desktopNavItems.map((item) => {
+            const isActive = currentPath === item.href || (item.href !== '/blog/' && item.href !== '/tools/' && currentPath.endsWith(item.href));
+            return (
+              <li role="none">
+                <a href={item.href} class={`nav-link ${isActive ? 'active' : ''}`} role="menuitem">
+                  {item.label}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+
+        <!-- Action Items (Language, Theme, Mobile Toggle) -->
+        <div class="nav-actions">
+          {showLangSelector && (
+            <LanguageSelector currentLang={currentLang} currentPath={currentPath} t={t} />
+          )}
+          <ThemeToggle t={t} />
+          
+          <!-- Mobile Menu Toggle Button -->
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm mobile-menu-toggle"
+            id="mobile-nav-toggle"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav-panel"
+          >
+            <svg class="hamburger-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            <svg class="close-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Mobile Menu Drawer Backdrop & Panel -->
+  <div class="mobile-nav-drawer" id="mobile-nav-panel" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu">
+    <div class="mobile-nav-inner">
+      <div class="mobile-nav-section-title">{t.nav.toolsAndNav}</div>
+      <ul class="mobile-nav-list" role="menu">
+        {mobileNavItems.map((item) => {
+          const isActive = currentPath === item.href;
+          return (
+            <li role="none">
+              <a href={item.href} class={`mobile-nav-link ${isActive ? 'active' : ''}`} role="menuitem">
+                <span>{item.label}</span>
+                {isActive && <span class="badge badge-brand">{t.nav.active}</span>}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-glass);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 1.5rem;
+  }
+
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    flex-shrink: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px var(--brand-glow);
+    flex-shrink: 0;
+  }
+
+  .brand-name {
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    justify-content: flex-end;
+  }
+
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    list-style: none;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .mobile-menu-toggle {
+    display: none;
+    padding: 0.45rem;
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Mobile Drawer */
+  .mobile-nav-drawer {
+    display: none;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+    background: var(--bg-elevated);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .mobile-nav-drawer.open {
+    display: block;
+    animation: slideDown 0.2s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mobile-nav-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 1rem 1.25rem 1.75rem;
+  }
+
+  .mobile-nav-section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    padding-left: 0.5rem;
+  }
+
+  .mobile-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+    background: var(--bg-glass-subtle);
+    border: 1px solid var(--border-glass);
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .mobile-nav-link:hover, .mobile-nav-link.active {
+    background: var(--bg-secondary);
+    border-color: var(--border-focus);
+    color: var(--brand-primary);
+  }
+
+  @media (max-width: 768px) {
+    .desktop-nav {
+      display: none;
+    }
+    .mobile-menu-toggle {
+      display: inline-flex;
+    }
+    .brand-name {
+      font-size: 1.05rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .brand-name {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function setupHeaderNav() {
+    const toggle = document.getElementById('mobile-nav-toggle');
+    const drawer = document.getElementById('mobile-nav-panel');
+    if (!toggle || !drawer) return;
+
+    const hamburgerIcon = toggle.querySelector('.hamburger-icon') as HTMLElement;
+    const closeIcon = toggle.querySelector('.close-icon') as HTMLElement;
+
+    function openMenu() {
+      drawer.classList.add('open');
+      toggle.setAttribute('aria-expanded', 'true');
+      if (hamburgerIcon) hamburgerIcon.style.display = 'none';
+      if (closeIcon) closeIcon.style.display = 'block';
+    }
+
+    function closeMenu() {
+      drawer.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      if (hamburgerIcon) hamburgerIcon.style.display = 'block';
+      if (closeIcon) closeIcon.style.display = 'none';
+    }
+
+    toggle.addEventListener('click', () => {
+      const isOpen = drawer.classList.contains('open');
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.classList.contains('open')) {
+        closeMenu();
+        toggle.focus();
+      }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (drawer.classList.contains('open') && !drawer.contains(e.target as Node) && !toggle.contains(e.target as Node)) {
+        closeMenu();
+      }
+    });
+
+    // Close drawer when a nav link is clicked
+    drawer.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        closeMenu();
+      });
+    });
+  }
+
+  setupHeaderNav();
+  document.addEventListener('astro:page-load', setupHeaderNav);
+</script>

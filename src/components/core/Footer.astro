@@ -1,0 +1,168 @@
+---
+import type { LanguageCode } from '../../i18n/languages';
+import type { TranslationDictionary } from '../../i18n/schema';
+import { getLocalizedPath } from '../../i18n/utils';
+
+interface Props {
+  currentLang: LanguageCode;
+  t: TranslationDictionary;
+}
+
+const { currentLang, t } = Astro.props;
+const currentYear = new Date().getFullYear();
+const toolHref = getLocalizedPath('uuid-generator', currentLang);
+const homeHref = getLocalizedPath('', currentLang);
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <!-- Left: Logo & Brand Information -->
+      <div class="footer-brand-section">
+        <a href={homeHref} class="footer-brand" aria-label={t.site.name}>
+          <span class="footer-logo-icon">U</span>
+          <span class="footer-brand-name">{t.site.name}</span>
+        </a>
+        <p class="footer-description">
+          {t.footer.clientSideSecurityNote}
+        </p>
+      </div>
+
+      <!-- Right: Navigation and Legal Links -->
+      <nav class="footer-nav" aria-label="Footer Navigation">
+        <ul class="footer-links">
+          <li><a href={toolHref}>{t.nav.generator}</a></li>
+          <li><a href="/blog/">{t.nav.blog}</a></li>
+          <li><a href="/about/">{t.footer.about}</a></li>
+          <li><a href="/privacy-policy/">{t.footer.privacyPolicy}</a></li>
+          <li><a href="/terms-of-service/">{t.footer.termsOfService}</a></li>
+          <li><a href="/contact/">{t.footer.contact}</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Centered Copyright Area across Desktop, Tablet, and Mobile -->
+    <div class="footer-bottom">
+      <p class="footer-copyright">
+        © {currentYear} {t.site.name}. {t.footer.allRightsReserved}
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: auto;
+    padding: 3.5rem 0 2rem;
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border-glass);
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .footer-content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  }
+
+  .footer-brand-section {
+    max-width: 480px;
+  }
+
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-logo-icon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 8px var(--brand-glow);
+    flex-shrink: 0;
+  }
+
+  .footer-brand-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+  }
+
+  .footer-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .footer-nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 1.75rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+
+  .footer-links a:hover {
+    color: var(--brand-primary);
+  }
+
+  /* Centered Footer Copyright */
+  .footer-bottom {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-glass);
+    text-align: center;
+    width: 100%;
+  }
+
+  .footer-copyright {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 640px) {
+    .site-footer {
+      padding: 2.5rem 0 1.75rem;
+    }
+    .footer-links {
+      gap: 0.85rem 1.25rem;
+    }
+    .footer-bottom {
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+    }
+  }
+</style>

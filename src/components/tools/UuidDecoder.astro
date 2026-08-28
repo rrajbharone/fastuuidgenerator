@@ -1,0 +1,233 @@
+---
+import type { TranslationDictionary } from '../../i18n/schema';
+import type { LanguageCode } from '../../i18n/languages';
+
+interface Props {
+  t: TranslationDictionary;
+  lang: LanguageCode;
+}
+
+const { t, lang } = Astro.props;
+---
+
+<div class="glass-panel tool-card" id="uuid-decoder-tool">
+  <div style="margin-bottom: 1.5rem;">
+    <label for="decoder-input" style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">
+      {t.decoder.title}
+    </label>
+    <div class="tool-input-row">
+      <input
+        type="text"
+        id="decoder-input"
+        class="input-control input-mono"
+        placeholder={t.decoder.inputPlaceholder}
+        value="018d4e9b-4835-7b56-9da8-1f54a8e63da2"
+      />
+      <div class="tool-input-actions">
+        <button type="button" class="btn btn-primary" id="btn-decode">
+          <span>{t.decoder.decodeButton}</span>
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-sample-v7">
+          <span>{t.decoder.sampleButton}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decoded Details View -->
+  <div id="decoder-results-area" style="display: block;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+      <h3 style="font-size: 1.1rem;">{t.decoder.resultsTitle}</h3>
+      <span id="decoder-badge" class="badge badge-brand"></span>
+    </div>
+
+    <!-- Timestamp Box (Shown if time-based) -->
+    <div id="timestamp-box" class="glass-panel-subtle" style="padding: 1.25rem; margin-bottom: 1.25rem; border-left: 4px solid var(--brand-primary); display: none;">
+      <div style="font-size: 0.85rem; font-weight: 600; color: var(--brand-primary); margin-bottom: 0.5rem;">
+        ⏱ {t.decoder.timestampUtc}
+      </div>
+      <div class="timestamp-grid">
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">UTC</span>
+          <strong id="dec-time-utc" class="input-mono" style="font-size: 0.95rem; color: var(--text-primary); word-break: break-all;"></strong>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Local Time</span>
+          <strong id="dec-time-local" class="input-mono" style="font-size: 0.95rem; color: var(--text-primary); word-break: break-all;"></strong>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">UNIX Milliseconds</span>
+          <strong id="dec-time-unix" class="input-mono" style="font-size: 0.95rem; color: var(--text-primary); word-break: break-all;"></strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Non Time-based Notice -->
+    <div id="non-time-box" class="glass-panel-subtle" style="padding: 1rem; margin-bottom: 1.25rem; display: none;">
+      <p style="font-size: 0.875rem; color: var(--text-muted);">
+        ℹ {t.decoder.notTimeBasedWarning}
+      </p>
+    </div>
+
+    <!-- Structural Breakdown Table -->
+    <div class="tool-grid-2">
+      <div class="glass-panel-subtle" style="padding: 1rem;">
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">{t.decoder.versionType}</div>
+        <strong id="dec-version" class="input-mono" style="color: var(--text-primary); font-size: 0.95rem; word-break: break-all;"></strong>
+      </div>
+
+      <div class="glass-panel-subtle" style="padding: 1rem;">
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">{t.decoder.variantType}</div>
+        <strong id="dec-variant" class="input-mono" style="color: var(--text-primary); font-size: 0.95rem; word-break: break-all;"></strong>
+      </div>
+
+      <div class="glass-panel-subtle" style="padding: 1rem;">
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">{t.decoder.clockSequence}</div>
+        <strong id="dec-clock-seq" class="input-mono" style="color: var(--text-primary); font-size: 0.95rem; word-break: break-all;"></strong>
+      </div>
+
+      <div class="glass-panel-subtle" style="padding: 1rem;">
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">{t.decoder.nodeId}</div>
+        <strong id="dec-entropy" class="input-mono" style="color: var(--text-primary); font-size: 0.95rem; word-break: break-all;"></strong>
+      </div>
+    </div>
+
+    <!-- Binary Representation -->
+    <div class="glass-panel-subtle" style="padding: 1rem; margin-top: 1.25rem;">
+      <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">{t.decoder.binaryRepresentation} (128-bit)</div>
+      <div id="dec-binary" class="input-mono binary-display"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tool-input-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tool-input-row input {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .tool-input-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .timestamp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .binary-display {
+    font-size: 0.8rem;
+    color: var(--brand-primary);
+    word-break: break-all;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 580px) {
+    .tool-input-row {
+      flex-direction: column;
+    }
+    .tool-input-row input {
+      min-width: 100%;
+    }
+    .tool-input-actions {
+      width: 100%;
+    }
+    .tool-input-actions .btn {
+      flex: 1;
+    }
+    .timestamp-grid {
+      grid-template-columns: 1fr;
+    }
+    .binary-display {
+      font-size: 0.75rem;
+    }
+  }
+</style>
+
+<script>
+  import { decodeUUID, generateUUIDv7 } from '../../utils/uuid';
+
+  function initDecoder() {
+    const input = document.getElementById('decoder-input') as HTMLInputElement;
+    const btnDecode = document.getElementById('btn-decode');
+    const btnSample = document.getElementById('btn-sample-v7');
+    const badge = document.getElementById('decoder-badge');
+
+    const timeBox = document.getElementById('timestamp-box');
+    const nonTimeBox = document.getElementById('non-time-box');
+    const timeUtc = document.getElementById('dec-time-utc');
+    const timeLocal = document.getElementById('dec-time-local');
+    const timeUnix = document.getElementById('dec-time-unix');
+
+    const decVersion = document.getElementById('dec-version');
+    const decVariant = document.getElementById('dec-variant');
+    const decClockSeq = document.getElementById('dec-clock-seq');
+    const decEntropy = document.getElementById('dec-entropy');
+    const decBinary = document.getElementById('dec-binary');
+
+    if (!input || !btnDecode) return;
+
+    function runDecode() {
+      const value = input.value.trim();
+      const res = decodeUUID(value);
+
+      if (!res.isValid) {
+        if (badge) {
+          badge.className = 'badge badge-danger';
+          badge.textContent = 'Invalid UUID';
+        }
+        if (timeBox) timeBox.style.display = 'none';
+        if (nonTimeBox) nonTimeBox.style.display = 'block';
+        return;
+      }
+
+      if (badge) {
+        badge.className = 'badge badge-success';
+        badge.textContent = res.versionName;
+      }
+
+      if (res.isTimeBased) {
+        if (timeBox) timeBox.style.display = 'block';
+        if (nonTimeBox) nonTimeBox.style.display = 'none';
+        if (timeUtc) timeUtc.textContent = res.timestampUtc || 'N/A';
+        if (timeLocal) timeLocal.textContent = res.timestampLocal || 'N/A';
+        if (timeUnix) timeUnix.textContent = res.timestampUnixMs ? `${res.timestampUnixMs} ms` : 'N/A';
+      } else {
+        if (timeBox) timeBox.style.display = 'none';
+        if (nonTimeBox) nonTimeBox.style.display = 'block';
+      }
+
+      if (decVersion) decVersion.textContent = res.versionName;
+      if (decVariant) decVariant.textContent = res.variant;
+      if (decClockSeq) decClockSeq.textContent = res.clockSequence !== null ? `${res.clockSequence} (0x${res.clockSequence.toString(16)})` : 'N/A (Pure Random)';
+      if (decEntropy) decEntropy.textContent = res.nodeOrEntropy;
+      if (decBinary) {
+        const chunks = res.binary.match(/.{1,8}/g) || [];
+        decBinary.textContent = chunks.join(' ');
+      }
+    }
+
+    btnDecode.addEventListener('click', runDecode);
+    input.addEventListener('input', runDecode);
+
+    if (btnSample) {
+      btnSample.addEventListener('click', () => {
+        input.value = generateUUIDv7();
+        runDecode();
+      });
+    }
+
+    runDecode();
+  }
+
+  initDecoder();
+  document.addEventListener('astro:page-load', initDecoder);
+</script>

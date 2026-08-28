@@ -1,0 +1,309 @@
+---
+import type { TranslationDictionary } from '../../i18n/schema';
+
+interface Props {
+  t: TranslationDictionary;
+}
+
+const { t } = Astro.props;
+---
+
+<section class="educational-section" aria-labelledby="edu-heading">
+  <div class="container">
+    <div style="text-align: center; max-width: 760px; margin: 0 auto 2.5rem;">
+      <span class="badge badge-brand" style="margin-bottom: 0.75rem;">{t.educational.technicalReferenceBadge}</span>
+      <h2 id="edu-heading" style="font-size: 1.85rem; margin-bottom: 0.6rem;">
+        {t.educational.everythingYouNeedTitle}
+      </h2>
+      <p style="font-size: 1rem; color: var(--text-secondary); line-height: 1.6;">
+        {t.educational.everythingYouNeedSubtitle}
+      </p>
+    </div>
+
+    <!-- Educational Content Grid (6 Topical Sections) -->
+    <div class="educational-grid">
+      <article class="edu-card">
+        <div class="edu-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="3" y1="9" x2="21" y2="9"></line>
+            <line x1="9" y1="21" x2="9" y2="9"></line>
+          </svg>
+        </div>
+        <h3>{t.educational.whatIsUuidTitle}</h3>
+        <p>{t.educational.whatIsUuidContent}</p>
+      </article>
+
+      <article class="edu-card">
+        <div class="edu-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
+        </div>
+        <h3>{t.educational.uuidVersionsTitle}</h3>
+        <p>{t.educational.uuidVersionsContent}</p>
+      </article>
+
+      <article class="edu-card">
+        <div class="edu-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <h3>{t.educational.uuidVsGuidTitle}</h3>
+        <p>{t.educational.uuidVsGuidContent}</p>
+      </article>
+
+      <article class="edu-card">
+        <div class="edu-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+          </svg>
+        </div>
+        <h3>{t.educational.useCasesTitle}</h3>
+        <p>{t.educational.useCasesContent}</p>
+      </article>
+
+      <article class="edu-card">
+        <div class="edu-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <h3>{t.educational.securityTitle}</h3>
+        <p>{t.educational.securityContent}</p>
+      </article>
+
+      <article class="edu-card">
+        <div class="edu-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+        <h3>{t.educational.toolSuiteTitle}</h3>
+        <p>{t.educational.toolSuiteContent}</p>
+      </article>
+    </div>
+
+    <!-- FAQ Accordion with 10 High-Intent Questions -->
+    <div class="faq-section-wrapper">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 class="faq-heading">{t.educational.faqTitle}</h2>
+        <p class="faq-subheading">Clear, concise answers to the most common questions about UUID generation, formats, and standards.</p>
+      </div>
+
+      <div style="max-width: 840px; margin: 0 auto;">
+        {t.educational.faqs.map((faq, index) => (
+          <div class="faq-item">
+            <button
+              type="button"
+              class="faq-question"
+              aria-expanded={index === 0 ? "true" : "false"}
+              aria-controls={`faq-answer-${index}`}
+              id={`faq-question-${index}`}
+            >
+              <span>{faq.question}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-chevron" style={`transform: rotate(${index === 0 ? '180deg' : '0deg'}); transition: transform 0.2s ease; flex-shrink: 0;`}>
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div
+              id={`faq-answer-${index}`}
+              class="faq-answer"
+              role="region"
+              aria-labelledby={`faq-question-${index}`}
+              style={`display: ${index === 0 ? 'block' : 'none'};`}
+            >
+              <p>{faq.answer}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .educational-section {
+    padding: 3.5rem 0 2.5rem;
+    border-top: 1px solid var(--border-glass);
+  }
+
+  .educational-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .educational-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .educational-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .edu-card {
+    padding: 1.5rem;
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--glass-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .edu-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--brand-glow);
+    color: var(--brand-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-glass);
+    margin-bottom: 0.25rem;
+  }
+
+  .edu-card h3 {
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    line-height: 1.35;
+  }
+
+  .edu-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .faq-section-wrapper {
+    margin-top: 3.5rem;
+    font-family: var(--font-sans);
+  }
+
+  .faq-heading {
+    font-family: var(--font-sans);
+    font-size: 1.75rem;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+  }
+
+  .faq-subheading {
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .faq-item {
+    font-family: var(--font-sans);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .faq-question {
+    font-family: var(--font-sans);
+    width: 100%;
+    padding: 1.1rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    transition: color 0.15s ease;
+  }
+
+  .faq-question span {
+    font-family: var(--font-sans);
+  }
+
+  .faq-question:hover {
+    color: var(--brand-primary);
+  }
+
+  .faq-answer {
+    font-family: var(--font-sans);
+    padding: 0 1.25rem 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.925rem;
+  }
+
+  .faq-answer p {
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.925rem;
+  }
+
+  @media (max-width: 640px) {
+    .educational-section {
+      padding: 2.5rem 0 2rem;
+    }
+    .faq-question {
+      padding: 0.9rem 1rem;
+      font-size: 0.925rem;
+    }
+    .faq-answer,
+    .faq-answer p {
+      padding: 0 1rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+</style>
+
+<script>
+  function setupFaqs() {
+    const questions = document.querySelectorAll('.faq-question');
+    questions.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+        const nextState = !isExpanded;
+        btn.setAttribute('aria-expanded', String(nextState));
+        
+        const answer = btn.nextElementSibling as HTMLElement;
+        const chevron = btn.querySelector('.faq-chevron') as HTMLElement;
+        if (answer) {
+          answer.style.display = nextState ? 'block' : 'none';
+        }
+        if (chevron) {
+          chevron.style.transform = nextState ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+      });
+    });
+  }
+
+  setupFaqs();
+  document.addEventListener('astro:page-load', setupFaqs);
+</script>

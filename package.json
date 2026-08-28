@@ -1,0 +1,22 @@
+{
+  "name": "fastuuidgenerator",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "test": "node --experimental-strip-types scripts/test-uuid.js",
+    "verify-i18n": "node --experimental-strip-types scripts/verify-i18n.js",
+    "verify-dist": "node scripts/verify-dist.js"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^5.4.2",
+    "typescript": "^5.7.3"
+  }
+}

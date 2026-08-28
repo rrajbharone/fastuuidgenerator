@@ -1,0 +1,71 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ToolEducationalContent from '../components/tools/ToolEducationalContent.astro';
+import PopularTools from '../components/tools/PopularTools.astro';
+import type { LanguageCode } from '../i18n/languages';
+import { getTranslations } from '../i18n/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  lang: LanguageCode;
+  canonicalPath: string;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  faqs?: Array<{ question: string; answer: string }>;
+  showPopularTools?: boolean;
+  showDefaultEducational?: boolean;
+}
+
+const {
+  title,
+  description,
+  heroTitle,
+  heroSubtitle,
+  lang,
+  canonicalPath,
+  breadcrumbs = [],
+  faqs,
+  showPopularTools = true,
+  showDefaultEducational = true,
+} = Astro.props;
+
+const t = getTranslations(lang);
+const resolvedFaqs = faqs || t.educational.faqs;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  canonicalPath={canonicalPath}
+  isMultilingualTool={true}
+  faqs={resolvedFaqs}
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container">
+    <!-- Hero Header (Badge Removed completely with clean spacing) -->
+    <header class="tool-hero">
+      <h1>{heroTitle}</h1>
+      <p>{heroSubtitle}</p>
+    </header>
+
+    <!-- Main Tool Interactive Slot -->
+    <slot />
+
+    <!-- Popular Tools Showcase (Conditional) -->
+    {showPopularTools && (
+      <PopularTools lang={lang} t={t} currentPath={canonicalPath} />
+    )}
+  </div>
+
+  <!-- Educational Knowledge & FAQ (Conditional) -->
+  {showDefaultEducational ? (
+    <slot name="educational">
+      <ToolEducationalContent t={t} />
+    </slot>
+  ) : (
+    <slot name="educational" />
+  )}
+</BaseLayout>

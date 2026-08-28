@@ -1,0 +1,24 @@
+---
+import { getTranslations } from '../i18n/utils';
+import ToolLayout from '../layouts/ToolLayout.astro';
+import UuidGenerator from '../components/tools/UuidGenerator.astro';
+
+const lang = 'en';
+const t = getTranslations(lang);
+const canonicalPath = '/bulk-uuid-generator/';
+---
+
+<ToolLayout
+  title={t.seo.bulkUuidTitle}
+  description={t.seo.bulkUuidDescription}
+  heroTitle={t.nav.bulk}
+  heroSubtitle="Generate up to 10,000 UUIDs in milliseconds. Export instantly as CSV, JSON, or TXT."
+  lang={lang}
+  canonicalPath={canonicalPath}
+  breadcrumbs={[
+    { name: t.site.name, url: 'https://fastuuidgenerator.com/' },
+    { name: t.nav.bulk, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <UuidGenerator t={t} lang={lang} defaultVersion="v4" defaultQuantity={50} />
+</ToolLayout>

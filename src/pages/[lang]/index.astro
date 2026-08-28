@@ -1,0 +1,31 @@
+---
+import { NON_ENGLISH_LANGUAGES, type NonEnglishLanguageCode } from '../../i18n/languages';
+import { getTranslations, getLocalizedPath } from '../../i18n/utils';
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import UuidGenerator from '../../components/tools/UuidGenerator.astro';
+
+export function getStaticPaths() {
+  return NON_ENGLISH_LANGUAGES.map((lang) => ({
+    params: { lang },
+  }));
+}
+
+const { lang } = Astro.params as { lang: NonEnglishLanguageCode };
+const t = getTranslations(lang);
+const canonicalPath = getLocalizedPath('uuid-generator', lang);
+---
+
+<ToolLayout
+  title={t.seo.uuidGeneratorTitle}
+  description={t.seo.uuidGeneratorDescription}
+  heroTitle={t.generator.title}
+  heroSubtitle={t.generator.subtitle}
+  lang={lang}
+  canonicalPath={canonicalPath}
+  breadcrumbs={[
+    { name: t.site.name, url: `https://fastuuidgenerator.com/${lang}/` },
+    { name: t.nav.generator, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <UuidGenerator t={t} lang={lang} defaultVersion="v4" defaultQuantity={1} />
+</ToolLayout>

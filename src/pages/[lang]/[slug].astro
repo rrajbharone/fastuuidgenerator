@@ -1,0 +1,210 @@
+---
+import { NON_ENGLISH_LANGUAGES, type NonEnglishLanguageCode } from '../../i18n/languages';
+import { TOOL_KEYS, TOOL_SLUGS, type ToolKey } from '../../i18n/routes';
+import { getTranslations, getLocalizedPath } from '../../i18n/utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import PopularTools from '../../components/tools/PopularTools.astro';
+import UuidGenerator from '../../components/tools/UuidGenerator.astro';
+import GuidGenerator from '../../components/tools/GuidGenerator.astro';
+import Base64UuidGenerator from '../../components/tools/Base64UuidGenerator.astro';
+import UuidValidator from '../../components/tools/UuidValidator.astro';
+import UuidDecoder from '../../components/tools/UuidDecoder.astro';
+
+export function getStaticPaths() {
+  const paths = [];
+
+  for (const lang of NON_ENGLISH_LANGUAGES) {
+    for (const toolKey of TOOL_KEYS) {
+      const localizedSlug = TOOL_SLUGS[lang][toolKey];
+
+      // 1. Primary localized route
+      paths.push({
+        params: { lang, slug: localizedSlug },
+        props: { lang, toolKey, isRedirect: false, redirectTo: '' },
+      });
+
+      // 2. Legacy English slug redirect route (if different from localized slug)
+      if (toolKey !== localizedSlug) {
+        paths.push({
+          params: { lang, slug: toolKey },
+          props: { lang, toolKey, isRedirect: true, redirectTo: `/${lang}/${localizedSlug}/` },
+        });
+      }
+    }
+  }
+
+  return paths;
+}
+
+interface Props {
+  lang: NonEnglishLanguageCode;
+  toolKey: ToolKey;
+  isRedirect: boolean;
+  redirectTo: string;
+}
+
+const { lang, toolKey, isRedirect, redirectTo } = Astro.props;
+const t = getTranslations(lang);
+const canonicalPath = getLocalizedPath(toolKey, lang);
+
+const toolConfigs = {
+  'uuid-generator': {
+    title: t.seo.uuidGeneratorTitle,
+    description: t.seo.uuidGeneratorDescription,
+    heroTitle: t.generator.title,
+    heroSubtitle: t.generator.subtitle,
+    breadcrumbName: t.nav.generator,
+    faqs: t.educational.faqs,
+  },
+  'uuid-v4-generator': {
+    title: t.seo.uuidV4Title,
+    description: t.seo.uuidV4Description,
+    heroTitle: t.generator.v4Description,
+    heroSubtitle: t.generator.subtitle,
+    breadcrumbName: t.nav.uuidV4,
+    faqs: t.educational.faqs,
+  },
+  'uuid-v7-generator': {
+    title: t.seo.uuidV7Title,
+    description: t.seo.uuidV7Description,
+    heroTitle: t.generator.v7Description,
+    heroSubtitle: t.generator.subtitle,
+    breadcrumbName: t.nav.uuidV7,
+    faqs: t.educational.faqs,
+  },
+  'bulk-uuid-generator': {
+    title: t.seo.bulkUuidTitle,
+    description: t.seo.bulkUuidDescription,
+    heroTitle: t.popularTools.bulkGenTitle,
+    heroSubtitle: t.popularTools.bulkGenDesc,
+    breadcrumbName: t.nav.bulk,
+    faqs: t.educational.faqs,
+  },
+  'guid-generator': {
+    title: t.seo.guidGeneratorTitle,
+    description: t.seo.guidGeneratorDescription,
+    heroTitle: t.guidGenerator.title,
+    heroSubtitle: t.guidGenerator.subtitle,
+    breadcrumbName: t.nav.guid,
+    faqs: t.educational.faqs,
+  },
+  'base64-uuid-generator': {
+    title: t.seo.base64UuidTitle,
+    description: t.seo.base64UuidDescription,
+    heroTitle: t.base64Generator.title,
+    heroSubtitle: t.base64Generator.subtitle,
+    breadcrumbName: t.nav.base64Uuid,
+    faqs: t.base64Generator.faqs,
+  },
+  'uuid-validator': {
+    title: t.seo.uuidValidatorTitle,
+    description: t.seo.uuidValidatorDescription,
+    heroTitle: t.validator.title,
+    heroSubtitle: t.validator.subtitle,
+    breadcrumbName: t.nav.validator,
+    faqs: t.educational.faqs,
+  },
+  'uuid-decoder': {
+    title: t.seo.uuidDecoderTitle,
+    description: t.seo.uuidDecoderDescription,
+    heroTitle: t.decoder.title,
+    heroSubtitle: t.decoder.subtitle,
+    breadcrumbName: t.nav.decoder,
+    faqs: t.educational.faqs,
+  },
+  'tools': {
+    title: t.seo.toolsTitle,
+    description: t.seo.toolsDescription,
+    heroTitle: t.popularTools.sectionTitle,
+    heroSubtitle: t.popularTools.sectionSubtitle,
+    breadcrumbName: t.nav.tools,
+    faqs: [],
+  },
+};
+
+const config = toolConfigs[toolKey];
+---
+
+{isRedirect ? (
+  <html lang={lang}>
+    <head>
+      <meta charset="utf-8" />
+      <title>Redirecting...</title>
+      <link rel="canonical" href={`https://fastuuidgenerator.com${redirectTo}`} />
+      <meta http-equiv="refresh" content={`0;url=${redirectTo}`} />
+      <meta name="robots" content="noindex, follow" />
+    </head>
+    <body>
+      <p>Redirecting to <a href={redirectTo}>{redirectTo}</a>...</p>
+    </body>
+  </html>
+) : toolKey === 'tools' ? (
+  <BaseLayout
+    title={config.title}
+    description={config.description}
+    lang={lang}
+    canonicalPath={canonicalPath}
+    isMultilingualTool={true}
+    showLangSelector={true}
+    breadcrumbs={[
+      { name: t.site.name, url: `https://fastuuidgenerator.com/${lang}/` },
+      { name: config.breadcrumbName, url: `https://fastuuidgenerator.com${canonicalPath}` },
+    ]}
+  >
+    <div class="container" style="padding: 2.5rem 1.25rem 4.5rem;">
+      <header class="tool-hero" style="text-align: center; max-width: 720px; margin: 0 auto 2.5rem;">
+        <span class="badge badge-brand" style="margin-bottom: 0.75rem;">{config.breadcrumbName}</span>
+        <h1 style="font-size: 2.35rem; margin-bottom: 0.75rem; letter-spacing: -0.025em;">
+          {config.heroTitle}
+        </h1>
+        <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.6;">
+          {config.heroSubtitle}
+        </p>
+      </header>
+
+      <PopularTools lang={lang} t={t} currentPath={canonicalPath} showAll={true} />
+    </div>
+  </BaseLayout>
+) : (
+  <ToolLayout
+    title={config.title}
+    description={config.description}
+    heroTitle={config.heroTitle}
+    heroSubtitle={config.heroSubtitle}
+    lang={lang}
+    canonicalPath={canonicalPath}
+    faqs={config.faqs}
+    showPopularTools={toolKey !== 'base64-uuid-generator'}
+    showDefaultEducational={toolKey !== 'base64-uuid-generator'}
+    breadcrumbs={[
+      { name: t.site.name, url: `https://fastuuidgenerator.com/${lang}/` },
+      { name: config.breadcrumbName, url: `https://fastuuidgenerator.com${canonicalPath}` },
+    ]}
+  >
+    {toolKey === 'uuid-generator' && (
+      <UuidGenerator t={t} lang={lang} defaultVersion="v4" defaultQuantity={1} />
+    )}
+    {toolKey === 'uuid-v4-generator' && (
+      <UuidGenerator t={t} lang={lang} defaultVersion="v4" defaultQuantity={1} />
+    )}
+    {toolKey === 'uuid-v7-generator' && (
+      <UuidGenerator t={t} lang={lang} defaultVersion="v7" defaultQuantity={1} />
+    )}
+    {toolKey === 'bulk-uuid-generator' && (
+      <UuidGenerator t={t} lang={lang} defaultVersion="v4" defaultQuantity={50} />
+    )}
+    {toolKey === 'guid-generator' && (
+      <GuidGenerator t={t} lang={lang} />
+    )}
+    {toolKey === 'base64-uuid-generator' && (
+      <Base64UuidGenerator t={t} lang={lang} />
+    )}
+    {toolKey === 'uuid-validator' && (
+      <UuidValidator t={t} lang={lang} />
+    )}
+    {toolKey === 'uuid-decoder' && (
+      <UuidDecoder t={t} lang={lang} />
+    )}
+  </ToolLayout>
+)}

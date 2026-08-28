@@ -1,0 +1,18 @@
+---
+import { LANGUAGE_CODES, type LanguageCode } from '../../i18n/languages';
+import { getLocalizedPath } from '../../i18n/utils';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const siteUrl = 'https://fastuuidgenerator.com';
+---
+
+{LANGUAGE_CODES.map((code) => {
+  const localizedPath = getLocalizedPath(currentPath, code);
+  const fullUrl = `${siteUrl}${localizedPath}`;
+  return <link rel="alternate" hreflang={code} href={fullUrl} />;
+})}
+<link rel="alternate" hreflang="x-default" href={`${siteUrl}${getLocalizedPath(currentPath, 'en')}`} />

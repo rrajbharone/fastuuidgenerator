@@ -1,0 +1,24 @@
+---
+import { getTranslations } from '../i18n/utils';
+import ToolLayout from '../layouts/ToolLayout.astro';
+import UuidGenerator from '../components/tools/UuidGenerator.astro';
+
+const lang = 'en';
+const t = getTranslations(lang);
+const canonicalPath = '/uuid-v7-generator/';
+---
+
+<ToolLayout
+  title={t.seo.uuidV7Title}
+  description={t.seo.uuidV7Description}
+  heroTitle={`${t.nav.uuidV7} Generator`}
+  heroSubtitle={t.generator.v7Description}
+  lang={lang}
+  canonicalPath={canonicalPath}
+  breadcrumbs={[
+    { name: t.site.name, url: 'https://fastuuidgenerator.com/' },
+    { name: t.nav.uuidV7, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <UuidGenerator t={t} lang={lang} defaultVersion="v7" defaultQuantity={1} />
+</ToolLayout>

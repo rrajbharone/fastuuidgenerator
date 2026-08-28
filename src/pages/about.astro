@@ -1,0 +1,35 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+---
+
+<LegalLayout
+  title="About FastUUIDGenerator"
+  description="Learn about our mission to provide the fastest, most secure, and completely private client-side UUID & GUID generation suite for developers."
+  canonicalPath="/about/"
+>
+  <h2>Our Mission</h2>
+  <p>
+    FastUUIDGenerator was built with a single objective: to provide engineers and system architects with a lightning-fast, zero-bloat, and 100% private UUID/GUID generation tool suite.
+  </p>
+
+  <h2>Core Architectural Principles</h2>
+  <ul>
+    <li>
+      <strong>Zero Server Telemetry:</strong> Every single UUID is computed strictly in your browser using the native Web Cryptography API (<code>crypto.getRandomValues</code>). Your generated keys are never logged, tracked, or transmitted across the wire.
+    </li>
+    <li>
+      <strong>Strict RFC Compliance:</strong> We adhere rigorously to <strong>RFC 4122</strong> (UUID v1, v4, v5) and the latest <strong>RFC 9562</strong> standards (UUID v7 time-ordered identifiers).
+    </li>
+    <li>
+      <strong>Static-First Performance:</strong> Built on Astro JS with minimal runtime JavaScript, our pages achieve sub-millisecond execution times and 100/100 Core Web Vitals.
+    </li>
+    <li>
+      <strong>Multilingual Reach:</strong> Supporting 8 major world languages with full translation parity so developers worldwide can work in their native tongue.
+    </li>
+  </ul>
+
+  <h2>Why We Built It</h2>
+  <p>
+    Most online UUID generators are bloated with heavy tracking scripts, slow server roundtrips, outdated UUID v1 implementations, or ad clutter. We created a premium, developer-focused utility that is instant, clean, and cryptographically sound.
+  </p>
+</LegalLayout>

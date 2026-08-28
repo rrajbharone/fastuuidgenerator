@@ -1,0 +1,64 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath: string;
+  lastUpdated?: string;
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  lastUpdated = 'February 2026',
+} = Astro.props;
+---
+
+<BaseLayout
+  title={`${title} | FastUUIDGenerator`}
+  description={description}
+  lang="en"
+  canonicalPath={canonicalPath}
+  isMultilingualTool={false}
+  showLangSelector={false}
+  breadcrumbs={[
+    { name: 'Home', url: 'https://fastuuidgenerator.com/' },
+    { name: title, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <div class="container" style="max-width: 840px; padding: 3rem 1.25rem 5rem;">
+    <header style="margin-bottom: 2.5rem; text-align: center;">
+      <h1 style="font-size: 2.25rem; margin-bottom: 0.5rem;">{title}</h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Last Updated: {lastUpdated}</p>
+    </header>
+
+    <article class="glass-panel" style="padding: 2.5rem; line-height: 1.8;">
+      <div class="legal-prose">
+        <slot />
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-prose :global(h2) {
+    font-size: 1.4rem;
+    margin-top: 1.75rem;
+    margin-bottom: 0.6rem;
+    color: var(--text-primary);
+  }
+  .legal-prose :global(p) {
+    margin-bottom: 1.25rem;
+    color: var(--text-secondary);
+  }
+  .legal-prose :global(ul) {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+  }
+  .legal-prose :global(li) {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+  }
+</style>

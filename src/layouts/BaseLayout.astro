@@ -1,0 +1,64 @@
+---
+import SeoHead from '../components/seo/SeoHead.astro';
+import Header from '../components/core/Header.astro';
+import Footer from '../components/core/Footer.astro';
+import type { LanguageCode } from '../i18n/languages';
+import { getTranslations } from '../i18n/utils';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: LanguageCode;
+  canonicalPath: string;
+  isMultilingualTool?: boolean;
+  ogType?: 'website' | 'article';
+  faqs?: Array<{ question: string; answer: string }>;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  showLangSelector?: boolean;
+}
+
+const {
+  title,
+  description,
+  lang = 'en',
+  canonicalPath,
+  isMultilingualTool = false,
+  ogType = 'website',
+  faqs = [],
+  breadcrumbs = [],
+  showLangSelector = true,
+} = Astro.props;
+
+const t = getTranslations(lang);
+---
+
+<!doctype html>
+<html lang={lang} dir="ltr">
+  <head>
+    <SeoHead
+      title={title}
+      description={description}
+      lang={lang}
+      canonicalPath={canonicalPath}
+      isMultilingualTool={isMultilingualTool}
+      ogType={ogType}
+      faqs={faqs}
+      breadcrumbs={breadcrumbs}
+    />
+  </head>
+  <body>
+    <Header
+      currentLang={lang}
+      currentPath={canonicalPath}
+      t={t}
+      showLangSelector={showLangSelector}
+    />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer currentLang={lang} t={t} />
+  </body>
+</html>

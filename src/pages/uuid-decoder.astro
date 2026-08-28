@@ -1,0 +1,24 @@
+---
+import { getTranslations } from '../i18n/utils';
+import ToolLayout from '../layouts/ToolLayout.astro';
+import UuidDecoder from '../components/tools/UuidDecoder.astro';
+
+const lang = 'en';
+const t = getTranslations(lang);
+const canonicalPath = '/uuid-decoder/';
+---
+
+<ToolLayout
+  title={t.seo.uuidDecoderTitle}
+  description={t.seo.uuidDecoderDescription}
+  heroTitle={t.decoder.title}
+  heroSubtitle={t.decoder.subtitle}
+  lang={lang}
+  canonicalPath={canonicalPath}
+  breadcrumbs={[
+    { name: t.site.name, url: 'https://fastuuidgenerator.com/' },
+    { name: t.nav.decoder, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <UuidDecoder t={t} lang={lang} />
+</ToolLayout>

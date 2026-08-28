@@ -1,0 +1,417 @@
+---
+import type { TranslationDictionary } from '../../i18n/schema';
+import type { LanguageCode } from '../../i18n/languages';
+
+interface Props {
+  t: TranslationDictionary;
+  lang: LanguageCode;
+}
+
+const { t, lang } = Astro.props;
+---
+
+<div class="glass-panel tool-card" id="guid-generator-tool">
+  <!-- Note banner explaining GUID vs UUID relationship -->
+  <div class="glass-panel-subtle" style="padding: 1rem; margin-bottom: 1.5rem; border-left: 4px solid var(--brand-primary);">
+    <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
+      <strong>Microsoft GUID vs IETF UUID:</strong> {t.guidGenerator.guidVsUuidNote}
+    </div>
+  </div>
+
+  <!-- Controls Section -->
+  <div class="generator-controls-grid">
+    <!-- Quantity Selector -->
+    <div class="control-group">
+      <label for="guid-quantity-input" class="control-label">
+        {t.generator.quantityLabel}
+      </label>
+      <div class="quantity-input-wrapper">
+        <input
+          type="number"
+          id="guid-quantity-input"
+          class="input-control quantity-input"
+          min="1"
+          max="5000"
+          value="1"
+        />
+        <div class="quantity-presets">
+          <button type="button" class="btn btn-secondary btn-sm guid-qty" data-qty="1">1</button>
+          <button type="button" class="btn btn-secondary btn-sm guid-qty" data-qty="10">10</button>
+          <button type="button" class="btn btn-secondary btn-sm guid-qty" data-qty="100">100</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Format Selector -->
+    <div class="control-group">
+      <label for="guid-format-select" class="control-label">
+        {t.generator.formatLabel}
+      </label>
+      <select id="guid-format-select" class="select-control">
+        <option value="braces">{t.guidGenerator.registryFormat}</option>
+        <option value="uppercase">{t.generator.formatting.uppercase}</option>
+        <option value="standard">{t.generator.formatting.standard}</option>
+        <option value="noHyphens">{t.generator.formatting.noHyphens}</option>
+        <option value="csharpGuid">{t.generator.formatting.csharpGuid}</option>
+        <option value="jsonArray">{t.generator.formatting.jsonArray}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Action Bar -->
+  <div class="generator-action-bar">
+    <div class="primary-actions">
+      <button type="button" class="btn btn-primary" id="btn-guid-generate">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+        <span>{t.common.generate}</span>
+      </button>
+      <button type="button" class="btn btn-secondary" id="btn-guid-copy-all">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span class="guid-copy-text">{t.common.copyAll}</span>
+      </button>
+    </div>
+
+    <!-- Download Options -->
+    <div class="secondary-actions">
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-guid-download-txt">.TXT</button>
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-guid-download-json">.JSON</button>
+      <button type="button" class="btn btn-outline btn-sm" id="btn-guid-clear">{t.common.clear}</button>
+    </div>
+  </div>
+
+  <!-- Results Output -->
+  <div class="generator-results-area">
+    <div class="results-meta-header">
+      <span id="guid-count-badge" class="badge badge-brand">
+        {t.common.results}
+      </span>
+      <span class="privacy-note">
+        {t.common.privacyNotice}
+      </span>
+    </div>
+
+    <div id="guid-single-box" class="uuid-display-box" style="display: none;">
+      <span id="guid-single-text" class="input-mono single-uuid-val" style="user-select: all;"></span>
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-guid-single-copy">
+        <span class="single-guid-copy-label">{t.common.copy}</span>
+      </button>
+    </div>
+
+    <div id="guid-multi-box" class="uuid-list-container" style="display: none;">
+      <div id="guid-rows-list"></div>
+    </div>
+
+    <div id="guid-raw-box" style="display: none;">
+      <textarea
+        id="guid-raw-textarea"
+        class="textarea-control input-mono"
+        rows="10"
+        readonly
+        spellcheck="false"
+        style="resize: vertical; font-size: 0.9rem;"
+      ></textarea>
+    </div>
+  </div>
+</div>
+
+<style>
+  .generator-controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .control-group {
+    min-width: 0;
+  }
+
+  .control-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+  }
+
+  .quantity-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .quantity-input {
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .quantity-presets {
+    display: flex;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  .generator-action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-glass);
+  }
+
+  .primary-actions, .secondary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .results-meta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .privacy-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .single-uuid-val {
+    word-break: break-all;
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 640px) {
+    .generator-controls-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .generator-action-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .primary-actions, .secondary-actions {
+      width: 100%;
+    }
+    .primary-actions .btn, .secondary-actions .btn {
+      flex: 1;
+    }
+    .single-uuid-val {
+      font-size: 0.95rem;
+    }
+    .uuid-display-box {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+    }
+    .uuid-display-box .btn {
+      align-self: flex-end;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .quantity-presets {
+      width: 100%;
+    }
+    .quantity-presets .btn {
+      flex: 1;
+    }
+  }
+</style>
+
+<script>
+  import { generateBulkUUIDs, type FormatOptions } from '../../utils/uuid';
+
+  function initGuidGenerator() {
+    const qtyInput = document.getElementById('guid-quantity-input') as HTMLInputElement;
+    const formatSelect = document.getElementById('guid-format-select') as HTMLSelectElement;
+    const btnGenerate = document.getElementById('btn-guid-generate');
+    const btnCopyAll = document.getElementById('btn-guid-copy-all');
+    const btnClear = document.getElementById('btn-guid-clear');
+    const btnDownloadTxt = document.getElementById('btn-guid-download-txt');
+    const btnDownloadJson = document.getElementById('btn-guid-download-json');
+
+    const singleBox = document.getElementById('guid-single-box');
+    const singleText = document.getElementById('guid-single-text');
+    const btnSingleCopy = document.getElementById('btn-guid-single-copy');
+    const multiBox = document.getElementById('guid-multi-box');
+    const rowsList = document.getElementById('guid-rows-list');
+    const rawBox = document.getElementById('guid-raw-box');
+    const rawTextarea = document.getElementById('guid-raw-textarea') as HTMLTextAreaElement;
+    const badge = document.getElementById('guid-count-badge');
+
+    if (!btnGenerate) return;
+
+    let currentGuids: string[] = [];
+
+    function getOptions(): FormatOptions {
+      const fmt = formatSelect ? formatSelect.value : 'braces';
+      return {
+        casing: fmt === 'standard' ? 'lowercase' : 'uppercase',
+        hyphens: fmt !== 'noHyphens',
+        braces: fmt === 'braces',
+        quotes: false,
+        csharp: fmt === 'csharpGuid',
+      };
+    }
+
+    function render(guids: string[]) {
+      currentGuids = guids;
+      const fmt = formatSelect ? formatSelect.value : 'braces';
+      const isCustom = fmt === 'jsonArray' || guids.length > 200;
+
+      if (badge) badge.textContent = `${guids.length} GUID(s)`;
+
+      if (guids.length === 0) {
+        if (singleBox) singleBox.style.display = 'none';
+        if (multiBox) multiBox.style.display = 'none';
+        if (rawBox) rawBox.style.display = 'none';
+        return;
+      }
+
+      if (isCustom) {
+        if (singleBox) singleBox.style.display = 'none';
+        if (multiBox) multiBox.style.display = 'none';
+        if (rawBox) rawBox.style.display = 'block';
+        rawTextarea.value = fmt === 'jsonArray' ? JSON.stringify(guids, null, 2) : guids.join('\n');
+      } else if (guids.length === 1) {
+        if (rawBox) rawBox.style.display = 'none';
+        if (multiBox) multiBox.style.display = 'none';
+        if (singleBox) singleBox.style.display = 'flex';
+        if (singleText) singleText.textContent = guids[0];
+      } else {
+        if (singleBox) singleBox.style.display = 'none';
+        if (rawBox) rawBox.style.display = 'none';
+        if (multiBox) multiBox.style.display = 'block';
+
+        if (rowsList) {
+          rowsList.innerHTML = '';
+          const frag = document.createDocumentFragment();
+          guids.forEach((id) => {
+            const row = document.createElement('div');
+            row.className = 'uuid-row';
+            const span = document.createElement('span');
+            span.className = 'input-mono';
+            span.textContent = id;
+            span.style.userSelect = 'all';
+            span.style.wordBreak = 'break-all';
+            span.style.fontSize = '0.9rem';
+
+            const copy = document.createElement('button');
+            copy.className = 'btn btn-secondary btn-sm';
+            copy.textContent = 'Copy';
+            copy.style.flexShrink = '0';
+            copy.addEventListener('click', () => {
+              navigator.clipboard.writeText(id).then(() => {
+                copy.textContent = 'Copied!';
+                setTimeout(() => { copy.textContent = 'Copy'; }, 1500);
+              });
+            });
+
+            row.appendChild(span);
+            row.appendChild(copy);
+            frag.appendChild(row);
+          });
+          rowsList.appendChild(frag);
+        }
+      }
+    }
+
+    function run() {
+      const count = parseInt(qtyInput ? qtyInput.value : '1', 10) || 1;
+      const opts = getOptions();
+      const guids = generateBulkUUIDs('v4', count, opts);
+      render(guids);
+    }
+
+    btnGenerate.addEventListener('click', run);
+    if (formatSelect) formatSelect.addEventListener('change', run);
+    if (qtyInput) qtyInput.addEventListener('change', run);
+
+    document.querySelectorAll('.guid-qty').forEach((b) => {
+      b.addEventListener('click', () => {
+        if (qtyInput) {
+          qtyInput.value = b.getAttribute('data-qty') || '1';
+          run();
+        }
+      });
+    });
+
+    if (btnSingleCopy && singleText) {
+      btnSingleCopy.addEventListener('click', () => {
+        const text = singleText.textContent || '';
+        navigator.clipboard.writeText(text).then(() => {
+          const label = btnSingleCopy.querySelector('.single-guid-copy-label');
+          if (label) {
+            const prev = label.textContent;
+            label.textContent = 'Copied!';
+            setTimeout(() => { label.textContent = prev; }, 1500);
+          }
+        });
+      });
+    }
+
+    if (btnCopyAll) {
+      btnCopyAll.addEventListener('click', () => {
+        if (currentGuids.length === 0) return;
+        navigator.clipboard.writeText(currentGuids.join('\n')).then(() => {
+          const label = btnCopyAll.querySelector('.guid-copy-text');
+          if (label) {
+            const prev = label.textContent;
+            label.textContent = 'Copied!';
+            setTimeout(() => { label.textContent = prev; }, 1500);
+          }
+        });
+      });
+    }
+
+    if (btnClear) {
+      btnClear.addEventListener('click', () => { render([]); });
+    }
+
+    if (btnDownloadTxt) {
+      btnDownloadTxt.addEventListener('click', () => {
+        if (currentGuids.length === 0) return;
+        const blob = new Blob([currentGuids.join('\n')], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'guids.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    if (btnDownloadJson) {
+      btnDownloadJson.addEventListener('click', () => {
+        if (currentGuids.length === 0) return;
+        const blob = new Blob([JSON.stringify(currentGuids, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'guids.json';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    run();
+  }
+
+  initGuidGenerator();
+  document.addEventListener('astro:page-load', initGuidGenerator);
+</script>

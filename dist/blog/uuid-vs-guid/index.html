@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="en" dir="ltr"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.18.2"><meta name="theme-color" content="#090d16" media="(prefers-color-scheme: dark)"><meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)"><!-- Performance Optimized Font (Enter / Inter with font-display: swap & minimal weights: 400, 500, 600, 700) --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"><!-- Primary Meta Tags --><title>UUID vs GUID: What&#39;s the Difference? | FastUUIDGenerator Blog</title><meta name="title" content="UUID vs GUID: What's the Difference? | FastUUIDGenerator Blog"><meta name="description" content="Confused about UUID vs GUID? Learn the real difference between Universally Unique Identifiers and Globally Unique Identifiers, their formats, RFC 9562 standards, Microsoft implementation, and when to use each."><meta name="robots" content="index, follow"><!-- Canonical URL --><link rel="canonical" href="https://fastuuidgenerator.com/blog/uuid-vs-guid/"><!-- International SEO Hreflang Tags (Only on multilingual tool pages) --><!-- Open Graph / Facebook --><meta property="og:type" content="article"><meta property="og:url" content="https://fastuuidgenerator.com/blog/uuid-vs-guid/"><meta property="og:title" content="UUID vs GUID: What's the Difference? | FastUUIDGenerator Blog"><meta property="og:description" content="Confused about UUID vs GUID? Learn the real difference between Universally Unique Identifiers and Globally Unique Identifiers, their formats, RFC 9562 standards, Microsoft implementation, and when to use each."><meta property="og:image" content="https://fastuuidgenerator.com/og-image.png"><meta property="og:site_name" content="FastUUIDGenerator"><meta property="og:locale" content="en"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://fastuuidgenerator.com/blog/uuid-vs-guid/"><meta property="twitter:title" content="UUID vs GUID: What's the Difference? | FastUUIDGenerator Blog"><meta property="twitter:description" content="Confused about UUID vs GUID? Learn the real difference between Universally Unique Identifiers and Globally Unique Identifiers, their formats, RFC 9562 standards, Microsoft implementation, and when to use each."><meta property="twitter:image" content="https://fastuuidgenerator.com/og-image.png"><!-- JSON-LD Structured Data --><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://fastuuidgenerator.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://fastuuidgenerator.com/blog/"},{"@type":"ListItem","position":3,"name":"UUID vs GUID: What's the Difference?","item":"https://fastuuidgenerator.com/blog/uuid-vs-guid/"}]}</script><!-- Instant Zero-FOUC Theme Script --><script>
+  (function() {
+    try {
+      const stored = localStorage.getItem('fastuuid_theme');
+      if (stored === 'light' || stored === 'dark') {
+        document.documentElement.setAttribute('data-theme', stored);
+      } else {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      }
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script><style>.prose-content[data-astro-cid-4dqtj3le] h2{font-size:1.55rem;margin-top:2rem;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border-glass)}.prose-content[data-astro-cid-4dqtj3le] h3{font-size:1.25rem;margin-top:1.5rem;margin-bottom:.5rem}.prose-content[data-astro-cid-4dqtj3le] p{margin-bottom:1.25rem}.prose-content[data-astro-cid-4dqtj3le] ul,.prose-content[data-astro-cid-4dqtj3le] ol{margin-bottom:1.25rem;padding-left:1.5rem}.prose-content[data-astro-cid-4dqtj3le] li{margin-bottom:.5rem;color:var(--text-secondary)}.prose-content[data-astro-cid-4dqtj3le] pre{background:#0f172a!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:var(--radius-md);padding:1.25rem;overflow-x:auto;font-family:var(--font-mono);font-size:.9rem;line-height:1.6;margin-bottom:1.5rem;box-shadow:0 4px 14px #00000040}.prose-content[data-astro-cid-4dqtj3le] pre code,.prose-content[data-astro-cid-4dqtj3le] pre span,.prose-content[data-astro-cid-4dqtj3le] pre .line{background:transparent!important;padding:0;color:#f8fafc!important;font-family:var(--font-mono)}.prose-content[data-astro-cid-4dqtj3le] code{font-family:var(--font-mono);background:var(--bg-glass-subtle);padding:.2rem .45rem;border-radius:var(--radius-sm);font-size:.9em;color:var(--brand-primary);border:1px solid var(--border-subtle)}.prose-content[data-astro-cid-4dqtj3le] table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.95rem}.prose-content[data-astro-cid-4dqtj3le] th,.prose-content[data-astro-cid-4dqtj3le] td{border:1px solid var(--border-glass);padding:.75rem 1rem;text-align:left}.prose-content[data-astro-cid-4dqtj3le] th{background:var(--bg-glass-subtle);font-weight:600}
+</style>
+<link rel="stylesheet" href="/_astro/_slug_.BFZBAOio.css"></head> <body> <header class="site-header" id="main-header" data-astro-cid-3hxe222u> <div class="container" data-astro-cid-3hxe222u> <nav class="nav-container" aria-label="Main Navigation" data-astro-cid-3hxe222u> <!-- Left: Brand Logo --> <a href="/" class="brand-logo" aria-label="FastUUIDGenerator" data-astro-cid-3hxe222u> <span class="brand-logo-icon" data-astro-cid-3hxe222u>U</span> <span class="brand-name" data-astro-cid-3hxe222u>FastUUIDGenerator</span> </a> <!-- Right: Navigation Links + Language Switcher + Theme Toggle + Mobile Menu --> <div class="nav-right" data-astro-cid-3hxe222u> <!-- Desktop Links aligned to the right --> <ul class="nav-links desktop-nav" role="menubar" data-astro-cid-3hxe222u> <li role="none" data-astro-cid-3hxe222u> <a href="/guid-generator/" class="nav-link " role="menuitem" data-astro-cid-3hxe222u> GUID Generator </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/uuid-decoder/" class="nav-link " role="menuitem" data-astro-cid-3hxe222u> Decoder </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/blog/" class="nav-link " role="menuitem" data-astro-cid-3hxe222u> Blog </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/tools/" class="nav-link " role="menuitem" data-astro-cid-3hxe222u> Tools </a> </li> </ul> <!-- Action Items (Language, Theme, Mobile Toggle) --> <div class="nav-actions" data-astro-cid-3hxe222u>  <button type="button" id="theme-toggle-btn" class="btn btn-secondary btn-sm" aria-label="Toggle theme" title="Toggle theme" data-astro-cid-l2o5ckvg> <span class="theme-icon-sun" aria-hidden="true" data-astro-cid-l2o5ckvg> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-l2o5ckvg> <circle cx="12" cy="12" r="5" data-astro-cid-l2o5ckvg></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-l2o5ckvg></line> <line x1="12" y1="21" x2="12" y2="23" data-astro-cid-l2o5ckvg></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-l2o5ckvg></line> <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-l2o5ckvg></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-l2o5ckvg></line> <line x1="21" y1="12" x2="23" y2="12" data-astro-cid-l2o5ckvg></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-l2o5ckvg></line> <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-l2o5ckvg></line> </svg> </span> <span class="theme-icon-moon" aria-hidden="true" data-astro-cid-l2o5ckvg> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-l2o5ckvg> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-l2o5ckvg></path> </svg> </span> </button>  <script type="module">function n(){const t=document.getElementById("theme-toggle-btn");t&&t.addEventListener("click",()=>{const e=(document.documentElement.getAttribute("data-theme")||"dark")==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",e),localStorage.setItem("fastuuid_theme",e)})}n();document.addEventListener("astro:page-load",n);</script> <!-- Mobile Menu Toggle Button --> <button type="button" class="btn btn-secondary btn-sm mobile-menu-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-panel" data-astro-cid-3hxe222u> <svg class="hamburger-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-3hxe222u> <line x1="3" y1="12" x2="21" y2="12" data-astro-cid-3hxe222u></line> <line x1="3" y1="6" x2="21" y2="6" data-astro-cid-3hxe222u></line> <line x1="3" y1="18" x2="21" y2="18" data-astro-cid-3hxe222u></line> </svg> <svg class="close-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;" data-astro-cid-3hxe222u> <line x1="18" y1="6" x2="6" y2="18" data-astro-cid-3hxe222u></line> <line x1="6" y1="6" x2="18" y2="18" data-astro-cid-3hxe222u></line> </svg> </button> </div> </div> </nav> </div> <!-- Mobile Menu Drawer Backdrop & Panel --> <div class="mobile-nav-drawer" id="mobile-nav-panel" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu" data-astro-cid-3hxe222u> <div class="mobile-nav-inner" data-astro-cid-3hxe222u> <div class="mobile-nav-section-title" data-astro-cid-3hxe222u>Tools &amp; Navigation</div> <ul class="mobile-nav-list" role="menu" data-astro-cid-3hxe222u> <li role="none" data-astro-cid-3hxe222u> <a href="/uuid-generator/" class="mobile-nav-link " role="menuitem" data-astro-cid-3hxe222u> <span data-astro-cid-3hxe222u>UUID Generator</span>  </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/uuid-v4-generator/" class="mobile-nav-link " role="menuitem" data-astro-cid-3hxe222u> <span data-astro-cid-3hxe222u>UUID v4</span>  </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/uuid-v7-generator/" class="mobile-nav-link " role="menuitem" data-astro-cid-3hxe222u> <span data-astro-cid-3hxe222u>UUID v7</span>  </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/bulk-uuid-generator/" class="mobile-nav-link " role="menuitem" data-astro-cid-3hxe222u> <span data-astro-cid-3hxe222u>Bulk Generator</span>  </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/guid-generator/" class="mobile-nav-link " role="menuitem" data-astro-cid-3hxe222u> <span data-astro-cid-3hxe222u>GUID Generator</span>  </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/base64-uuid-generator/" class="mobile-nav-link " role="menuitem" data-astro-cid-3hxe222u> <span data-astro-cid-3hxe222u>Base64 UUID</span>  </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/uuid-validator/" class="mobile-nav-link " role="menuitem" data-astro-cid-3hxe222u> <span data-astro-cid-3hxe222u>Validator</span>  </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/uuid-decoder/" class="mobile-nav-link " role="menuitem" data-astro-cid-3hxe222u> <span data-astro-cid-3hxe222u>Decoder</span>  </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/blog/" class="mobile-nav-link " role="menuitem" data-astro-cid-3hxe222u> <span data-astro-cid-3hxe222u>Blog</span>  </a> </li><li role="none" data-astro-cid-3hxe222u> <a href="/tools/" class="mobile-nav-link " role="menuitem" data-astro-cid-3hxe222u> <span data-astro-cid-3hxe222u>Tools</span>  </a> </li> </ul> </div> </div> </header>  <script type="module">function a(){const e=document.getElementById("mobile-nav-toggle"),n=document.getElementById("mobile-nav-panel");if(!e||!n)return;const s=e.querySelector(".hamburger-icon"),o=e.querySelector(".close-icon");function i(){n.classList.add("open"),e.setAttribute("aria-expanded","true"),s&&(s.style.display="none"),o&&(o.style.display="block")}function c(){n.classList.remove("open"),e.setAttribute("aria-expanded","false"),s&&(s.style.display="block"),o&&(o.style.display="none")}e.addEventListener("click",()=>{n.classList.contains("open")?c():i()}),document.addEventListener("keydown",t=>{t.key==="Escape"&&n.classList.contains("open")&&(c(),e.focus())}),document.addEventListener("click",t=>{n.classList.contains("open")&&!n.contains(t.target)&&!e.contains(t.target)&&c()}),n.querySelectorAll("a").forEach(t=>{t.addEventListener("click",()=>{c()})})}a();document.addEventListener("astro:page-load",a);</script> <main id="main-content">  <div class="container" style="max-width: 820px; padding: 2.5rem 1.25rem 4rem;" data-astro-cid-4dqtj3le> <!-- Article Header --> <header style="margin-bottom: 2.5rem; text-align: center;" data-astro-cid-4dqtj3le> <div style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem;" data-astro-cid-4dqtj3le> <span class="badge badge-brand" data-astro-cid-4dqtj3le>Architecture &amp; Standards</span> <span class="badge badge-neutral" data-astro-cid-4dqtj3le>8 min read</span> </div> <h1 style="font-size: 2.4rem; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.03em;" data-astro-cid-4dqtj3le> UUID vs GUID: What&#39;s the Difference? </h1> <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; color: var(--text-muted); font-size: 0.9rem;" data-astro-cid-4dqtj3le> <span data-astro-cid-4dqtj3le>By FastUUID Engineering Team</span> <span data-astro-cid-4dqtj3le>•</span> <time datetime="2026-08-28T00:00:00.000Z" data-astro-cid-4dqtj3le>August 28, 2026</time> </div> </header> <!-- Article Content Card --> <article class="glass-panel" style="padding: 2.5rem; margin-bottom: 3rem; line-height: 1.8; font-size: 1.05rem;" data-astro-cid-4dqtj3le> <div class="prose-content" data-astro-cid-4dqtj3le>  <p>If you have ever built a database, connected to a REST API, or developed software for Windows, you have almost certainly encountered 36-character identifiers that look like this:</p>
+<p><code>550e8400-e29b-41d4-a716-446655440000</code></p>
+<p>In one project, a developer might call this value a <strong>UUID</strong>. In another codebase—especially one using C#, .NET, or Microsoft SQL Server—someone else might call the exact same string a <strong>GUID</strong>.</p>
+<p>This raises a common question for engineers and system designers: <strong>Is there an actual difference between a UUID and a GUID, or are they just two names for the same thing?</strong></p>
+<p>In this comprehensive guide, we will unpack the exact relationship between UUIDs and GUIDs. We will look at their origins, how they work under the hood, how official specifications like <strong>RFC 9562</strong> define them, where subtle implementation differences exist, and which term you should use in your daily work.</p>
+<hr>
+<h2 id="1-uuid-vs-guid-at-a-glance">1. UUID vs GUID at a Glance</h2>
+<p>For 99% of day-to-day software development, <strong>a UUID and a GUID are conceptually the same thing</strong>.</p>
+<p>Both refer to a <strong>128-bit (16-byte) number</strong> designed to provide a unique identity across distributed computer systems without relying on a central authority or database coordinator.</p>
+<p>Here is the quick summary:</p>
+<ul>
+<li><strong>UUID</strong> stands for <strong>Universally Unique Identifier</strong>. It is the open, international standard defined by the Internet Engineering Task Force (IETF) in <a href="https://www.rfc-editor.org/rfc/rfc9562.html">RFC 9562</a> (which updates and supersedes the older RFC 4122) and by ISO/IEC 9834-8.</li>
+<li><strong>GUID</strong> stands for <strong>Globally Unique Identifier</strong>. It is the term popularized by Microsoft in the 1990s for its Component Object Model (COM) and Windows ecosystems.</li>
+<li><strong>The Relationship:</strong> Every standard GUID is an implementation of a UUID. In modern computing, the two terms are widely used interchangeably, though platform-specific memory representations can differ.</li>
+</ul>
+<p>If you need to generate one right now for your project, you can use our free browser-based <a href="/uuid-generator/">UUID Generator</a> or <a href="/guid-generator/">GUID Generator</a> to create fresh identifiers instantly.</p>
+<hr>
+<h2 id="2-what-is-a-uuid">2. What Is a UUID?</h2>
+<p>A <strong>UUID</strong> (<strong>Universally Unique Identifier</strong>) is a 128-bit identifier standardized to ensure uniqueness across space and time.</p>
+<h3 id="why-were-uuids-created">Why Were UUIDs Created?</h3>
+<p>In traditional database systems, unique identifiers were generated using <strong>auto-incrementing integers</strong> (such as <code>1, 2, 3, 4...</code>). While auto-incrementing IDs work well on a single server, they break down in modern distributed environments:</p>
+<ol>
+<li><strong>Coordination Bottlenecks:</strong> Two independent servers creating records simultaneously would generate identical IDs unless they constantly coordinate over a network.</li>
+<li><strong>Merging Conflicts:</strong> If you merge databases from two different regions, duplicate primary keys collide immediately.</li>
+<li><strong>Security Leaks:</strong> Sequential numbers reveal business volume (e.g., <code>order/1001</code> tells an attacker that you only have 1,000 previous orders).</li>
+</ol>
+<p>UUIDs solve these problems by providing an identifier with so many possible combinations that any machine can generate one independently with zero risk of collision.</p>
+<p>The open UUID standard was originally created in the 1980s by the Open Software Foundation (OSF) for the Distributed Computing Environment (DCE) and was later formally standardized by the IETF.</p>
+<hr>
+<h2 id="3-what-is-a-guid">3. What Is a GUID?</h2>
+<p>A <strong>GUID</strong> (<strong>Globally Unique Identifier</strong>) is Microsoft’s implementation and terminology for the universal 128-bit identifier concept.</p>
+<p>When Microsoft developed the <strong>Component Object Model (COM)</strong> in the early 1990s, the operating system needed a bulletproof way to identify software components, interfaces, ActiveX controls, and Windows Registry keys without centralized registration.</p>
+<p>Microsoft adopted the OSF/DCE UUID specification and integrated it deeply into Windows under the name <strong>GUID</strong>.</p>
+<p>Since then, the term “GUID” has remained the standard naming convention across the entire Microsoft ecosystem, including:</p>
+<ul>
+<li><strong>The .NET Framework &#x26; C#:</strong> Where the standard type is <a href="https://learn.microsoft.com/en-us/dotnet/api/system.guid"><code>System.Guid</code></a>.</li>
+<li><strong>Microsoft SQL Server:</strong> Where the data type is <code>UNIQUEIDENTIFIER</code>.</li>
+<li><strong>Windows Registry &#x26; Win32 APIs:</strong> Where COM classes use <code>CLSID</code> and interfaces use <code>IID</code> (both aliases for <code>GUID</code>).</li>
+</ul>
+<hr>
+<h2 id="4-uuid-vs-guid-are-they-actually-different">4. UUID vs GUID: Are They Actually Different?</h2>
+<p>The short answer is <strong>no in concept, but sometimes yes in binary representation</strong>.</p>
+<p>According to <strong>RFC 9562 (Section 1)</strong>:</p>
+<blockquote>
+<p><em>“UUIDs are also known as GUIDs (Globally Unique Identifiers). The term GUID is generally used in Microsoft-related contexts.”</em></p>
+</blockquote>
+<p>However, depending on whether you are looking at the <strong>textual string</strong> or the <strong>underlying binary byte array</strong>, there is a subtle technical nuance that every engineer should understand.</p>
+<h3 id="1-string-representation-identical">1. String Representation (Identical)</h3>
+<p>When written as text, standard UUIDs and GUIDs follow the exact same 32 hexadecimal character format split by four hyphens into five groups:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></span></code></pre>
+<p>For example:</p>
+<ul>
+<li><strong>UUID string:</strong> <code>6ba7b810-9dad-11d1-80b4-00c04fd430c8</code></li>
+<li><strong>GUID string:</strong> <code>6ba7b810-9dad-11d1-80b4-00c04fd430c8</code></li>
+</ul>
+<p>In some Windows contexts, GUIDs are enclosed in curly braces (e.g., <code>{6ba7b810-9dad-11d1-80b4-00c04fd430c8}</code>), but the hexadecimal digits and positions are identical.</p>
+<h3 id="2-binary-memory-layout--endianness-the-hidden-difference">2. Binary Memory Layout &#x26; Endianness (The Hidden Difference)</h3>
+<p>The real difference appears when storing the 16 raw bytes in computer memory:</p>
+<ul>
+<li><strong>RFC 9562 UUIDs</strong> use <strong>big-endian (network byte order)</strong> for all 16 bytes.</li>
+<li><strong>Microsoft GUIDs</strong> historically use a <strong>mixed-endian C/C++ struct</strong> defined in Windows headers:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#F97583">typedef</span><span style="color:#F97583"> struct</span><span style="color:#E1E4E8"> _GUID {</span></span>
+<span class="line"><span style="color:#F97583">    unsigned</span><span style="color:#F97583"> long</span><span style="color:#E1E4E8">  Data1;</span><span style="color:#6A737D">    // 4 bytes (Little-Endian on x86/x64)</span></span>
+<span class="line"><span style="color:#F97583">    unsigned</span><span style="color:#F97583"> short</span><span style="color:#E1E4E8"> Data2;</span><span style="color:#6A737D">    // 2 bytes (Little-Endian on x86/x64)</span></span>
+<span class="line"><span style="color:#F97583">    unsigned</span><span style="color:#F97583"> short</span><span style="color:#E1E4E8"> Data3;</span><span style="color:#6A737D">    // 2 bytes (Little-Endian on x86/x64)</span></span>
+<span class="line"><span style="color:#F97583">    unsigned</span><span style="color:#F97583"> char</span><span style="color:#FFAB70">  Data4</span><span style="color:#E1E4E8">[</span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">];</span><span style="color:#6A737D"> // 8 bytes (Big-Endian / byte array)</span></span>
+<span class="line"><span style="color:#E1E4E8">} GUID;</span></span></code></pre>
+<p>Because <code>Data1</code>, <code>Data2</code>, and <code>Data3</code> are stored as native integers on x86 and ARM processors, their raw byte order in memory is reversed (little-endian) compared to standard network byte order.</p>
+<p>When serializing a GUID to a string using official APIs, the string output matches the standard UUID string format. But if you inspect raw database binary columns (such as <code>RAW(16)</code> vs <code>UNIQUEIDENTIFIER</code>) across different database engines, the byte ordering can differ.</p>
+<p>You can verify whether any given string adheres to standard formatting using our free <a href="/uuid-validator/">UUID / GUID Validator</a>.</p>
+<hr>
+<h2 id="5-uuid-vs-guid-comparison-table">5. UUID vs GUID Comparison Table</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">Feature / Aspect</th><th align="left">UUID (Universally Unique Identifier)</th><th align="left">GUID (Globally Unique Identifier)</th></tr></thead><tbody><tr><td align="left"><strong>Full Name</strong></td><td align="left">Universally Unique Identifier</td><td align="left">Globally Unique Identifier</td></tr><tr><td align="left"><strong>Originating Body</strong></td><td align="left">OSF / IETF (RFC 4122, RFC 9562), ISO/IEC</td><td align="left">Microsoft (DCOM, Windows, .NET)</td></tr><tr><td align="left"><strong>Size in Bits / Bytes</strong></td><td align="left">128 bits (16 bytes)</td><td align="left">128 bits (16 bytes)</td></tr><tr><td align="left"><strong>Canonical String Length</strong></td><td align="left">36 characters (32 hex + 4 hyphens)</td><td align="left">36 characters (often wrapped in <code>{}</code> in Windows)</td></tr><tr><td align="left"><strong>String Format</strong></td><td align="left"><code>8-4-4-4-12</code> hex digits</td><td align="left"><code>8-4-4-4-12</code> hex digits</td></tr><tr><td align="left"><strong>Standard Specification</strong></td><td align="left">RFC 9562 (IETF Standard)</td><td align="left">Microsoft Win32 API / .NET Documentation</td></tr><tr><td align="left"><strong>Byte Ordering</strong></td><td align="left">Big-Endian (Network Byte Order)</td><td align="left">Mixed-Endian (Little-Endian for first 3 fields in native memory)</td></tr><tr><td align="left"><strong>Primary Ecosystems</strong></td><td align="left">Linux, macOS, Java, Python, Go, Rust, PostgreSQL</td><td align="left">Windows, C#, .NET, Azure, Microsoft SQL Server</td></tr><tr><td align="left"><strong>Standard Versions</strong></td><td align="left">Versions 1 through 8 (v1 to v8)</td><td align="left">Typically maps to v4 (random) or v1 (time-based)</td></tr></tbody></table>
+<hr>
+<h2 id="6-understanding-the-uuidguid-format">6. Understanding the UUID/GUID Format</h2>
+<p>To understand how an identifier guarantees uniqueness, let’s dissect the standard 36-character string representation.</p>
+<p>Consider this sample identifier:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>550e8400-e29b-41d4-a716-446655440000</span></span></code></pre>
+<p>This string consists of <strong>32 hexadecimal digits</strong> (characters <code>0–9</code> and <code>a–f</code>) grouped into five fields separated by hyphens in an <strong>8-4-4-4-12 pattern</strong>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>  550e8400  -   e29b   -   41d4   -   a716   -   446655440000</span></span>
+<span class="line"><span> [ 8 hex ]    [ 4 hex]   [ 4 hex]   [ 4 hex]     [  12 hex  ]</span></span>
+<span class="line"><span>  32 bits      16 bits    16 bits    16 bits       48 bits</span></span></code></pre>
+<h3 id="the-breakdown-of-fields">The Breakdown of Fields</h3>
+<p>In the formal specification (RFC 9562), the 128 bits are assigned specific roles:</p>
+<ol>
+<li><strong><code>time_low</code> (8 characters / 32 bits):</strong> <code>550e8400</code> — The low 32 bits of the timestamp (in time-based versions) or random data.</li>
+<li><strong><code>time_mid</code> (4 characters / 16 bits):</strong> <code>e29b</code> — The middle 16 bits of the timestamp or random data.</li>
+<li><strong><code>time_hi_and_version</code> (4 characters / 16 bits):</strong> <code>41d4</code> — The first character (<code>4</code>) represents the <strong>UUID Version</strong> (in this case, Version 4), while the remaining 3 characters contain timestamp or random data.</li>
+<li><strong><code>clock_seq_hi_and_reserved</code> / <code>clock_seq_low</code> (4 characters / 16 bits):</strong> <code>a716</code> — The leading 2 to 3 bits indicate the <strong>UUID Variant</strong> (RFC 9562 variant), and the rest contains clock sequence or random data.</li>
+<li><strong><code>node</code> (12 characters / 48 bits):</strong> <code>446655440000</code> — In Version 1, this holds the IEEE 802 MAC address; in Version 4 and 7, it contains cryptographically strong random or pseudo-random bits.</li>
+</ol>
+<hr>
+<h2 id="7-why-are-uuids-and-guids-128-bit">7. Why Are UUIDs and GUIDs 128-bit?</h2>
+<p>Why did computer scientists settle on 128 bits rather than 32, 64, or 256 bits?</p>
+<p>128 bits is the <strong>mathematical sweet spot</strong> between compact storage and collision resistance.</p>
+<ul>
+<li>A 128-bit number allows for $2^{128}$ possible unique combinations.</li>
+<li>In decimal, that is:
+$$\approx 340,282,366,920,938,463,463,374,607,431,768,211,456$$
+<em>(over 340 undecillion possible values).</em></li>
+</ul>
+<h3 id="how-low-is-the-risk-of-a-collision">How Low Is the Risk of a Collision?</h3>
+<p>To illustrate how enormous this space is:</p>
+<p>If you generated <strong>1 billion new UUIDs every second</strong> for <strong>100 consecutive years</strong>, the probability of generating a single duplicate is less than 0.00000000001%.</p>
+<p>Because 128 bits fit neatly into two 64-bit CPU registers or standard database integer blocks, modern processors can compare and index UUIDs with exceptional speed.</p>
+<hr>
+<h2 id="8-uuid-versions-and-how-they-relate-to-guids">8. UUID Versions and How They Relate to GUIDs</h2>
+<p>The latest standard, <strong>RFC 9562</strong>, defines multiple versions of UUIDs. Each version serves a distinct engineering purpose.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>┌─────────┬───────────────────────────────┬────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│ Version │ Generation Method             │ Best Used For                              │</span></span>
+<span class="line"><span>├─────────┼───────────────────────────────┼────────────────────────────────────────────┤</span></span>
+<span class="line"><span>│ UUID v1 │ Timestamp + MAC Address       │ Legacy distributed systems                 │</span></span>
+<span class="line"><span>│ UUID v3 │ MD5 Hash of Namespace + Name  │ Legacy deterministic IDs                   │</span></span>
+<span class="line"><span>│ UUID v4 │ Cryptographic Randomness      │ General web apps, APIs, primary keys       │</span></span>
+<span class="line"><span>│ UUID v5 │ SHA-1 Hash of Namespace + Name│ Deterministic matching across services     │</span></span>
+<span class="line"><span>│ UUID v6 │ Reordered Timestamp + Node    │ Legacy database index friendly             │</span></span>
+<span class="line"><span>│ UUID v7 │ Epoch Timestamp (ms) + Random │ Modern B-Tree databases, MySQL, PostgreSQL │</span></span>
+<span class="line"><span>│ UUID v8 │ Custom / Vendor Specific      │ Specialized domain-specific payloads       │</span></span>
+<span class="line"><span>└─────────┴───────────────────────────────┴────────────────────────────────────────────┘</span></span></code></pre>
+<h3 id="which-version-does-a-microsoft-guid-use">Which Version Does a Microsoft GUID Use?</h3>
+<p>When you call <code>Guid.NewGuid()</code> in C# or <code>NEWID()</code> in Microsoft SQL Server, the system generates a <strong>UUID Version 4 (Random)</strong> identifier.</p>
+<p>When you call <code>NEWSEQUENTIALID()</code> in SQL Server, it generates a sequential identifier similar in spirit to <strong>UUID Version 1 / Version 7</strong> to prevent B-Tree index fragmentation.</p>
+<p>If your application needs thousands of identifiers at once for performance testing, seed data, or batch migration, check out our <a href="/bulk-uuid-generator/">Bulk UUID Generator</a>.</p>
+<hr>
+<h2 id="9-uuid-vs-guid-in-microsoft-and-windows">9. UUID vs GUID in Microsoft and Windows</h2>
+<p>Microsoft played a major role in making 128-bit identifiers ubiquitous. Understanding where GUIDs live in Windows helps demystify why the terminology stuck.</p>
+<h3 id="1-the-windows-registry-and-com-objects">1. The Windows Registry and COM Objects</h3>
+<p>Every registered COM library, interface, and application component on a Windows machine is indexed by a GUID:</p>
+<ul>
+<li><strong>CLSID (Class ID):</strong> <code>{0002DF01-0000-0000-C000-000000000046}</code> (Identifies Internet Explorer)</li>
+<li><strong>IID (Interface ID):</strong> <code>{00000000-0000-0000-C000-000000000046}</code> (Identifies <code>IUnknown</code>)</li>
+</ul>
+<h3 id="2-net-and-c">2. .NET and C#</h3>
+<p>In the .NET ecosystem, the <code>System.Guid</code> struct is a fundamental building block:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#6A737D">// Generating a GUID in C#</span></span>
+<span class="line"><span style="color:#B392F0">Guid</span><span style="color:#B392F0"> myGuid</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Guid.</span><span style="color:#B392F0">NewGuid</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(myGuid.</span><span style="color:#B392F0">ToString</span><span style="color:#E1E4E8">()); </span></span>
+<span class="line"><span style="color:#6A737D">// Output: "d8e3b74e-6e21-4f9a-8c9e-5f12e8b0a3c2"</span></span></code></pre>
+<p>Under the hood, <code>System.Guid</code> implements standard RFC 4122 / RFC 9562 generation algorithms using the operating system’s cryptographic random number generator (<code>BCryptGenRandom</code> or equivalent).</p>
+<h3 id="3-microsoft-sql-server-uniqueidentifier">3. Microsoft SQL Server (<code>UNIQUEIDENTIFIER</code>)</h3>
+<p>SQL Server natively supports GUIDs using the <code>UNIQUEIDENTIFIER</code> column type. While convenient, developers often prefer modern time-ordered identifiers (like UUID v7) to avoid index page splits caused by random UUID v4 values.</p>
+<hr>
+<h2 id="10-are-uuid-and-guid-interchangeable">10. Are UUID and GUID Interchangeable?</h2>
+<p><strong>In conversational English and high-level software design: YES.</strong></p>
+<p>If a teammate asks: <em>“Can you add a UUID field to this database table?”</em> and another says <em>“Make sure that GUID is indexed,”</em> they are referring to the same thing.</p>
+<p><strong>In code and cross-platform binary serialization: PAY ATTENTION.</strong></p>
+<p>Here are the two cases where you must be careful:</p>
+<ol>
+<li><strong>Raw Byte Serialization:</strong> If you pass a 16-byte buffer from a C# application to a Java or Go microservice without formatting it as a string first, the first 8 bytes will be shuffled due to little-endian integer storage in <code>System.Guid.ToByteArray()</code>.</li>
+<li><strong>Deterministic String Encodings:</strong> In Web APIs, standard lowercase 36-character strings without braces are preferred. Some legacy Windows software defaults to uppercase strings enclosed in curly braces (<code>{...}</code>).</li>
+</ol>
+<hr>
+<h2 id="11-when-should-you-use-the-term-uuid">11. When Should You Use the Term “UUID”?</h2>
+<p>You should use the term <strong>UUID</strong> when:</p>
+<ul>
+<li>Writing documentation for cross-platform, cloud-native, or open-source software.</li>
+<li>Working with languages like <strong>Python, Go, Java, Rust, TypeScript, or PHP</strong>.</li>
+<li>Designing <strong>REST, GraphQL, or gRPC APIs</strong>.</li>
+<li>Working with databases like <strong>PostgreSQL, CockroachDB, MongoDB, Cassandra, or Redis</strong>.</li>
+<li>Referencing formal Internet specifications like <strong>RFC 9562</strong>.</li>
+</ul>
+<hr>
+<h2 id="12-when-will-you-see-guid-instead">12. When Will You See “GUID” Instead?</h2>
+<p>You will most often encounter the term <strong>GUID</strong> when:</p>
+<ul>
+<li>Writing code in <strong>C#, F#, VB.NET, or C++ on Windows</strong>.</li>
+<li>Designing schemas for <strong>Microsoft SQL Server</strong>.</li>
+<li>Managing <strong>Active Directory</strong> objects (<code>objectGUID</code>).</li>
+<li>Working with the <strong>Windows Registry</strong> and COM/OLE components.</li>
+<li>Interacting with the <strong>UEFI BIOS</strong> partition table (GPT stands for <em>GUID Partition Table</em>).</li>
+</ul>
+<hr>
+<h2 id="13-common-uuidguid-misconceptions">13. Common UUID/GUID Misconceptions</h2>
+<p>Let’s clear up some common myths that circulate in online forums:</p>
+<h3 id="myth-1-guids-are-36-characters-but-uuids-are-128-bits">Myth 1: “GUIDs are 36 characters, but UUIDs are 128 bits.”</h3>
+<p><strong>Fact:</strong> Both are natively <strong>128 bits in binary</strong> and <strong>36 characters in canonical string format</strong>. The string is simply the human-readable hexadecimal representation of the 128-bit number.</p>
+<h3 id="myth-2-guid-is-proprietary-to-microsoft">Myth 2: “GUID is proprietary to Microsoft.”</h3>
+<p><strong>Fact:</strong> While Microsoft popularized the term GUID, the underlying math and structural layout adhere to the open OSF/DCE and IETF standards.</p>
+<h3 id="myth-3-uuids-are-sequential-while-guids-are-random">Myth 3: “UUIDs are sequential, while GUIDs are random.”</h3>
+<p><strong>Fact:</strong> Both UUIDs and GUIDs can be either random or sequential depending on the version used (e.g., UUID v4 is random; UUID v7 and SQL Server’s <code>NEWSEQUENTIALID()</code> are time-ordered).</p>
+<h3 id="myth-4-uuids-are-completely-secure-and-can-replace-api-keys">Myth 4: “UUIDs are completely secure and can replace API keys.”</h3>
+<p><strong>Fact:</strong> While UUID v4 is unpredictable, UUIDs are not secret tokens. Time-based UUIDs (like v1 and v7) leak creation timestamps and should never be used as authentication passwords.</p>
+<hr>
+<h2 id="14-real-world-examples-and-alternative-encodings">14. Real-World Examples and Alternative Encodings</h2>
+<h3 id="compact-storage-with-base64-uuids">Compact Storage with Base64 UUIDs</h3>
+<p>While standard 36-character strings are easy to read, they take up 36 bytes in text format. By converting the raw 128 bits into URL-safe Base64, you can compress the identifier into just <strong>22 characters</strong>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>Standard UUID:  550e8400-e29b-41d4-a716-446655440000  (36 chars)</span></span>
+<span class="line"><span>Base64 UUID:    VQ6EAOKbQdSnFkRmVUQAAA                  (22 chars)</span></span></code></pre>
+<p>If you are optimizing URL parameters, mobile payloads, or Redis keys, test our <a href="/base64-uuid-generator/">Base64 UUID Generator</a> to see how compact encoding works in practice.</p>
+<h3 id="database-primary-keys--distributed-tracing">Database Primary Keys &#x26; Distributed Tracing</h3>
+<p>In modern microservices architectures:</p>
+<ul>
+<li><strong>Distributed Tracing:</strong> Systems like OpenTelemetry and AWS X-Ray assign a unique 128-bit UUID/GUID to every incoming HTTP request to trace it across hundreds of server nodes.</li>
+<li><strong>Idempotency Keys:</strong> Payment gateways like Stripe use UUIDs as idempotency keys to ensure a customer is never billed twice for a single button click.</li>
+</ul>
+<hr>
+<h2 id="15-uuid-vs-guid-which-one-should-you-use">15. UUID vs GUID: Which One Should You Use?</h2>
+<p>When choosing what to use in your next project, follow these simple rules:</p>
+<ol>
+<li><strong>In Code:</strong> Follow the naming convention of your programming language and framework.
+<ul>
+<li>If you are in <strong>.NET / C#</strong>, use <code>Guid.NewGuid()</code>.</li>
+<li>If you are in <strong>Node.js, Python, Go, or Java</strong>, use <code>uuid.v4()</code> or <code>uuidv7()</code>.</li>
+</ul>
+</li>
+<li><strong>In Database Storage:</strong> Store identifiers in native 16-byte binary or <code>UUID</code> column types (e.g., <code>UUID</code> in PostgreSQL, <code>UNIQUEIDENTIFIER</code> in SQL Server).</li>
+<li><strong>In API Payloads:</strong> Always transfer identifiers as standard <strong>lowercase 36-character strings</strong> (<code>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code>) without curly braces to guarantee 100% compatibility across all programming languages.</li>
+</ol>
+<hr>
+<h2 id="16-frequently-asked-questions-faq">16. Frequently Asked Questions (FAQ)</h2>
+<h3 id="is-a-guid-the-same-as-a-uuid">Is a GUID the same as a UUID?</h3>
+<p>Yes. A GUID is Microsoft’s implementation and naming convention for a UUID. Both represent 128-bit unique identifiers. RFC 9562 explicitly recognizes that UUIDs are also called GUIDs.</p>
+<h3 id="can-i-convert-a-guid-to-a-uuid">Can I convert a GUID to a UUID?</h3>
+<p>Yes. Because they have identical 128-bit values and string representations, any valid GUID string is already a valid UUID string. Simply remove any surrounding curly braces <code>{}</code> and convert the text to lowercase.</p>
+<h3 id="what-does-the-8-4-4-4-12-pattern-mean">What does the 8-4-4-4-12 pattern mean?</h3>
+<p>The 8-4-4-4-12 pattern represents the number of hexadecimal characters in each of the five hyphen-separated groups of a UUID/GUID. Together, these 32 hex digits represent 16 bytes (128 bits) of data.</p>
+<h3 id="is-uuid-v4-or-uuid-v7-better-for-databases">Is UUID v4 or UUID v7 better for databases?</h3>
+<p>UUID v7 is generally better for database primary keys because it begins with an epoch millisecond timestamp, keeping B-Tree indexes sorted sequentially. UUID v4 is completely random, which can cause database page splits at massive scale.</p>
+<h3 id="why-do-some-guids-have-curly-braces">Why do some GUIDs have curly braces <code>{}</code>?</h3>
+<p>Microsoft COM and Windows Registry conventions historically wrap GUIDs in curly braces (e.g., <code>{12345678-1234-1234-1234-123456789abc}</code>). In modern REST APIs and cloud systems, braces are omitted.</p>
+<hr>
+<h2 id="17-final-conclusion">17. Final Conclusion</h2>
+<p>To sum up:</p>
+<ul>
+<li><strong>UUID</strong> is the universal, open Internet standard (RFC 9562).</li>
+<li><strong>GUID</strong> is Microsoft’s terminology for the exact same 128-bit identifier concept.</li>
+<li>In string form, they look and function identically.</li>
+<li>In binary memory, Microsoft GUID structures use mixed-endian ordering, while standard UUIDs use big-endian order.</li>
+<li>Use whichever term fits your tech stack, but always exchange them as standard 36-character hyphenated strings across network boundaries.</li>
+</ul>
+<p>Ready to generate, inspect, or validate identifiers for your next build? Explore our comprehensive suite of developer tools:</p>
+<ul>
+<li><a href="/uuid-generator/">UUID Generator</a> — Fast, secure online UUID generation.</li>
+<li><a href="/guid-generator/">GUID Generator</a> — Create Windows &#x26; .NET ready GUIDs.</li>
+<li><a href="/uuid-validator/">UUID / GUID Validator</a> — Verify syntax, extract version and variant data.</li>
+<li><a href="/bulk-uuid-generator/">Bulk UUID Generator</a> — Generate up to 10,000 identifiers at once.</li>
+<li><a href="/base64-uuid-generator/">Base64 UUID Generator</a> — Convert 128-bit UUIDs into compact 22-character strings.</li>
+</ul>  </div> </article> <!-- Quick Tool CTA Banner --> <div class="glass-panel-subtle" style="padding: 2rem; text-align: center; border-radius: var(--radius-lg);" data-astro-cid-4dqtj3le> <h3 style="margin-bottom: 0.5rem;" data-astro-cid-4dqtj3le>Need to generate UUIDs right now?</h3> <p style="margin-bottom: 1.25rem; font-size: 0.95rem;" data-astro-cid-4dqtj3le>
+Generate cryptographically secure UUID v4 or time-ordered UUID v7 identifiers instantly in your browser.
+</p> <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;" data-astro-cid-4dqtj3le> <a href="/uuid-generator/" class="btn btn-primary" data-astro-cid-4dqtj3le>Generate UUIDs Online</a> <a href="/uuid-validator/" class="btn btn-secondary" data-astro-cid-4dqtj3le>Validate a UUID</a> </div> </div> </div>  </main> <footer class="site-footer" data-astro-cid-ofitbb36> <div class="container" data-astro-cid-ofitbb36> <div class="footer-content" data-astro-cid-ofitbb36> <!-- Left: Logo & Brand Information --> <div class="footer-brand-section" data-astro-cid-ofitbb36> <a href="/" class="footer-brand" aria-label="FastUUIDGenerator" data-astro-cid-ofitbb36> <span class="footer-logo-icon" data-astro-cid-ofitbb36>U</span> <span class="footer-brand-name" data-astro-cid-ofitbb36>FastUUIDGenerator</span> </a> <p class="footer-description" data-astro-cid-ofitbb36> Client-side generation with zero telemetry. Fast, private, and secure. </p> </div> <!-- Right: Navigation and Legal Links --> <nav class="footer-nav" aria-label="Footer Navigation" data-astro-cid-ofitbb36> <ul class="footer-links" data-astro-cid-ofitbb36> <li data-astro-cid-ofitbb36><a href="/uuid-generator/" data-astro-cid-ofitbb36>UUID Generator</a></li> <li data-astro-cid-ofitbb36><a href="/blog/" data-astro-cid-ofitbb36>Blog</a></li> <li data-astro-cid-ofitbb36><a href="/about/" data-astro-cid-ofitbb36>About</a></li> <li data-astro-cid-ofitbb36><a href="/privacy-policy/" data-astro-cid-ofitbb36>Privacy Policy</a></li> <li data-astro-cid-ofitbb36><a href="/terms-of-service/" data-astro-cid-ofitbb36>Terms of Service</a></li> <li data-astro-cid-ofitbb36><a href="/contact/" data-astro-cid-ofitbb36>Contact</a></li> </ul> </nav> </div> <!-- Centered Copyright Area across Desktop, Tablet, and Mobile --> <div class="footer-bottom" data-astro-cid-ofitbb36> <p class="footer-copyright" data-astro-cid-ofitbb36>
+© 2026 FastUUIDGenerator. All rights reserved. </p> </div> </div> </footer>  </body></html> 

@@ -1,0 +1,24 @@
+---
+import { getTranslations } from '../i18n/utils';
+import ToolLayout from '../layouts/ToolLayout.astro';
+import GuidGenerator from '../components/tools/GuidGenerator.astro';
+
+const lang = 'en';
+const t = getTranslations(lang);
+const canonicalPath = '/guid-generator/';
+---
+
+<ToolLayout
+  title={t.seo.guidGeneratorTitle}
+  description={t.seo.guidGeneratorDescription}
+  heroTitle={t.guidGenerator.title}
+  heroSubtitle={t.guidGenerator.subtitle}
+  lang={lang}
+  canonicalPath={canonicalPath}
+  breadcrumbs={[
+    { name: t.site.name, url: 'https://fastuuidgenerator.com/' },
+    { name: t.nav.guid, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <GuidGenerator t={t} lang={lang} />
+</ToolLayout>

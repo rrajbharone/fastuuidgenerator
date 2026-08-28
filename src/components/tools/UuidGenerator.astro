@@ -1,0 +1,481 @@
+---
+import type { TranslationDictionary } from '../../i18n/schema';
+import type { LanguageCode } from '../../i18n/languages';
+
+interface Props {
+  t: TranslationDictionary;
+  lang: LanguageCode;
+  defaultVersion?: 'v4' | 'v7';
+  defaultQuantity?: number;
+}
+
+const { t, lang, defaultVersion = 'v4', defaultQuantity = 1 } = Astro.props;
+---
+
+<div class="glass-panel tool-card" id="uuid-generator-tool">
+  <!-- Controls Section -->
+  <div class="generator-controls-grid">
+    <!-- Version Selector -->
+    <div class="control-group">
+      <label for="uuid-version-select" class="control-label">
+        {t.generator.selectVersion}
+      </label>
+      <select id="uuid-version-select" class="select-control">
+        <option value="v4" selected={defaultVersion === 'v4'}>UUID v4 (Random / RFC 4122)</option>
+        <option value="v7" selected={defaultVersion === 'v7'}>UUID v7 (Time-Ordered / RFC 9562)</option>
+      </select>
+    </div>
+
+    <!-- Quantity Selector -->
+    <div class="control-group">
+      <label for="uuid-quantity-input" class="control-label">
+        {t.generator.quantityLabel}
+      </label>
+      <div class="quantity-input-wrapper">
+        <input
+          type="number"
+          id="uuid-quantity-input"
+          class="input-control quantity-input"
+          min="1"
+          max="10000"
+          value={defaultQuantity}
+        />
+        <div class="quantity-presets">
+          <button type="button" class="btn btn-secondary btn-sm qty-preset" data-qty="1">1</button>
+          <button type="button" class="btn btn-secondary btn-sm qty-preset" data-qty="5">5</button>
+          <button type="button" class="btn btn-secondary btn-sm qty-preset" data-qty="50">50</button>
+          <button type="button" class="btn btn-secondary btn-sm qty-preset" data-qty="500">500</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Format Selector -->
+    <div class="control-group">
+      <label for="uuid-format-select" class="control-label">
+        {t.generator.formatLabel}
+      </label>
+      <select id="uuid-format-select" class="select-control">
+        <option value="standard">{t.generator.formatting.standard}</option>
+        <option value="uppercase">{t.generator.formatting.uppercase}</option>
+        <option value="noHyphens">{t.generator.formatting.noHyphens}</option>
+        <option value="braces">{t.generator.formatting.braces}</option>
+        <option value="quotes">{t.generator.formatting.quotes}</option>
+        <option value="commaSeparated">{t.generator.formatting.commaSeparated}</option>
+        <option value="jsonArray">{t.generator.formatting.jsonArray}</option>
+        <option value="csharpGuid">{t.generator.formatting.csharpGuid}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Primary Action Bar -->
+  <div class="generator-action-bar">
+    <div class="primary-actions">
+      <button type="button" class="btn btn-primary" id="btn-generate">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+        <span>{t.common.generate}</span>
+      </button>
+      <button type="button" class="btn btn-secondary" id="btn-copy-all">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span class="copy-text">{t.common.copyAll}</span>
+      </button>
+    </div>
+
+    <!-- Download & Clear Controls -->
+    <div class="secondary-actions">
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-download-txt" title={t.common.downloadTxt}>
+        <span>.TXT</span>
+      </button>
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-download-json" title={t.common.downloadJson}>
+        <span>.JSON</span>
+      </button>
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-download-csv" title={t.common.downloadCsv}>
+        <span>.CSV</span>
+      </button>
+      <button type="button" class="btn btn-outline btn-sm" id="btn-clear">
+        <span>{t.common.clear}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Output Area -->
+  <div class="generator-results-area">
+    <div class="results-meta-header">
+      <span id="results-count-badge" class="badge badge-brand">
+        {t.common.results}
+      </span>
+      <span class="privacy-note">
+        {t.common.privacyNotice}
+      </span>
+    </div>
+
+    <!-- Single Item Display -->
+    <div id="single-uuid-container" class="uuid-display-box" style="display: none;">
+      <span id="single-uuid-text" class="input-mono single-uuid-val" style="user-select: all;"></span>
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-single-copy">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span class="single-copy-label">{t.common.copy}</span>
+      </button>
+    </div>
+
+    <!-- Multi Item Display -->
+    <div id="multi-uuid-container" class="uuid-list-container" style="display: none;">
+      <div id="uuid-rows-list"></div>
+    </div>
+
+    <!-- Bulk Raw Textarea -->
+    <div id="raw-textarea-container" style="display: none;">
+      <textarea
+        id="raw-output-textarea"
+        class="textarea-control input-mono"
+        rows="12"
+        readonly
+        spellcheck="false"
+        style="resize: vertical; font-size: 0.9rem;"
+      ></textarea>
+    </div>
+  </div>
+</div>
+
+<style>
+  .generator-controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .control-group {
+    min-width: 0;
+  }
+
+  .control-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+  }
+
+  .quantity-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .quantity-input {
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .quantity-presets {
+    display: flex;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  .generator-action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-glass);
+  }
+
+  .primary-actions, .secondary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .results-meta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .privacy-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .single-uuid-val {
+    word-break: break-all;
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 640px) {
+    .generator-controls-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .generator-action-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .primary-actions, .secondary-actions {
+      width: 100%;
+    }
+    .primary-actions .btn, .secondary-actions .btn {
+      flex: 1;
+    }
+    .single-uuid-val {
+      font-size: 0.95rem;
+    }
+    .uuid-display-box {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+    }
+    .uuid-display-box .btn {
+      align-self: flex-end;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .quantity-presets {
+      width: 100%;
+    }
+    .quantity-presets .btn {
+      flex: 1;
+    }
+  }
+</style>
+
+<script>
+  import { generateBulkUUIDs, type FormatOptions, type UuidVersion } from '../../utils/uuid';
+
+  function initGenerator() {
+    const versionSelect = document.getElementById('uuid-version-select') as HTMLSelectElement;
+    const quantityInput = document.getElementById('uuid-quantity-input') as HTMLInputElement;
+    const formatSelect = document.getElementById('uuid-format-select') as HTMLSelectElement;
+    const btnGenerate = document.getElementById('btn-generate');
+    const btnCopyAll = document.getElementById('btn-copy-all');
+    const btnClear = document.getElementById('btn-clear');
+    const btnDownloadTxt = document.getElementById('btn-download-txt');
+    const btnDownloadJson = document.getElementById('btn-download-json');
+    const btnDownloadCsv = document.getElementById('btn-download-csv');
+
+    const singleContainer = document.getElementById('single-uuid-container');
+    const singleText = document.getElementById('single-uuid-text');
+    const btnSingleCopy = document.getElementById('btn-single-copy');
+    const multiContainer = document.getElementById('multi-uuid-container');
+    const rowsList = document.getElementById('uuid-rows-list');
+    const rawContainer = document.getElementById('raw-textarea-container');
+    const rawTextarea = document.getElementById('raw-output-textarea') as HTMLTextAreaElement;
+    const countBadge = document.getElementById('results-count-badge');
+
+    if (!btnGenerate) return;
+
+    let currentList: string[] = [];
+
+    function getFormatOptions(): FormatOptions {
+      const fmt = formatSelect ? formatSelect.value : 'standard';
+      return {
+        casing: fmt === 'uppercase' ? 'uppercase' : 'lowercase',
+        hyphens: fmt !== 'noHyphens',
+        braces: fmt === 'braces',
+        quotes: fmt === 'quotes',
+        csharp: fmt === 'csharpGuid',
+      };
+    }
+
+    function renderOutput(uuids: string[]) {
+      currentList = uuids;
+      const fmt = formatSelect ? formatSelect.value : 'standard';
+      const isCustomStructure = fmt === 'commaSeparated' || fmt === 'jsonArray' || uuids.length > 200;
+
+      if (countBadge) {
+        countBadge.textContent = `${uuids.length} UUID(s)`;
+      }
+
+      if (uuids.length === 0) {
+        if (singleContainer) singleContainer.style.display = 'none';
+        if (multiContainer) multiContainer.style.display = 'none';
+        if (rawContainer) rawContainer.style.display = 'none';
+        return;
+      }
+
+      if (isCustomStructure) {
+        if (singleContainer) singleContainer.style.display = 'none';
+        if (multiContainer) multiContainer.style.display = 'none';
+        if (rawContainer) rawContainer.style.display = 'block';
+
+        if (fmt === 'jsonArray') {
+          rawTextarea.value = JSON.stringify(uuids, null, 2);
+        } else if (fmt === 'commaSeparated') {
+          rawTextarea.value = uuids.join(', ');
+        } else {
+          rawTextarea.value = uuids.join('\n');
+        }
+      } else if (uuids.length === 1) {
+        if (rawContainer) rawContainer.style.display = 'none';
+        if (multiContainer) multiContainer.style.display = 'none';
+        if (singleContainer) singleContainer.style.display = 'flex';
+        if (singleText) singleText.textContent = uuids[0];
+      } else {
+        if (singleContainer) singleContainer.style.display = 'none';
+        if (rawContainer) rawContainer.style.display = 'none';
+        if (multiContainer) multiContainer.style.display = 'block';
+
+        if (rowsList) {
+          rowsList.innerHTML = '';
+          const fragment = document.createDocumentFragment();
+
+          uuids.forEach((id) => {
+            const row = document.createElement('div');
+            row.className = 'uuid-row';
+            
+            const span = document.createElement('span');
+            span.className = 'input-mono';
+            span.textContent = id;
+            span.style.userSelect = 'all';
+            span.style.wordBreak = 'break-all';
+            span.style.fontSize = '0.9rem';
+
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'btn btn-secondary btn-sm';
+            copyBtn.textContent = 'Copy';
+            copyBtn.style.flexShrink = '0';
+            copyBtn.addEventListener('click', () => {
+              navigator.clipboard.writeText(id).then(() => {
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1500);
+              });
+            });
+
+            row.appendChild(span);
+            row.appendChild(copyBtn);
+            fragment.appendChild(row);
+          });
+
+          rowsList.appendChild(fragment);
+        }
+      }
+    }
+
+    function runGeneration() {
+      const version = (versionSelect ? versionSelect.value : 'v4') as UuidVersion;
+      const count = parseInt(quantityInput ? quantityInput.value : '1', 10) || 1;
+      const options = getFormatOptions();
+
+      const uuids = generateBulkUUIDs(version, count, options);
+      renderOutput(uuids);
+    }
+
+    btnGenerate.addEventListener('click', runGeneration);
+
+    if (versionSelect) versionSelect.addEventListener('change', runGeneration);
+    if (formatSelect) formatSelect.addEventListener('change', runGeneration);
+    if (quantityInput) quantityInput.addEventListener('change', runGeneration);
+
+    document.querySelectorAll('.qty-preset').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const qty = btn.getAttribute('data-qty') || '1';
+        if (quantityInput) {
+          quantityInput.value = qty;
+          runGeneration();
+        }
+      });
+    });
+
+    if (btnSingleCopy && singleText) {
+      btnSingleCopy.addEventListener('click', () => {
+        const text = singleText.textContent || '';
+        navigator.clipboard.writeText(text).then(() => {
+          const label = btnSingleCopy.querySelector('.single-copy-label');
+          if (label) {
+            const prev = label.textContent;
+            label.textContent = 'Copied!';
+            setTimeout(() => { label.textContent = prev; }, 1500);
+          }
+        });
+      });
+    }
+
+    if (btnCopyAll) {
+      btnCopyAll.addEventListener('click', () => {
+        if (currentList.length === 0) return;
+        const fmt = formatSelect ? formatSelect.value : 'standard';
+        let textToCopy = '';
+        if (fmt === 'jsonArray') {
+          textToCopy = JSON.stringify(currentList, null, 2);
+        } else if (fmt === 'commaSeparated') {
+          textToCopy = currentList.join(', ');
+        } else {
+          textToCopy = currentList.join('\n');
+        }
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const label = btnCopyAll.querySelector('.copy-text');
+          if (label) {
+            const prev = label.textContent;
+            label.textContent = 'Copied!';
+            setTimeout(() => { label.textContent = prev; }, 1500);
+          }
+        });
+      });
+    }
+
+    if (btnClear) {
+      btnClear.addEventListener('click', () => {
+        renderOutput([]);
+      });
+    }
+
+    function downloadFile(content: string, filename: string, type: string) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    if (btnDownloadTxt) {
+      btnDownloadTxt.addEventListener('click', () => {
+        if (currentList.length === 0) return;
+        downloadFile(currentList.join('\n'), 'uuids.txt', 'text/plain');
+      });
+    }
+
+    if (btnDownloadJson) {
+      btnDownloadJson.addEventListener('click', () => {
+        if (currentList.length === 0) return;
+        downloadFile(JSON.stringify(currentList, null, 2), 'uuids.json', 'application/json');
+      });
+    }
+
+    if (btnDownloadCsv) {
+      btnDownloadCsv.addEventListener('click', () => {
+        if (currentList.length === 0) return;
+        downloadFile(['uuid', ...currentList].join('\n'), 'uuids.csv', 'text/csv');
+      });
+    }
+
+    // Auto generate on load
+    runGeneration();
+  }
+
+  initGenerator();
+  document.addEventListener('astro:page-load', initGenerator);
+</script>

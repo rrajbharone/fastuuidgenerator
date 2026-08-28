@@ -1,0 +1,27 @@
+---
+import { getTranslations } from '../i18n/utils';
+import ToolLayout from '../layouts/ToolLayout.astro';
+import Base64UuidGenerator from '../components/tools/Base64UuidGenerator.astro';
+
+const lang = 'en';
+const t = getTranslations(lang);
+const canonicalPath = '/base64-uuid-generator/';
+---
+
+<ToolLayout
+  title={t.seo.base64UuidTitle}
+  description={t.seo.base64UuidDescription}
+  heroTitle={t.base64Generator.title}
+  heroSubtitle={t.base64Generator.subtitle}
+  lang={lang}
+  canonicalPath={canonicalPath}
+  faqs={t.base64Generator.faqs}
+  showPopularTools={false}
+  showDefaultEducational={false}
+  breadcrumbs={[
+    { name: t.site.name, url: 'https://fastuuidgenerator.com/' },
+    { name: t.nav.base64Uuid, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <Base64UuidGenerator t={t} lang={lang} />
+</ToolLayout>

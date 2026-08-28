@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTranslations } from '../../i18n/utils';
+
+const posts = await getCollection('blog');
+const sortedPosts = posts.sort((a, b) => {
+  const timeA = new Date(a.data.publishDate).getTime();
+  const timeB = new Date(b.data.publishDate).getTime();
+  if (timeB !== timeA) {
+    return timeB - timeA; // Newest first
+  }
+  return a.data.title.localeCompare(b.data.title);
+});
+
+const t = getTranslations('en');
+---
+
+<BaseLayout
+  title="UUID & System Architecture Blog | FastUUIDGenerator"
+  description="Technical articles, deep dives, benchmarks, and tutorials on UUID v4, UUID v7, GUIDs, database B-Tree index optimization, and distributed system design."
+  lang="en"
+  canonicalPath="/blog/"
+  isMultilingualTool={false}
+  showLangSelector={false}
+  breadcrumbs={[
+    { name: 'Home', url: 'https://fastuuidgenerator.com/' },
+    { name: 'Blog', url: 'https://fastuuidgenerator.com/blog/' },
+  ]}
+>
+  <div class="container" style="padding: 3rem 1.25rem 5rem;">
+    <header style="text-align: center; max-width: 680px; margin: 0 auto 3rem;">
+      <span class="badge badge-brand" style="margin-bottom: 0.75rem;">Engineering & Systems</span>
+      <h1 style="font-size: 2.25rem; margin-bottom: 0.75rem;">UUID Engineering Blog</h1>
+      <p>
+        In-depth technical guides, cryptographic analysis, and database indexing benchmarks for modern software engineers.
+      </p>
+    </header>
+
+    {sortedPosts.length > 0 ? (
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+        {sortedPosts.map((post) => (
+          <article class="glass-panel" style="padding: 1.75rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span class="badge badge-brand">{post.data.category}</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">{post.data.readingTime}</span>
+              </div>
+              <h2 style="font-size: 1.25rem; margin-bottom: 0.6rem; line-height: 1.35;">
+                <a href={`/blog/${post.slug}/`} style="color: var(--text-primary);">
+                  {post.data.title}
+                </a>
+              </h2>
+              <p style="font-size: 0.9rem; margin-bottom: 1.25rem; color: var(--text-secondary);">
+                {post.data.description}
+              </p>
+            </div>
+
+            <div style="padding-top: 1rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center;">
+              <time datetime={post.data.publishDate.toISOString()} style="font-size: 0.8rem; color: var(--text-muted);">
+                {post.data.publishDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </time>
+              <a href={`/blog/${post.slug}/`} class="btn btn-secondary btn-sm">
+                Read Guide →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="glass-panel" style="max-width: 540px; margin: 0 auto; padding: 3rem 2rem; text-align: center;">
+        <div style="width: 48px; height: 48px; margin: 0 auto 1.25rem; border-radius: var(--radius-md); background: var(--brand-glow); color: var(--brand-primary); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-glass);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </div>
+        <h2 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Articles Coming Soon</h2>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">
+          We are preparing in-depth technical guides, cryptographic breakdowns, and database indexing benchmarks.
+        </p>
+        <a href="/uuid-generator/" class="btn btn-primary">
+          Explore UUID Tools →
+        </a>
+      </div>
+    )}
+  </div>
+</BaseLayout>

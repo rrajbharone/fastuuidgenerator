@@ -1,0 +1,75 @@
+---
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  url: string;
+  faqs?: FaqItem[];
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  isApp?: boolean;
+}
+
+const { title, description, url, faqs = [], breadcrumbs = [], isApp = true } = Astro.props;
+
+const softwareSchema = isApp
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      name: title,
+      description: description,
+      url: url,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      browserRequirements: 'Requires JavaScript and Web Cryptography API support',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+      },
+    }
+  : null;
+
+const breadcrumbSchema = breadcrumbs.length > 0
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((crumb, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        name: crumb.name,
+        item: crumb.url,
+      })),
+    }
+  : null;
+
+const faqSchema = faqs.length > 0
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: f.answer,
+        },
+      })),
+    }
+  : null;
+---
+
+{softwareSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+)}
+
+{breadcrumbSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+)}
+
+{faqSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+)}
