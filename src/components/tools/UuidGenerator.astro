@@ -1,6 +1,7 @@
 ---
 import type { TranslationDictionary } from '../../i18n/schema';
 import type { LanguageCode } from '../../i18n/languages';
+import { generateUUIDv4, generateUUIDv7 } from '../../utils/uuid';
 
 interface Props {
   t: TranslationDictionary;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const { t, lang, defaultVersion = 'v4', defaultQuantity = 1 } = Astro.props;
+const initialUuid = defaultVersion === 'v7' ? generateUUIDv7() : generateUUIDv4();
 ---
 
 <div class="glass-panel tool-card" id="uuid-generator-tool">
@@ -108,7 +110,7 @@ const { t, lang, defaultVersion = 'v4', defaultQuantity = 1 } = Astro.props;
   <div class="generator-results-area">
     <div class="results-meta-header">
       <span id="results-count-badge" class="badge badge-brand">
-        {t.common.results}
+        {defaultQuantity === 1 ? '1 UUID' : `${defaultQuantity} UUIDs`}
       </span>
       <span class="privacy-note">
         {t.common.privacyNotice}
@@ -116,8 +118,8 @@ const { t, lang, defaultVersion = 'v4', defaultQuantity = 1 } = Astro.props;
     </div>
 
     <!-- Single Item Display -->
-    <div id="single-uuid-container" class="uuid-display-box" style="display: none;">
-      <span id="single-uuid-text" class="input-mono single-uuid-val" style="user-select: all;"></span>
+    <div id="single-uuid-container" class="uuid-display-box" style={defaultQuantity === 1 ? "display: flex;" : "display: none;"}>
+      <span id="single-uuid-text" class="input-mono single-uuid-val" style="user-select: all;">{initialUuid}</span>
       <button type="button" class="btn btn-secondary btn-sm" id="btn-single-copy">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>

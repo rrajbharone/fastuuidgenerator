@@ -1,6 +1,7 @@
 ---
 import type { TranslationDictionary } from '../../i18n/schema';
 import type { LanguageCode } from '../../i18n/languages';
+import { generateUUIDv4, uuidToBase64 } from '../../utils/uuid';
 
 interface Props {
   t: TranslationDictionary;
@@ -8,6 +9,11 @@ interface Props {
 }
 
 const { t, lang } = Astro.props;
+
+const initialUuid = generateUUIDv4();
+const initialUrlSafe = uuidToBase64(initialUuid, { urlSafe: true, padding: false });
+const initialStdBase64 = uuidToBase64(initialUuid, { urlSafe: false, padding: true });
+const initialHex = initialUuid.replace(/-/g, '');
 ---
 
 <div class="glass-panel tool-card" id="base64-uuid-tool">
@@ -83,6 +89,7 @@ const { t, lang } = Astro.props;
         id="uuid-source-input"
         class="input-control input-mono"
         placeholder={t.base64Generator.uuidInputPlaceholder}
+        value={initialUuid}
         spellcheck="false"
         autocomplete="off"
       />
@@ -111,7 +118,7 @@ const { t, lang } = Astro.props;
             </button>
           </div>
           <div class="output-value-box">
-            <code class="output-text input-mono" id="out-urlsafe-b64"></code>
+            <code class="output-text input-mono" id="out-urlsafe-b64">{initialUrlSafe}</code>
           </div>
         </div>
 
@@ -127,7 +134,7 @@ const { t, lang } = Astro.props;
             </button>
           </div>
           <div class="output-value-box">
-            <code class="output-text input-mono" id="out-std-b64"></code>
+            <code class="output-text input-mono" id="out-std-b64">{initialStdBase64}</code>
           </div>
         </div>
 
@@ -143,7 +150,7 @@ const { t, lang } = Astro.props;
             </button>
           </div>
           <div class="output-value-box">
-            <code class="output-text input-mono" id="out-canonical-uuid"></code>
+            <code class="output-text input-mono" id="out-canonical-uuid">{initialUuid}</code>
           </div>
         </div>
 
@@ -159,7 +166,7 @@ const { t, lang } = Astro.props;
             </button>
           </div>
           <div class="output-value-box">
-            <code class="output-text input-mono" id="out-raw-hex"></code>
+            <code class="output-text input-mono" id="out-raw-hex">{initialHex}</code>
           </div>
         </div>
       </div>

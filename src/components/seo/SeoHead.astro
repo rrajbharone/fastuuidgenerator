@@ -38,13 +38,26 @@ const ogImage = `${siteUrl}/og-image.png`;
 <meta name="theme-color" content="#090d16" media="(prefers-color-scheme: dark)" />
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 
-<!-- Performance Optimized Font (Enter / Inter with font-display: swap & minimal weights: 400, 500, 600, 700) -->
+<!-- Performance Optimized Font (Non-blocking with font-display: swap & system-ui fallback) -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  rel="stylesheet"
+  rel="preload"
+  as="style"
   href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
 />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  media="print"
+  onload="this.media='all'"
+/>
+<noscript>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  />
+</noscript>
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>

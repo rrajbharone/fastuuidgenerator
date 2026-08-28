@@ -1,6 +1,7 @@
 ---
 import type { TranslationDictionary } from '../../i18n/schema';
 import type { LanguageCode } from '../../i18n/languages';
+import { generateUUIDv4, formatUUID } from '../../utils/uuid';
 
 interface Props {
   t: TranslationDictionary;
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const { t, lang } = Astro.props;
+const initialGuid = formatUUID(generateUUIDv4(), { braces: true, casing: 'uppercase' });
 ---
 
 <div class="glass-panel tool-card" id="guid-generator-tool">
@@ -90,15 +92,15 @@ const { t, lang } = Astro.props;
   <div class="generator-results-area">
     <div class="results-meta-header">
       <span id="guid-count-badge" class="badge badge-brand">
-        {t.common.results}
+        1 GUID
       </span>
       <span class="privacy-note">
         {t.common.privacyNotice}
       </span>
     </div>
 
-    <div id="guid-single-box" class="uuid-display-box" style="display: none;">
-      <span id="guid-single-text" class="input-mono single-uuid-val" style="user-select: all;"></span>
+    <div id="guid-single-box" class="uuid-display-box" style="display: flex;">
+      <span id="guid-single-text" class="input-mono single-uuid-val" style="user-select: all;">{initialGuid}</span>
       <button type="button" class="btn btn-secondary btn-sm" id="btn-guid-single-copy">
         <span class="single-guid-copy-label">{t.common.copy}</span>
       </button>
