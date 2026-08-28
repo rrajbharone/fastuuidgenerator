@@ -4,31 +4,173 @@ import LegalLayout from '../layouts/LegalLayout.astro';
 
 <LegalLayout
   title="Privacy Policy"
-  description="FastUUIDGenerator privacy policy. Read how we protect your privacy with 100% client-side computing and zero server storage."
+  description="FastUUIDGenerator.com Privacy Policy. Learn how we handle your data, our client-side tool processing, cookie usage, analytics, and advertising disclosure."
   canonicalPath="/privacy-policy/"
+  lastUpdated="August 28, 2026"
 >
-  <h2>1. Zero Data Collection Policy</h2>
+  <h2>1. Introduction</h2>
   <p>
-    FastUUIDGenerator operates under a strict <strong>Zero-Collection Policy</strong>. All UUID, GUID, validation, and decoding operations are executed exclusively within your client web browser using the standard Web Cryptography API.
+    Welcome to <strong>FastUUIDGenerator.com</strong> ("we," "our," or "the website"). We provide free, web-based developer utilities for generating, validating, decoding, and converting Universally Unique Identifiers (UUIDs) and Globally Unique Identifiers (GUIDs).
+  </p>
+  <p>
+    We respect your privacy and are committed to protecting the information you share with us. This Privacy Policy explains how information is collected, used, processed, and protected when you visit our website and use our tools, as well as your choices regarding cookies, analytics, and advertising.
+  </p>
+  <p>
+    By accessing or using FastUUIDGenerator.com, you acknowledge that you have read and understood the practices described in this policy.
   </p>
 
-  <h2>2. No Server-Side Logging or Telemetry</h2>
+  <h2>2. How Our Tools Process Information (Client-Side Processing)</h2>
   <p>
-    We do not transmit, log, intercept, or store any generated keys, decoded timestamp values, or validation payloads on any backend server or third-party database.
+    The core tools on FastUUIDGenerator.com—including our <a href="/uuid-generator/">UUID Generator</a>, <a href="/guid-generator/">GUID Generator</a>, <a href="/uuid-validator/">UUID / GUID Validator</a>, <a href="/uuid-decoder/">UUID Decoder</a>, <a href="/bulk-uuid-generator/">Bulk UUID Generator</a>, and <a href="/base64-uuid-generator/">Base64 UUID Generator</a>—are designed to execute <strong>locally within your web browser</strong> using standard JavaScript and the browser's native Web Cryptography API (<code>crypto.getRandomValues</code> and <code>crypto.randomUUID</code>).
+  </p>
+  <ul>
+    <li>
+      <strong>Generated Identifiers:</strong> The UUIDs, GUIDs, and Base64 strings you generate on this site are computed on your device and are not transmitted to or stored on our backend web servers.
+    </li>
+    <li>
+      <strong>Validated & Decoded Inputs:</strong> Any UUIDs, timestamps, or text you paste into our validator or decoder tools are processed in-memory within your browser and are not saved to any database.
+    </li>
+  </ul>
+
+  <h2>3. Information We Collect</h2>
+  <p>
+    While our generator tools process data locally on your device, standard web browsing information may be collected when you access the site:
   </p>
 
-  <h2>3. Local Storage</h2>
+  <h3>A. Server Log and Technical Data</h3>
   <p>
-    We use your browser's local storage (<code>localStorage</code>) strictly to preserve your selected theme preference (Light / Dark mode). No tracking identifiers, cookies, or profiling data are stored.
+    Like most websites, our hosting infrastructure and Content Delivery Network (CDN) automatically log standard HTTP request metadata. This may include:
+  </p>
+  <ul>
+    <li>Your Internet Protocol (IP) address</li>
+    <li>Browser type, version, and language settings</li>
+    <li>Operating system and device platform</li>
+    <li>Referring and exit URLs</li>
+    <li>Date, time, and duration of page requests</li>
+  </ul>
+  <p>
+    This technical data is used exclusively to maintain site availability, diagnose server errors, mitigate distributed denial-of-service (DDoS) attacks, and ensure network security.
   </p>
 
-  <h2>4. Third-Party Services</h2>
+  <h3>B. Communications and Feedback Data</h3>
   <p>
-    This website is hosted on high-performance static content delivery networks (CDNs). Standard ephemeral HTTP request access logs (such as IP addresses and User-Agent headers) may be recorded by the edge CDN strictly for DDoS mitigation and network security purposes in compliance with industry standards.
+    If you voluntarily reach out to us via our <a href="/contact/">Contact Page</a> or by email, we collect the contact details and message contents you provide (such as your name, email address, and feedback) solely to respond to your inquiry.
   </p>
 
-  <h2>5. Changes to This Policy</h2>
+  <h2>4. Cookies and Local Storage</h2>
   <p>
-    Any future modifications to this policy will be posted on this page with an updated revision date.
+    A cookie is a small data file placed on your device by your web browser. Local storage (<code>localStorage</code>) is a similar mechanism that stores key-value pairs directly in your browser.
   </p>
+
+  <h3>A. First-Party Local Storage</h3>
+  <p>
+    We use browser <code>localStorage</code> (under the key <code>fastuuid_theme</code>) solely to remember your chosen display theme preference (Light mode or Dark mode) across page visits. This data remains on your device and is not sent to our servers.
+  </p>
+
+  <h3>B. Third-Party Cookies</h3>
+  <p>
+    Third-party service providers, analytics platforms, and advertising partners may place cookies, web beacons, or similar tracking technologies on your device when you browse our pages. These cookies are governed by the respective third parties' privacy policies.
+  </p>
+
+  <h2>5. Analytics and Usage Metrics</h2>
+  <p>
+    We may use privacy-conscious analytics services to understand general website traffic trends, identify popular tools, measure page loading performance, and improve our educational guides. These analytics tools collect aggregated, non-personally identifiable information such as page views, country-level geographic regions, and browser types.
+  </p>
+
+  <h2>6. Advertising and Google AdSense</h2>
+  <p>
+    To keep FastUUIDGenerator.com free and accessible to all developers, we may display advertisements served by third-party advertising networks, including <strong>Google AdSense</strong>.
+  </p>
+  <p>
+    In connection with advertising, please be aware of the following disclosures:
+  </p>
+  <ul>
+    <li>
+      <strong>Third-Party Vendors:</strong> Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites on the internet.
+    </li>
+    <li>
+      <strong>Advertising Cookies:</strong> Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to our site and/or other sites on the Internet.
+    </li>
+    <li>
+      <strong>Personalized vs. Non-Personalized Ads:</strong> Depending on applicable laws and your consent choices, ads may be personalized based on your browsing interests or non-personalized (contextual).
+    </li>
+    <li>
+      <strong>Opting Out of Personalized Advertising:</strong> You can opt out of personalized advertising by visiting Google's <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>. Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">AboutAds.info</a> or the <a href="https://www.networkadvertising.org/choices/" target="_blank" rel="noopener noreferrer">Network Advertising Initiative</a>.
+    </li>
+  </ul>
+
+  <h2>7. How We Use Collected Information</h2>
+  <p>
+    We use the technical, analytics, and contact information collected on this website for the following legitimate business purposes:
+  </p>
+  <ol>
+    <li><strong>Operating the Website:</strong> Ensuring fast, secure, and reliable delivery of web pages and tools.</li>
+    <li><strong>Maintenance & Security:</strong> Detecting, preventing, and mitigating technical bugs, fraud, and security threats.</li>
+    <li><strong>Improving User Experience:</strong> Analyzing traffic patterns to optimize layout, navigation, and tool performance.</li>
+    <li><strong>Responding to Inquiries:</strong> Answering user emails, bug reports, and feature requests.</li>
+    <li><strong>Legal Compliance:</strong> Complying with applicable legal obligations and enforcing our terms.</li>
+  </ol>
+
+  <h2>8. Information Sharing and Disclosure</h2>
+  <p>
+    We do not sell, rent, or trade your personal information. We may share technical or aggregated data only in the following limited circumstances:
+  </p>
+  <ul>
+    <li>
+      <strong>Service Providers:</strong> With trusted infrastructure, hosting, CDN, analytics, and advertising vendors who assist in operating our website subject to standard confidentiality agreements.
+    </li>
+    <li>
+      <strong>Legal Obligations:</strong> When required by law, regulation, subpoena, or valid legal process, or to protect the safety, rights, and property of FastUUIDGenerator.com, our users, or the public.
+    </li>
+  </ul>
+
+  <h2>9. Data Retention</h2>
+  <p>
+    Because tool computations occur client-side, we do not retain generated identifiers or validation payloads. Technical server logs are automatically rotated and deleted on a regular schedule (typically within 30 to 90 days) unless required longer for active security investigations. Communications sent to our contact email are retained only as long as necessary to address your request.
+  </p>
+
+  <h2>10. Data Security</h2>
+  <p>
+    We implement industry-standard technical and organizational security measures to protect website traffic. All connections to FastUUIDGenerator.com are encrypted in transit using <strong>Transport Layer Security (HTTPS / TLS)</strong>. While we strive to protect information, no method of electronic transmission over the internet or server storage is 100% secure, and we cannot guarantee absolute security.
+  </p>
+
+  <h2>11. Your Privacy Choices and Rights</h2>
+  <p>
+    Depending on your jurisdiction (such as the European Economic Area under the GDPR, the United Kingdom, or California under the CCPA/CPRA), you may have certain rights regarding your personal data:
+  </p>
+  <ul>
+    <li>
+      <strong>Cookie Management:</strong> You can configure your browser settings to accept, reject, or delete cookies at any time. Please note that disabling cookies may affect some advertising preferences.
+    </li>
+    <li>
+      <strong>Access and Deletion:</strong> You may request information about any personal communications data we hold about you or request its deletion by contacting us.
+    </li>
+    <li>
+      <strong>Do Not Track:</strong> Some browsers offer a "Do Not Track" (DNT) signal. Because there is currently no uniform industry standard for interpreting DNT signals, our website does not alter its practices upon receiving a DNT signal.
+    </li>
+  </ul>
+
+  <h2>12. Children's Privacy</h2>
+  <p>
+    FastUUIDGenerator.com is a general-audience developer website and is not directed to children under the age of 13 (or under 16 in certain jurisdictions). We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us so we can promptly delete it.
+  </p>
+
+  <h2>13. Third-Party Links</h2>
+  <p>
+    Our website and blog articles may contain links to external websites, specifications (such as IETF RFCs), or third-party documentation for reference purposes. We are not responsible for the privacy practices, content, or policies of those external websites. We encourage you to review the privacy policies of any third-party sites you visit.
+  </p>
+
+  <h2>14. Changes to This Privacy Policy</h2>
+  <p>
+    We may periodically update this Privacy Policy to reflect changes in our tools, technology, advertising practices, or legal requirements. Any modifications will be posted directly on this page with an updated "Last Updated" date at the top of the policy. We encourage you to review this page periodically to stay informed about our privacy practices.
+  </p>
+
+  <h2>15. Contact Us</h2>
+  <p>
+    If you have any questions, comments, or concerns regarding this Privacy Policy or our data practices, please contact us:
+  </p>
+  <ul>
+    <li><strong>Email:</strong> <a href="mailto:support@fastuuidgenerator.com">support@fastuuidgenerator.com</a></li>
+    <li><strong>Contact Page:</strong> <a href="/contact/">FastUUIDGenerator.com Contact Form</a></li>
+  </ul>
 </LegalLayout>

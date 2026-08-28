@@ -4,26 +4,157 @@ import LegalLayout from '../layouts/LegalLayout.astro';
 
 <LegalLayout
   title="Terms of Service"
-  description="FastUUIDGenerator terms of service. Free, open, and provided as-is for developers and organizations worldwide."
+  description="FastUUIDGenerator.com Terms of Service. Review our terms of use, tool limitations, acceptable use policy, intellectual property, and advertising disclosures."
   canonicalPath="/terms-of-service/"
+  lastUpdated="August 28, 2026"
 >
-  <h2>1. Acceptance of Terms</h2>
+  <h2>1. Introduction</h2>
   <p>
-    By accessing and utilizing FastUUIDGenerator ("the Service"), you agree to abide by these Terms of Service. If you do not agree to these terms, please discontinue use of the website.
+    Welcome to <strong>FastUUIDGenerator.com</strong> ("we," "our," "us," or "the website"). These Terms of Service ("Terms") govern your access to and use of FastUUIDGenerator.com and its suite of web-based developer utilities, articles, and documentation (collectively, the "Services").
+  </p>
+  <p>
+    Please read these Terms carefully before using our website. By accessing, browsing, or using any part of FastUUIDGenerator.com, you agree to be bound by these Terms and our <a href="/privacy-policy/">Privacy Policy</a>. If you do not agree to all of these Terms, you must discontinue use of the website immediately.
   </p>
 
-  <h2>2. License and Usage</h2>
+  <h2>2. Description of Our Services</h2>
   <p>
-    The tools and utilities provided on this website are free to use for both personal and commercial projects. You may generate unlimited quantities of UUIDs and GUIDs for use in software systems, databases, APIs, test suites, and documentation.
+    FastUUIDGenerator.com provides free, client-side developer tools designed to assist software engineers, database administrators, and students with identifier-related tasks. Our tools include:
+  </p>
+  <ul>
+    <li><a href="/uuid-generator/"><strong>UUID Generator:</strong></a> Generating standard 128-bit Universally Unique Identifiers.</li>
+    <li><a href="/uuid-v4-generator/"><strong>UUID v4 Generator:</strong></a> Generating cryptographically random identifiers.</li>
+    <li><a href="/uuid-v7-generator/"><strong>UUID v7 Generator:</strong></a> Generating time-ordered identifiers with Unix millisecond timestamps under RFC 9562.</li>
+    <li><a href="/guid-generator/"><strong>GUID Generator:</strong></a> Creating Microsoft-compatible Globally Unique Identifiers.</li>
+    <li><a href="/uuid-validator/"><strong>UUID / GUID Validator:</strong></a> Checking syntax, version, and variant compliance.</li>
+    <li><a href="/uuid-decoder/"><strong>UUID Decoder:</strong></a> Extracting embedded timestamps and metadata.</li>
+    <li><a href="/bulk-uuid-generator/"><strong>Bulk UUID Generator:</strong></a> Generating large batches of identifiers for database seeding and testing.</li>
+    <li><a href="/base64-uuid-generator/"><strong>Base64 UUID Generator:</strong></a> Converting 128-bit UUIDs into compact 22-character strings.</li>
+    <li><a href="/blog/"><strong>Engineering Blog:</strong></a> Educational guides and technical articles on system architecture and identifier standards.</li>
+  </ul>
+  <p>
+    Our tools do not require user account registration, fees, or subscription payments. All core generator and validator operations execute directly in your web browser.
   </p>
 
-  <h2>3. Disclaimer of Warranty</h2>
+  <h2>3. Permitted and Commercial Use</h2>
   <p>
-    The Service is provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind, whether express or implied. While generation relies on cryptographically secure pseudorandom algorithms implemented in modern web browsers, the creators of FastUUIDGenerator assume no liability for collisions, data corruption, or system errors resulting from the use of generated identifiers.
+    You are granted a non-exclusive, worldwide, royalty-free license to use the tools on FastUUIDGenerator.com for personal, educational, and commercial purposes.
+  </p>
+  <p>
+    <strong>Ownership of Generated Identifiers:</strong> Any UUIDs, GUIDs, or Base64 strings generated using our tools are mathematically generated numerical values and are not proprietary to FastUUIDGenerator.com. You are free to use, distribute, store, and incorporate generated identifiers into your software, databases, APIs, test suites, and commercial products without attribution or licensing fees.
   </p>
 
-  <h2>4. Limitation of Liability</h2>
+  <h2>4. Acceptable Use Policy</h2>
   <p>
-    In no event shall FastUUIDGenerator or its contributors be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from the use of or inability to use the Service.
+    You agree to use FastUUIDGenerator.com only for lawful purposes and in accordance with these Terms. You agree NOT to:
   </p>
+  <ul>
+    <li>Use the website in any manner that violates applicable local, national, or international laws or regulations.</li>
+    <li>Attempt to interfere with, disrupt, compromise, or overburden our hosting servers, Content Delivery Network (CDN), or network infrastructure.</li>
+    <li>Launch automated scripts, bots, scrapers, or excessive requests intended to degrade website performance or cause a Denial of Service (DoS/DDoS) to other users.</li>
+    <li>Attempt to probe, scan, test the vulnerability of, or gain unauthorized access to our systems, servers, or networks.</li>
+    <li>Use the website or its content to transmit malicious software, viruses, worms, or harmful code.</li>
+  </ul>
+
+  <h2>5. Tool Results, Accuracy, and Technical Limitations</h2>
+  <p>
+    While our tools are built strictly to conform to official internet specifications (including <strong>RFC 9562</strong> and <strong>RFC 4122</strong>) and utilize modern Web Cryptography APIs, you understand and acknowledge the following:
+  </p>
+  <ul>
+    <li>
+      <strong>Probabilistic Uniqueness:</strong> UUID uniqueness is probabilistic based on the size of the 128-bit number space and cryptographic entropy. No tool or algorithm can provide an absolute mathematical guarantee against collisions across all systems in existence.
+    </li>
+    <li>
+      <strong>Validation Scope:</strong> Our validator and decoder tools verify structural formatting, version digits, variant bits, and mathematical syntax. Validation confirms that a string conforms to UUID standards; it does not verify whether an identifier is already in use by a third party.
+    </li>
+    <li>
+      <strong>User Responsibility:</strong> You are solely responsible for verifying that generated identifiers, versions, and formats are appropriate for your specific database engine, application architecture, and security requirements.
+    </li>
+  </ul>
+
+  <h2>6. Intellectual Property Rights</h2>
+  <p>
+    Except for the public-domain identifiers generated by users, all materials on FastUUIDGenerator.com—including website design, layout, logos, text, graphics, educational blog articles, illustrations, software scripts, and user interface components—are the intellectual property of FastUUIDGenerator.com and are protected by applicable copyright, trademark, and intellectual property laws.
+  </p>
+  <p>
+    You may not reproduce, redistribute, scrape, duplicate, copy, or create derivative works of our website content, blog posts, or branding without our prior written permission.
+  </p>
+
+  <h2>7. Third-Party Links and External Resources</h2>
+  <p>
+    FastUUIDGenerator.com may contain links to third-party websites, documentation, specification repositories (such as IETF RFC documents), or developer tools. These links are provided solely for your reference and convenience.
+  </p>
+  <p>
+    We do not control, endorse, monitor, or assume responsibility for the content, privacy policies, accuracy, or practices of any third-party websites. You access third-party websites at your own risk.
+  </p>
+
+  <h2>8. Advertising and Google AdSense</h2>
+  <p>
+    To support the ongoing maintenance and hosting of our free developer utilities, FastUUIDGenerator.com may display advertisements served by third-party advertising partners, including <strong>Google AdSense</strong>.
+  </p>
+  <ul>
+    <li>
+      <strong>Third-Party Ad Networks:</strong> Advertisements displayed on the website are provided by third-party ad networks. These vendors may use cookies, web beacons, and device identifiers to serve contextual or personalized advertisements based on your browsing activity, as detailed in our <a href="/privacy-policy/">Privacy Policy</a>.
+    </li>
+    <li>
+      <strong>No Endorsement:</strong> The display of any advertisement does not constitute an endorsement, recommendation, guarantee, or warranty by FastUUIDGenerator.com of the advertised product, service, or company.
+    </li>
+    <li>
+      <strong>Interactions with Advertisers:</strong> Any dealings, purchases, or interactions you have with third-party advertisers found on our website are solely between you and the respective advertiser.
+    </li>
+  </ul>
+
+  <h2>9. Service Availability and Modifications</h2>
+  <p>
+    We strive to maintain high availability and performance. However, we do not guarantee that FastUUIDGenerator.com will always be available, uninterrupted, timely, secure, or error-free.
+  </p>
+  <p>
+    We reserve the right to modify, suspend, update, or discontinue any tool, feature, or part of the website at any time without prior notice or liability.
+  </p>
+
+  <h2>10. Disclaimer of Warranties</h2>
+  <p>
+    <strong>THE WEBSITE AND ALL TOOLS, CONTENT, AND SERVICES ARE PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED.</strong>
+  </p>
+  <p>
+    TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, FASTUUIDGENERATOR.COM DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, ACCURACY, NON-INFRINGEMENT, AND FREEDOM FROM COMPUTER VIRUSES OR OTHER HARMFUL COMPONENTS.
+  </p>
+
+  <h2>11. Limitation of Liability</h2>
+  <p>
+    <strong>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL FASTUUIDGENERATOR.COM, ITS OPERATORS, CONTRIBUTORS, OR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, PUNITIVE, OR EXEMPLARY DAMAGES</strong> (INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF PROFITS, REVENUE, DATA, GOODWILL, WORK STOPPAGE, SYSTEM FAILURE, DATABASE CORRUPTION, OR BUSINESS INTERRUPTION) ARISING OUT OF OR IN CONNECTION WITH:
+  </p>
+  <ol>
+    <li>Your access to, use of, or inability to access or use the website or any tools;</li>
+    <li>Any identifier generated, validated, or decoded through our tools;</li>
+    <li>Any bugs, errors, inaccuracies, or downtime on the website;</li>
+    <li>Any unauthorized access to or alteration of your transmissions; or</li>
+    <li>Any third-party advertisements, links, or conduct.</li>
+  </ol>
+
+  <h2>12. Indemnification</h2>
+  <p>
+    You agree to defend, indemnify, and hold harmless FastUUIDGenerator.com and its operators from and against any claims, liabilities, damages, judgments, awards, losses, costs, expenses, or fees (including reasonable legal fees) arising out of or relating to your violation of these Terms or your misuse of the website.
+  </p>
+
+  <h2>13. Changes to These Terms of Service</h2>
+  <p>
+    We reserve the right to revise, update, or replace these Terms at our sole discretion at any time. Any changes will become effective immediately upon being posted on this page with an updated "Last Updated" date.
+  </p>
+  <p>
+    Your continued use of FastUUIDGenerator.com following the posting of revised Terms means that you accept and agree to the changes. We encourage you to review this page periodically.
+  </p>
+
+  <h2>14. Severability</h2>
+  <p>
+    If any provision of these Terms is found to be unlawful, void, or for any reason unenforceable by a court of competent jurisdiction, that provision shall be deemed severable from these Terms and shall not affect the validity and enforceability of any remaining provisions.
+  </p>
+
+  <h2>15. Contact Information</h2>
+  <p>
+    If you have any questions, comments, or legal inquiries regarding these Terms of Service, please contact us:
+  </p>
+  <ul>
+    <li><strong>Email:</strong> <a href="mailto:support@fastuuidgenerator.com">support@fastuuidgenerator.com</a></li>
+    <li><strong>Contact Page:</strong> <a href="/contact/">FastUUIDGenerator.com Contact Form</a></li>
+  </ul>
 </LegalLayout>

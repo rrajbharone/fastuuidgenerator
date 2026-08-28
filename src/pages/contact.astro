@@ -3,44 +3,46 @@ import LegalLayout from '../layouts/LegalLayout.astro';
 ---
 
 <LegalLayout
-  title="Contact & Developer Feedback"
-  description="Get in touch with the FastUUIDGenerator engineering team for bug reports, feature requests, or RFC implementation queries."
+  title="Contact Us"
+  description="Have questions, suggestions, or need help with FastUUIDGenerator.com? Contact our support team via email. We are happy to assist you."
   canonicalPath="/contact/"
+  lastUpdated="August 2026"
 >
-  <h2>Get in Touch</h2>
   <p>
-    We welcome feedback, suggestions for new UUID/ULID/KSUID formatting options, and technical inquiries regarding RFC 9562 compliance.
+    We are always here to help. Whether you have a question about one of our UUID/GUID tools, noticed a technical bug, or want to suggest a new feature, feel free to reach out to us anytime.
   </p>
 
-  <h2>Developer Channels</h2>
+  <h2>Email Support</h2>
+  <p>
+    You can email us directly at:
+  </p>
+  <p style="font-size: 1.15rem; margin: 1rem 0 1.5rem;">
+    ✉️ <a href="mailto:support@fastuuidgenerator.com" style="font-weight: 700; font-size: 1.15rem;">support@fastuuidgenerator.com</a>
+  </p>
+  <p>
+    Our inbox is open 24 hours a day, 7 days a week. We review incoming messages regularly and do our very best to get back to you within <strong>12 hours</strong>.
+  </p>
+
+  <h2>What Can You Contact Us About?</h2>
+  <p>
+    We welcome any inquiries related to our website and developer tools, including:
+  </p>
   <ul>
-    <li>
-      <strong>Email:</strong> <a href="mailto:support@fastuuidgenerator.com">support@fastuuidgenerator.com</a>
-    </li>
-    <li>
-      <strong>GitHub Discussions & Bug Reports:</strong> Available via our official open-source repository.
-    </li>
+    <li><strong>Tool-Related Questions:</strong> Need clarification on UUID versions (v1 to v8), formats, or validation rules? We are happy to help explain how they work.</li>
+    <li><strong>Bug Reports & Technical Issues:</strong> If a tool is not behaving as expected on your browser or device, let us know so we can fix it promptly.</li>
+    <li><strong>Feedback & Feature Suggestions:</strong> Have an idea for a new generator option, export format, or educational topic? We would love to hear your thoughts.</li>
+    <li><strong>Website Display Issues:</strong> Found a layout glitch, broken link, or dark mode display issue? Tell us what you observed.</li>
+    <li><strong>Privacy & Terms Inquiries:</strong> Any questions regarding how our client-side tools operate or how our policies apply to you.</li>
+    <li><strong>General Inquiries:</strong> Any other questions about FastUUIDGenerator.com.</li>
   </ul>
 
-  <h2>Feedback Form</h2>
-  <form onsubmit="event.preventDefault(); alert('Thank you for your message! Our engineering team will review it.');" style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-    <div>
-      <label for="contact-name" style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">Name</label>
-      <input type="text" id="contact-name" class="input-control" required placeholder="Your name" />
-    </div>
+  <h2>How to Help Us Help You Faster</h2>
+  <p>
+    When sending us a support request or bug report, please include a few helpful details—such as the tool you were using, your browser and operating system, and a brief description of what happened. This helps us diagnose the problem quickly and provide you with an accurate solution.
+  </p>
 
-    <div>
-      <label for="contact-email" style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">Email Address</label>
-      <input type="email" id="contact-email" class="input-control" required placeholder="you@company.com" />
-    </div>
-
-    <div>
-      <label for="contact-msg" style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">Message / Feature Request</label>
-      <textarea id="contact-msg" class="textarea-control" rows="5" required placeholder="Tell us how we can improve FastUUIDGenerator..."></textarea>
-    </div>
-
-    <div>
-      <button type="submit" class="btn btn-primary">Send Feedback</button>
-    </div>
-  </form>
+  <h2>Thank You for Using FastUUIDGenerator.com</h2>
+  <p>
+    We built FastUUIDGenerator.com to provide clean, fast, and reliable tools for developers and everyday users around the world. We are truly grateful for your support and always delighted to serve and assist our community.
+  </p>
 </LegalLayout>

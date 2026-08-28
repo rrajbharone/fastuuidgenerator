@@ -3,33 +3,82 @@ import LegalLayout from '../layouts/LegalLayout.astro';
 ---
 
 <LegalLayout
-  title="About FastUUIDGenerator"
-  description="Learn about our mission to provide the fastest, most secure, and completely private client-side UUID & GUID generation suite for developers."
+  title="About FastUUIDGenerator.com"
+  description="Learn about FastUUIDGenerator.com: our mission to provide fast, transparent, and standards-compliant UUID and GUID generation and validation tools for developers and beginners."
   canonicalPath="/about/"
+  lastUpdated="August 2026"
 >
-  <h2>Our Mission</h2>
+  <h2>What Is FastUUIDGenerator.com?</h2>
   <p>
-    FastUUIDGenerator was built with a single objective: to provide engineers and system architects with a lightning-fast, zero-bloat, and 100% private UUID/GUID generation tool suite.
+    <strong>FastUUIDGenerator.com</strong> is a dedicated developer utility platform designed to make generating, validating, decoding, and converting Universally Unique Identifiers (UUIDs) and Globally Unique Identifiers (GUIDs) fast, simple, and accessible to everyone.
+  </p>
+  <p>
+    Whether you are a software engineer building distributed cloud systems, a database administrator optimizing B-Tree indexes, or a student learning how digital identifiers work, our platform provides clean, focused tools to help you get your work done without friction.
   </p>
 
-  <h2>Core Architectural Principles</h2>
+  <h2>Why We Created FastUUIDGenerator</h2>
+  <p>
+    Every day, developers worldwide need unique identifiers for database primary keys, API endpoints, microservice tracing, mobile apps, and testing fixtures. Yet finding a dependable tool online was often frustrating. Many existing generators are cluttered with intrusive ads, rely on slow server roundtrips, or use outdated standards that do not support modern specifications like <strong>RFC 9562</strong>.
+  </p>
+  <p>
+    We built FastUUIDGenerator.com to solve this problem. Our goal was simple: create an uncluttered, high-performance toolkit that does exactly what you need in milliseconds, with clear explanations and zero unnecessary complexity.
+  </p>
+
+  <h2>What You Can Do on FastUUIDGenerator</h2>
+  <p>
+    Our platform offers a comprehensive suite of purpose-built tools to cover every common identifier workflow:
+  </p>
   <ul>
     <li>
-      <strong>Zero Server Telemetry:</strong> Every single UUID is computed strictly in your browser using the native Web Cryptography API (<code>crypto.getRandomValues</code>). Your generated keys are never logged, tracked, or transmitted across the wire.
+      <a href="/uuid-generator/"><strong>UUID Generator:</strong></a> Generate standard UUIDs with custom casing and hyphenation options for general application use.
     </li>
     <li>
-      <strong>Strict RFC Compliance:</strong> We adhere rigorously to <strong>RFC 4122</strong> (UUID v1, v4, v5) and the latest <strong>RFC 9562</strong> standards (UUID v7 time-ordered identifiers).
+      <a href="/uuid-v4-generator/"><strong>UUID v4 Generator:</strong></a> Create cryptographically random 128-bit identifiers ideal for public URLs, session tokens, and security-sensitive identifiers.
     </li>
     <li>
-      <strong>Static-First Performance:</strong> Built on Astro JS with minimal runtime JavaScript, our pages achieve sub-millisecond execution times and 100/100 Core Web Vitals.
+      <a href="/uuid-v7-generator/"><strong>UUID v7 Generator:</strong></a> Generate modern time-ordered UUIDs with millisecond Unix timestamps to optimize database primary key indexing and eliminate B-Tree page splits.
     </li>
     <li>
-      <strong>Multilingual Reach:</strong> Supporting 8 major world languages with full translation parity so developers worldwide can work in their native tongue.
+      <a href="/guid-generator/"><strong>GUID Generator:</strong></a> Produce Microsoft-compatible GUIDs with uppercase and curly brace formatting for C#, .NET, Windows Registry, and COM applications.
+    </li>
+    <li>
+      <a href="/uuid-validator/"><strong>UUID / GUID Validator:</strong></a> Check whether any identifier is syntactically valid, verify RFC variant compliance, and identify the exact version.
+    </li>
+    <li>
+      <a href="/uuid-decoder/"><strong>UUID Decoder:</strong></a> Inspect the internal bits of any UUID to extract embedded timestamps, clock sequences, and version metadata.
+    </li>
+    <li>
+      <a href="/bulk-uuid-generator/"><strong>Bulk UUID Generator:</strong></a> Generate up to 10,000 unique identifiers simultaneously and export them as plain text, JSON, CSV, or SQL queries.
+    </li>
+    <li>
+      <a href="/base64-uuid-generator/"><strong>Base64 UUID Generator:</strong></a> Compress standard 36-character UUIDs into compact 22-character URL-safe strings for bandwidth-efficient payloads.
     </li>
   </ul>
 
-  <h2>Why We Built It</h2>
+  <h2>Our Core Principles</h2>
   <p>
-    Most online UUID generators are bloated with heavy tracking scripts, slow server roundtrips, outdated UUID v1 implementations, or ad clutter. We created a premium, developer-focused utility that is instant, clean, and cryptographically sound.
+    Everything on FastUUIDGenerator.com is guided by four foundational principles:
+  </p>
+  <ol>
+    <li>
+      <strong>Client-Side Speed & Privacy:</strong> Generation and validation happen directly inside your web browser using modern Web Cryptography APIs (<code>crypto.getRandomValues</code> and <code>crypto.randomUUID</code>). Your generated identifiers are computed locally and are never transmitted to our servers.
+    </li>
+    <li>
+      <strong>Strict Standards Compliance:</strong> All tools strictly follow official IETF specifications, including <strong>RFC 9562</strong> and <strong>RFC 4122</strong>, ensuring full compatibility across all programming languages and database engines.
+    </li>
+    <li>
+      <strong>Clarity & Education:</strong> We believe tools are most valuable when paired with understanding. Through our in-depth <a href="/blog/">Engineering Blog</a>, we provide comprehensive, beginner-friendly guides on identifier formats, collision math, and database optimization.
+    </li>
+    <li>
+      <strong>Clean User Experience:</strong> No compulsory signups, no unnecessary popups, and no artificial delays. Just fast, dependable tools whenever you need them.
+    </li>
+  </ol>
+
+  <h2>Continuously Built for You</h2>
+  <p>
+    FastUUIDGenerator.com is an evolving project. We continuously refine our tools, update algorithms as new internet standards emerge, and expand our educational resources based on real feedback from developers and users around the world.
+  </p>
+  <p>
+    If you have suggestions, feature requests, or questions, we welcome you to reach out through our <a href="/contact/">Contact Page</a>. Thank you for using FastUUIDGenerator.com!
   </p>
 </LegalLayout>
