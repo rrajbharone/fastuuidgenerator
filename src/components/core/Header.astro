@@ -269,20 +269,102 @@ const homeHref = getLocalizedPath('', currentLang);
   }
 
   @media (max-width: 768px) {
+    .site-header :global(.container) {
+      padding: 0 0.875rem;
+    }
     .desktop-nav {
       display: none;
     }
     .mobile-menu-toggle {
       display: inline-flex;
     }
+    .nav-container {
+      gap: 0.65rem;
+    }
+    .nav-right {
+      gap: 0.5rem;
+    }
+    .brand-logo {
+      gap: 0.5rem;
+      min-width: 0;
+      flex-shrink: 1;
+    }
+    .brand-logo-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      font-size: 0.95rem;
+    }
     .brand-name {
+      display: inline-block;
       font-size: 1.05rem;
+      font-weight: 700;
+      white-space: nowrap;
     }
   }
 
-  @media (max-width: 360px) {
+  @media (max-width: 480px) {
+    .site-header :global(.container) {
+      padding: 0 0.65rem;
+    }
+    .nav-container {
+      gap: 0.4rem;
+    }
+    .brand-logo {
+      gap: 0.45rem;
+    }
+    .brand-logo-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
     .brand-name {
-      display: none;
+      font-size: 0.95rem;
+    }
+    .nav-actions {
+      gap: 0.35rem;
+    }
+    .mobile-menu-toggle {
+      width: 34px;
+      height: 34px;
+      padding: 0.35rem;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .site-header :global(.container) {
+      padding: 0 0.5rem;
+    }
+    .nav-container {
+      gap: 0.3rem;
+    }
+    .brand-logo {
+      gap: 0.35rem;
+    }
+    .brand-logo-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+    .brand-name {
+      font-size: 0.85rem;
+      letter-spacing: -0.03em;
+    }
+    .nav-actions {
+      gap: 0.25rem;
+    }
+    .mobile-menu-toggle {
+      width: 32px;
+      height: 32px;
+      padding: 0.3rem;
+    }
+  }
+
+  @media (max-width: 330px) {
+    .brand-name {
+      font-size: 0.775rem;
     }
   }
 </style>
