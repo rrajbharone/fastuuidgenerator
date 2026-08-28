@@ -44,37 +44,37 @@ const formattedDate = publishDate.toLocaleDateString('en-US', {
     { name: title, url: `https://fastuuidgenerator.com${canonicalPath}` },
   ]}
 >
-  <div class="container" style="max-width: 820px; padding: 2.5rem 1.25rem 4rem;">
+  <div class="container blog-container">
     <!-- Article Header -->
-    <header style="margin-bottom: 2.5rem; text-align: center;">
-      <div style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem;">
+    <header class="blog-header">
+      <div class="blog-meta-tags">
         <span class="badge badge-brand">{category}</span>
         <span class="badge badge-neutral">{readingTime}</span>
       </div>
-      <h1 style="font-size: 2.4rem; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.03em;">
+      <h1 class="blog-title">
         {title}
       </h1>
-      <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+      <div class="blog-author-meta">
         <span>By {author}</span>
-        <span>•</span>
+        <span class="meta-separator">•</span>
         <time datetime={publishDate.toISOString()}>{formattedDate}</time>
       </div>
     </header>
 
     <!-- Article Content Card -->
-    <article class="glass-panel" style="padding: 2.5rem; margin-bottom: 3rem; line-height: 1.8; font-size: 1.05rem;">
+    <article class="glass-panel blog-article-card">
       <div class="prose-content">
         <slot />
       </div>
     </article>
 
     <!-- Quick Tool CTA Banner -->
-    <div class="glass-panel-subtle" style="padding: 2rem; text-align: center; border-radius: var(--radius-lg);">
-      <h3 style="margin-bottom: 0.5rem;">Need to generate UUIDs right now?</h3>
-      <p style="margin-bottom: 1.25rem; font-size: 0.95rem;">
+    <div class="glass-panel-subtle blog-cta-card">
+      <h3>Need to generate UUIDs right now?</h3>
+      <p>
         Generate cryptographically secure UUID v4 or time-ordered UUID v7 identifiers instantly in your browser.
       </p>
-      <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+      <div class="blog-cta-actions">
         <a href="/uuid-generator/" class="btn btn-primary">Generate UUIDs Online</a>
         <a href="/uuid-validator/" class="btn btn-secondary">Validate a UUID</a>
       </div>
@@ -83,41 +83,189 @@ const formattedDate = publishDate.toLocaleDateString('en-US', {
 </BaseLayout>
 
 <style>
+  .blog-container {
+    max-width: 820px;
+    padding: 2.5rem 1.25rem 4rem;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .blog-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  .blog-meta-tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .blog-title {
+    font-size: 2.4rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.03em;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .blog-author-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-separator {
+    color: var(--text-muted);
+  }
+
+  .blog-article-card {
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+    line-height: 1.8;
+    font-size: 1.05rem;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .blog-cta-card {
+    padding: 2rem;
+    text-align: center;
+    border-radius: var(--radius-lg);
+    box-sizing: border-box;
+  }
+
+  .blog-cta-card h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .blog-cta-card p {
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  .blog-cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  /* Prose typography & flow */
+  .prose-content {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
   .prose-content :global(h2) {
     font-size: 1.55rem;
-    margin-top: 2rem;
+    margin-top: 2.25rem;
     margin-bottom: 0.75rem;
     padding-bottom: 0.4rem;
     border-bottom: 1px solid var(--border-glass);
+    line-height: 1.3;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
+
   .prose-content :global(h3) {
     font-size: 1.25rem;
-    margin-top: 1.5rem;
+    margin-top: 1.75rem;
     margin-bottom: 0.5rem;
+    line-height: 1.35;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
+
+  .prose-content :global(h4) {
+    font-size: 1.1rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.4rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
   .prose-content :global(p) {
     margin-bottom: 1.25rem;
+    line-height: 1.75;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
-  .prose-content :global(ul), .prose-content :global(ol) {
+
+  .prose-content :global(strong) {
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .prose-content :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--border-glass);
+    margin: 2rem 0;
+  }
+
+  .prose-content :global(a) {
+    color: var(--brand-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .prose-content :global(a:hover) {
+    color: var(--brand-primary-hover);
+  }
+
+  .prose-content :global(ul),
+  .prose-content :global(ol) {
     margin-bottom: 1.25rem;
     padding-left: 1.5rem;
+    box-sizing: border-box;
   }
+
   .prose-content :global(li) {
     margin-bottom: 0.5rem;
+    line-height: 1.7;
     color: var(--text-secondary);
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
+
+  .prose-content :global(li > ul),
+  .prose-content :global(li > ol) {
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+    padding-left: 1.25rem;
+  }
+
   .prose-content :global(pre) {
     background: #0f172a !important;
     border: 1px solid rgba(255, 255, 255, 0.14) !important;
     border-radius: var(--radius-md);
     padding: 1.25rem;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     font-family: var(--font-mono);
     font-size: 0.9rem;
     line-height: 1.6;
     margin-bottom: 1.5rem;
+    max-width: 100%;
+    box-sizing: border-box;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   }
+
   .prose-content :global(pre code),
   .prose-content :global(pre span),
   .prose-content :global(pre .line) {
@@ -125,29 +273,221 @@ const formattedDate = publishDate.toLocaleDateString('en-US', {
     padding: 0;
     color: #f8fafc !important;
     font-family: var(--font-mono);
+    white-space: pre;
+    word-break: normal;
+    word-wrap: normal;
   }
-  .prose-content :global(code) {
+
+  .prose-content :global(code:not(pre code)) {
     font-family: var(--font-mono);
     background: var(--bg-glass-subtle);
     padding: 0.2rem 0.45rem;
     border-radius: var(--radius-sm);
-    font-size: 0.9em;
+    font-size: 0.88em;
     color: var(--brand-primary);
     border: 1px solid var(--border-subtle);
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
   }
+
   .prose-content :global(table) {
     width: 100%;
     border-collapse: collapse;
     margin: 1.5rem 0;
-    font-size: 0.95rem;
+    font-size: 0.925rem;
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
   }
-  .prose-content :global(th), .prose-content :global(td) {
+
+  .prose-content :global(th),
+  .prose-content :global(td) {
     border: 1px solid var(--border-glass);
     padding: 0.75rem 1rem;
     text-align: left;
+    min-width: 110px;
+    vertical-align: top;
+    box-sizing: border-box;
   }
+
   .prose-content :global(th) {
     background: var(--bg-glass-subtle);
     font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .prose-content :global(td) {
+    color: var(--text-secondary);
+  }
+
+  .prose-content :global(blockquote) {
+    border-left: 3px solid var(--brand-primary);
+    margin: 1.5rem 0;
+    padding: 0.75rem 1.25rem;
+    background: var(--bg-glass-subtle);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    color: var(--text-secondary);
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  .prose-content :global(blockquote p) {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-content :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .prose-content :global(img),
+  .prose-content :global(svg),
+  .prose-content :global(video),
+  .prose-content :global(iframe) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    box-sizing: border-box;
+  }
+
+  /* Responsive Breakpoints */
+  @media (max-width: 768px) {
+    .blog-container {
+      padding: 1.75rem 1rem 3rem;
+    }
+    .blog-header {
+      margin-bottom: 1.75rem;
+    }
+    .blog-title {
+      font-size: 1.85rem;
+      margin-bottom: 0.75rem;
+    }
+    .blog-article-card {
+      padding: 1.5rem 1.25rem;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      border-radius: var(--radius-md);
+    }
+    .blog-cta-card {
+      padding: 1.5rem 1.25rem;
+    }
+    .prose-content :global(h2) {
+      font-size: 1.35rem;
+      margin-top: 1.75rem;
+    }
+    .prose-content :global(h3) {
+      font-size: 1.15rem;
+      margin-top: 1.35rem;
+    }
+    .prose-content :global(pre) {
+      padding: 1rem;
+      font-size: 0.85rem;
+      border-radius: var(--radius-sm);
+    }
+    .prose-content :global(ul),
+    .prose-content :global(ol) {
+      padding-left: 1.25rem;
+    }
+    .prose-content :global(th),
+    .prose-content :global(td) {
+      padding: 0.6rem 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .blog-container {
+      padding: 1.25rem 0.65rem 2.5rem;
+    }
+    .blog-header {
+      margin-bottom: 1.25rem;
+    }
+    .blog-title {
+      font-size: 1.5rem;
+      margin-bottom: 0.65rem;
+      letter-spacing: -0.02em;
+    }
+    .blog-article-card {
+      padding: 1.15rem 0.875rem;
+      margin-bottom: 1.5rem;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .blog-cta-card {
+      padding: 1.25rem 0.875rem;
+      border-radius: var(--radius-md);
+    }
+    .blog-cta-card h3 {
+      font-size: 1.1rem;
+    }
+    .blog-cta-card p {
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .blog-cta-actions .btn {
+      width: 100%;
+    }
+    .prose-content :global(h2) {
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+      padding-bottom: 0.3rem;
+    }
+    .prose-content :global(h3) {
+      font-size: 1.1rem;
+      margin-top: 1.2rem;
+    }
+    .prose-content :global(p) {
+      margin-bottom: 1rem;
+    }
+    .prose-content :global(pre) {
+      padding: 0.875rem 0.75rem;
+      font-size: 0.82rem;
+      margin-left: -0.25rem;
+      margin-right: -0.25rem;
+    }
+    .prose-content :global(ul),
+    .prose-content :global(ol) {
+      padding-left: 1.15rem;
+      margin-bottom: 1rem;
+    }
+    .prose-content :global(li) {
+      margin-bottom: 0.4rem;
+    }
+    .prose-content :global(blockquote) {
+      padding: 0.6rem 0.875rem;
+      margin: 1.25rem 0;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .blog-container {
+      padding: 1rem 0.4rem 2rem;
+    }
+    .blog-title {
+      font-size: 1.35rem;
+    }
+    .blog-article-card {
+      padding: 1rem 0.65rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.925rem;
+    }
+    .prose-content :global(h2) {
+      font-size: 1.15rem;
+    }
+    .prose-content :global(h3) {
+      font-size: 1.05rem;
+    }
+    .prose-content :global(pre) {
+      padding: 0.75rem 0.5rem;
+      font-size: 0.78rem;
+    }
+    .prose-content :global(ul),
+    .prose-content :global(ol) {
+      padding-left: 1rem;
+    }
   }
 </style>

@@ -28,36 +28,36 @@ const t = getTranslations('en');
     { name: 'Blog', url: 'https://fastuuidgenerator.com/blog/' },
   ]}
 >
-  <div class="container" style="padding: 3rem 1.25rem 5rem;">
-    <header style="text-align: center; max-width: 680px; margin: 0 auto 3rem;">
+  <div class="container blog-index-container">
+    <header class="blog-index-header">
       <span class="badge badge-brand" style="margin-bottom: 0.75rem;">Engineering & Systems</span>
-      <h1 style="font-size: 2.25rem; margin-bottom: 0.75rem;">UUID Engineering Blog</h1>
-      <p>
+      <h1 class="blog-index-title">UUID Engineering Blog</h1>
+      <p class="blog-index-desc">
         In-depth technical guides, cryptographic analysis, and database indexing benchmarks for modern software engineers.
       </p>
     </header>
 
     {sortedPosts.length > 0 ? (
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+      <div class="blog-posts-grid">
         {sortedPosts.map((post) => (
-          <article class="glass-panel" style="padding: 1.75rem; display: flex; flex-direction: column; justify-content: space-between;">
+          <article class="glass-panel blog-post-card">
             <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <div class="blog-card-meta">
                 <span class="badge badge-brand">{post.data.category}</span>
-                <span style="font-size: 0.8rem; color: var(--text-muted);">{post.data.readingTime}</span>
+                <span class="blog-card-reading-time">{post.data.readingTime}</span>
               </div>
-              <h2 style="font-size: 1.25rem; margin-bottom: 0.6rem; line-height: 1.35;">
-                <a href={`/blog/${post.slug}/`} style="color: var(--text-primary);">
+              <h2 class="blog-card-title">
+                <a href={`/blog/${post.slug}/`}>
                   {post.data.title}
                 </a>
               </h2>
-              <p style="font-size: 0.9rem; margin-bottom: 1.25rem; color: var(--text-secondary);">
+              <p class="blog-card-desc">
                 {post.data.description}
               </p>
             </div>
 
-            <div style="padding-top: 1rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center;">
-              <time datetime={post.data.publishDate.toISOString()} style="font-size: 0.8rem; color: var(--text-muted);">
+            <div class="blog-card-footer">
+              <time datetime={post.data.publishDate.toISOString()} class="blog-card-date">
                 {post.data.publishDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </time>
               <a href={`/blog/${post.slug}/`} class="btn btn-secondary btn-sm">
@@ -68,8 +68,8 @@ const t = getTranslations('en');
         ))}
       </div>
     ) : (
-      <div class="glass-panel" style="max-width: 540px; margin: 0 auto; padding: 3rem 2rem; text-align: center;">
-        <div style="width: 48px; height: 48px; margin: 0 auto 1.25rem; border-radius: var(--radius-md); background: var(--brand-glow); color: var(--brand-primary); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-glass);">
+      <div class="glass-panel blog-empty-state">
+        <div class="blog-empty-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -86,3 +86,166 @@ const t = getTranslations('en');
     )}
   </div>
 </BaseLayout>
+
+<style>
+  .blog-index-container {
+    padding: 3rem 1.25rem 5rem;
+    max-width: 1120px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .blog-index-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 3rem;
+  }
+
+  .blog-index-title {
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+    overflow-wrap: break-word;
+  }
+
+  .blog-index-desc {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .blog-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .blog-post-card {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .blog-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .blog-card-reading-time {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .blog-card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.6rem;
+    line-height: 1.35;
+    overflow-wrap: break-word;
+  }
+
+  .blog-card-title a {
+    color: var(--text-primary);
+  }
+
+  .blog-card-title a:hover {
+    color: var(--brand-primary);
+  }
+
+  .blog-card-desc {
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    overflow-wrap: break-word;
+  }
+
+  .blog-card-footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-glass);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .blog-card-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .blog-empty-state {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .blog-empty-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--brand-glow);
+    color: var(--brand-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-glass);
+  }
+
+  @media (max-width: 768px) {
+    .blog-index-container {
+      padding: 2rem 1rem 3.5rem;
+    }
+    .blog-index-header {
+      margin-bottom: 2rem;
+    }
+    .blog-index-title {
+      font-size: 1.85rem;
+    }
+    .blog-posts-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    .blog-post-card {
+      padding: 1.35rem 1.15rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .blog-index-container {
+      padding: 1.5rem 0.65rem 2.5rem;
+    }
+    .blog-index-title {
+      font-size: 1.5rem;
+    }
+    .blog-index-desc {
+      font-size: 0.95rem;
+    }
+    .blog-post-card {
+      padding: 1.15rem 0.875rem;
+      border-radius: var(--radius-md);
+    }
+  }
+
+  @media (max-width: 360px) {
+    .blog-index-container {
+      padding: 1.25rem 0.4rem 2rem;
+    }
+    .blog-index-title {
+      font-size: 1.35rem;
+    }
+    .blog-post-card {
+      padding: 1rem 0.65rem;
+    }
+  }
+</style>
