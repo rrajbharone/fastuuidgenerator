@@ -3,6 +3,12 @@ import HreflangTags from './HreflangTags.astro';
 import SchemaJsonLd from './SchemaJsonLd.astro';
 import type { LanguageCode } from '../../i18n/languages';
 
+interface ArticleMeta {
+  publishDate?: Date;
+  author?: string;
+  category?: string;
+}
+
 interface Props {
   title: string;
   description: string;
@@ -12,6 +18,7 @@ interface Props {
   ogType?: 'website' | 'article';
   faqs?: Array<{ question: string; answer: string }>;
   breadcrumbs?: Array<{ name: string; url: string }>;
+  articleMeta?: ArticleMeta;
 }
 
 const {
@@ -23,6 +30,7 @@ const {
   ogType = 'website',
   faqs = [],
   breadcrumbs = [],
+  articleMeta,
 } = Astro.props;
 
 const siteUrl = 'https://fastuuidgenerator.com';
@@ -79,6 +87,15 @@ const ogImage = `${siteUrl}/og-image.png`;
 <meta property="og:image" content={ogImage} />
 <meta property="og:site_name" content="FastUUIDGenerator" />
 <meta property="og:locale" content={lang} />
+{ogType === 'article' && articleMeta?.publishDate && (
+  <meta property="article:published_time" content={articleMeta.publishDate.toISOString()} />
+)}
+{ogType === 'article' && articleMeta?.author && (
+  <meta property="article:author" content={articleMeta.author} />
+)}
+{ogType === 'article' && articleMeta?.category && (
+  <meta property="article:section" content={articleMeta.category} />
+)}
 
 <!-- Twitter / X -->
 <meta property="twitter:card" content="summary_large_image" />
@@ -95,6 +112,7 @@ const ogImage = `${siteUrl}/og-image.png`;
   faqs={faqs}
   breadcrumbs={breadcrumbs}
   isApp={isMultilingualTool}
+  articleMeta={articleMeta}
 />
 
 <!-- Instant Zero-FOUC Theme Script -->

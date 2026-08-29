@@ -4,6 +4,12 @@ interface FaqItem {
   answer: string;
 }
 
+interface ArticleMeta {
+  publishDate?: Date;
+  author?: string;
+  category?: string;
+}
+
 interface Props {
   title: string;
   description: string;
@@ -11,9 +17,18 @@ interface Props {
   faqs?: FaqItem[];
   breadcrumbs?: Array<{ name: string; url: string }>;
   isApp?: boolean;
+  articleMeta?: ArticleMeta;
 }
 
-const { title, description, url, faqs = [], breadcrumbs = [], isApp = true } = Astro.props;
+const {
+  title,
+  description,
+  url,
+  faqs = [],
+  breadcrumbs = [],
+  isApp = true,
+  articleMeta,
+} = Astro.props;
 
 const softwareSchema = isApp
   ? {
@@ -30,6 +45,37 @@ const softwareSchema = isApp
         price: '0',
         priceCurrency: 'USD',
       },
+    }
+  : null;
+
+const blogPostingSchema = articleMeta
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title.replace(/ \| FastUUIDGenerator Blog$/, ''),
+      description: description,
+      url: url,
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': url,
+      },
+      author: {
+        '@type': 'Organization',
+        name: articleMeta.author || 'FastUUID Engineering Team',
+        url: 'https://fastuuidgenerator.com/about/',
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'FastUUIDGenerator',
+        url: 'https://fastuuidgenerator.com',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://fastuuidgenerator.com/favicon.svg',
+        },
+      },
+      datePublished: articleMeta.publishDate ? articleMeta.publishDate.toISOString() : undefined,
+      articleSection: articleMeta.category,
+      inLanguage: 'en',
     }
   : null;
 
@@ -64,6 +110,10 @@ const faqSchema = faqs.length > 0
 
 {softwareSchema && (
   <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+)}
+
+{blogPostingSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostingSchema)} />
 )}
 
 {breadcrumbSchema && (

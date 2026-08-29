@@ -43,6 +43,11 @@ const formattedDate = publishDate.toLocaleDateString('en-US', {
     { name: 'Blog', url: 'https://fastuuidgenerator.com/blog/' },
     { name: title, url: `https://fastuuidgenerator.com${canonicalPath}` },
   ]}
+  articleMeta={{
+    publishDate,
+    author,
+    category,
+  }}
 >
   <div class="container blog-container">
     <!-- Article Header -->
