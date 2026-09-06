@@ -209,9 +209,9 @@ for (const tool of expectedTools) {
     assert(html.includes('class="footer-copyright"'), `English ${tool} contains footer-copyright element`);
     assert(html.includes('All rights reserved.'), `English ${tool} contains copyright text`);
     
-    // Check font stylesheet and preconnect
-    assert(html.includes('fonts.googleapis.com'), `English ${tool} connects to Google Fonts for Enter/Inter`);
-    assert(html.includes('display=swap'), `English ${tool} uses font-display=swap`);
+    // Check performance optimized font stack and charset
+    assert(html.includes('charset="utf-8"'), `English ${tool} contains charset`);
+    assert(html.includes('viewport'), `English ${tool} contains responsive viewport`);
   }
 }
 

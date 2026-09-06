@@ -136,7 +136,7 @@ const { t } = Astro.props;
 <style>
   .educational-section {
     padding: 3.5rem 0 2.5rem;
-    border-top: 1px solid var(--border-glass);
+    border-top: 1px solid var(--border-subtle);
   }
 
   .educational-grid {
@@ -161,12 +161,10 @@ const { t } = Astro.props;
 
   .edu-card {
     padding: 1.5rem;
-    border: 1px solid var(--border-glass);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    background: var(--bg-glass);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: var(--glass-shadow);
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
@@ -181,7 +179,7 @@ const { t } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--border-glass);
+    border: 1px solid var(--border-subtle);
     margin-bottom: 0.25rem;
   }
 
@@ -217,13 +215,11 @@ const { t } = Astro.props;
 
   .faq-item {
     font-family: var(--font-sans);
-    border: 1px solid var(--border-glass);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     margin-bottom: 0.75rem;
     overflow: hidden;
-    background: var(--bg-glass);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--bg-primary);
   }
 
   .faq-question {

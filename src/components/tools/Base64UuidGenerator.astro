@@ -429,7 +429,7 @@ const initialHex = initialUuid.replace(/-/g, '');
     gap: 0.5rem;
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-glass);
+    border-bottom: 1px solid var(--border-subtle);
     overflow-x: auto;
   }
 
@@ -442,8 +442,8 @@ const initialHex = initialUuid.replace(/-/g, '');
     font-weight: 600;
     font-family: var(--font-sans);
     border-radius: var(--radius-md);
-    background: var(--bg-glass-subtle);
-    border: 1px solid var(--border-glass);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
     color: var(--text-secondary);
     cursor: pointer;
     transition: all 0.15s ease;
@@ -451,9 +451,13 @@ const initialHex = initialUuid.replace(/-/g, '');
   }
 
   .mode-tab-btn:hover {
-    background: var(--bg-elevated);
+    background: #e2e8f0;
     color: var(--text-primary);
     border-color: var(--border-subtle);
+  }
+
+  [data-theme="dark"] .mode-tab-btn:hover {
+    background: #334155;
   }
 
   .mode-tab-btn.active {
@@ -946,8 +950,10 @@ const initialHex = initialUuid.replace(/-/g, '');
       });
     }
 
-    // Initial run
-    generateNew();
+    // Initial run only if not already pre-rendered
+    if (!uuidInput || !uuidInput.value) {
+      generateNew();
+    }
   }
 
   initBase64Tool();

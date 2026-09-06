@@ -1,21 +1,21 @@
 /* ==========================================================================
-   FastUUIDGenerator.com - Premium Modern Developer Theme & Glassmorphism
-   Optimized for Core Web Vitals, 0 CLS, High Contrast & 100% Mobile Responsive
+   FastUUIDGenerator.com - Clean, Ultra-Fast Lightweight Modern Theme
+   Optimized for Sub-Second FCP/LCP, 0 CLS, High Contrast & 100% Mobile Speed
    ========================================================================== */
 
 :root {
-  --font-sans: 'Inter', 'Enter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
-  /* Light Theme Variables */
-  --bg-primary: #f8fafc;
-  --bg-secondary: #ffffff;
-  --bg-elevated: rgba(255, 255, 255, 0.9);
-  --bg-glass: rgba(255, 255, 255, 0.72);
-  --bg-glass-subtle: rgba(255, 255, 255, 0.5);
-  --border-glass: rgba(226, 232, 240, 0.85);
+  /* Clean Plain-White Theme Variables */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-elevated: #ffffff;
+  --bg-glass: #ffffff;
+  --bg-glass-subtle: #f8fafc;
+  --border-glass: #e2e8f0;
   --border-subtle: #e2e8f0;
-  --border-focus: #3b82f6;
+  --border-focus: #2563eb;
 
   --text-primary: #0f172a;
   --text-secondary: #475569;
@@ -24,7 +24,7 @@
 
   --brand-primary: #2563eb;
   --brand-primary-hover: #1d4ed8;
-  --brand-glow: rgba(37, 99, 235, 0.12);
+  --brand-glow: rgba(37, 99, 235, 0.08);
 
   --accent-success: #16a34a;
   --accent-success-bg: #f0fdf4;
@@ -35,24 +35,24 @@
   --accent-danger-border: #fecaca;
 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --glass-shadow: 0 8px 30px 0 rgba(31, 38, 135, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+  --glass-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 
   --radius-sm: 6px;
   --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-lg: 14px;
   --radius-full: 9999px;
 }
 
 [data-theme="dark"] {
-  /* Dark Theme Variables */
+  /* Clean Dark Theme Variables */
   --bg-primary: #090d16;
   --bg-secondary: #0f172a;
-  --bg-elevated: rgba(15, 23, 42, 0.92);
-  --bg-glass: rgba(15, 23, 42, 0.78);
-  --bg-glass-subtle: rgba(30, 41, 59, 0.55);
-  --border-glass: rgba(51, 65, 85, 0.65);
+  --bg-elevated: #1e293b;
+  --bg-glass: #0f172a;
+  --bg-glass-subtle: #1e293b;
+  --border-glass: #1e293b;
   --border-subtle: #1e293b;
   --border-focus: #60a5fa;
 
@@ -63,7 +63,7 @@
 
   --brand-primary: #3b82f6;
   --brand-primary-hover: #60a5fa;
-  --brand-glow: rgba(59, 130, 246, 0.2);
+  --brand-glow: rgba(59, 130, 246, 0.15);
 
   --accent-success: #22c55e;
   --accent-success-bg: rgba(34, 197, 94, 0.12);
@@ -73,10 +73,10 @@
   --accent-danger-bg: rgba(239, 68, 68, 0.12);
   --accent-danger-border: rgba(239, 68, 68, 0.3);
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
-  --glass-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  --glass-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* Reset and base */
@@ -106,10 +106,7 @@ body {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(at 0% 0%, var(--brand-glow) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, var(--brand-glow) 0px, transparent 50%);
-  background-attachment: fixed;
+  color: var(--text-primary);
   overflow-x: hidden;
   width: 100%;
   position: relative;
@@ -151,22 +148,18 @@ a:hover {
   padding: 0 1.25rem;
 }
 
-/* Lightweight Glass Panels */
+/* Clean Modern Panels (No Blur, No Backdrop-Filter, Pure Lightweight Rendering) */
 .glass-panel {
-  background: var(--bg-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-glass);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .glass-panel-subtle {
-  background: var(--bg-glass-subtle);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--border-glass);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
 }
 
@@ -221,9 +214,9 @@ button.btn-primary:active {
 .btn-secondary,
 a.btn-secondary,
 button.btn-secondary {
-  background: var(--bg-glass-subtle);
+  background: var(--bg-secondary);
   color: var(--text-primary) !important;
-  border-color: var(--border-glass);
+  border-color: var(--border-subtle);
 }
 
 .btn-secondary:hover,
@@ -235,9 +228,22 @@ a.btn-secondary:active,
 button.btn-secondary:hover,
 button.btn-secondary:focus,
 button.btn-secondary:active {
-  background: var(--bg-elevated);
-  border-color: var(--border-focus);
-  color: var(--brand-primary) !important;
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .btn-secondary:hover,
+[data-theme="dark"] .btn-secondary:focus,
+[data-theme="dark"] .btn-secondary:active,
+[data-theme="dark"] a.btn-secondary:hover,
+[data-theme="dark"] a.btn-secondary:focus,
+[data-theme="dark"] a.btn-secondary:active,
+[data-theme="dark"] button.btn-secondary:hover,
+[data-theme="dark"] button.btn-secondary:focus,
+[data-theme="dark"] button.btn-secondary:active {
+  background: #334155;
+  border-color: #475569;
 }
 
 .btn-sm {
@@ -263,7 +269,7 @@ a.btn-outline:active,
 button.btn-outline:hover,
 button.btn-outline:focus,
 button.btn-outline:active {
-  background: var(--bg-glass-subtle);
+  background: var(--bg-secondary);
   color: var(--text-primary) !important;
   border-color: var(--text-muted);
 }
@@ -324,9 +330,9 @@ button.btn-outline:active {
 }
 
 .badge-neutral {
-  background: var(--bg-glass-subtle);
+  background: var(--bg-secondary);
   color: var(--text-secondary);
-  border: 1px solid var(--border-glass);
+  border: 1px solid var(--border-subtle);
 }
 
 /* Navigation Links */
@@ -344,7 +350,7 @@ button.btn-outline:active {
 
 .nav-link:hover, .nav-link.active {
   color: var(--text-primary);
-  background: var(--bg-glass-subtle);
+  background: var(--bg-secondary);
 }
 
 /* Dropdown Menu */
@@ -359,12 +365,10 @@ button.btn-outline:active {
   right: 0;
   min-width: 190px;
   max-width: calc(100vw - 2rem);
-  background: var(--bg-elevated);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-glass);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
   padding: 0.4rem;
   z-index: 100;
   display: none;
@@ -392,7 +396,7 @@ button.btn-outline:active {
 }
 
 .dropdown-item:hover, .dropdown-item.active {
-  background: var(--bg-glass-subtle);
+  background: var(--bg-secondary);
   color: var(--brand-primary);
 }
 
@@ -411,7 +415,6 @@ button.btn-outline:active {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
 }
 
 .uuid-list-container {
@@ -439,7 +442,7 @@ button.btn-outline:active {
 }
 
 .uuid-row:hover {
-  background: var(--bg-glass-subtle);
+  background: var(--border-subtle);
 }
 
 /* Tool Sections */
@@ -474,7 +477,7 @@ button.btn-outline:active {
 /* Educational Content & FAQ */
 .educational-section {
   padding: 3.5rem 0 2.5rem;
-  border-top: 1px solid var(--border-glass);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .educational-grid {
@@ -492,9 +495,10 @@ button.btn-outline:active {
 
 .edu-card {
   padding: 1.5rem;
-  border: 1px solid var(--border-glass);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  background: var(--bg-glass);
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .edu-card h3 {
@@ -503,11 +507,11 @@ button.btn-outline:active {
 }
 
 .faq-item {
-  border: 1px solid var(--border-glass);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   margin-bottom: 0.75rem;
   overflow: hidden;
-  background: var(--bg-glass);
+  background: var(--bg-primary);
 }
 
 .faq-question {
@@ -536,10 +540,8 @@ button.btn-outline:active {
 .site-footer {
   margin-top: auto;
   padding: 3rem 0 2rem;
-  background: var(--bg-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid var(--border-glass);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .footer-content {

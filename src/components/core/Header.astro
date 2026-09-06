@@ -121,10 +121,8 @@ const homeHref = getLocalizedPath('', currentLang);
     position: sticky;
     top: 0;
     z-index: 50;
-    background: var(--bg-glass);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border-glass);
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-subtle);
     transition: background-color 0.2s ease, border-color 0.2s ease;
   }
 
@@ -201,10 +199,8 @@ const homeHref = getLocalizedPath('', currentLang);
     display: none;
     max-height: calc(100vh - 64px);
     overflow-y: auto;
-    background: var(--bg-elevated);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border-glass);
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-subtle);
     box-shadow: var(--shadow-lg);
   }
 
@@ -257,13 +253,13 @@ const homeHref = getLocalizedPath('', currentLang);
     font-weight: 500;
     color: var(--text-primary);
     text-decoration: none;
-    background: var(--bg-glass-subtle);
-    border: 1px solid var(--border-glass);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
     transition: background 0.15s ease, border-color 0.15s ease;
   }
 
   .mobile-nav-link:hover, .mobile-nav-link.active {
-    background: var(--bg-secondary);
+    background: #e2e8f0;
     border-color: var(--border-focus);
     color: var(--brand-primary);
   }
