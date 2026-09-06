@@ -381,7 +381,24 @@ const initialUuid = defaultVersion === 'v7' ? generateUUIDv7() : generateUUIDv4(
       renderOutput(uuids);
     }
 
-    btnGenerate.addEventListener('click', runGeneration);
+    const resultsArea = document.querySelector('.generator-results-area') as HTMLElement;
+
+    function scrollToResultsOnMobile() {
+      if (window.matchMedia('(max-width: 768px)').matches && resultsArea) {
+        const headerOffset = 76;
+        const elementPosition = resultsArea.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: 'smooth',
+        });
+      }
+    }
+
+    btnGenerate.addEventListener('click', () => {
+      runGeneration();
+      scrollToResultsOnMobile();
+    });
 
     if (versionSelect) versionSelect.addEventListener('change', runGeneration);
     if (formatSelect) formatSelect.addEventListener('change', runGeneration);

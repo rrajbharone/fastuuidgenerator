@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 const distDir = path.join(__dirname, '..', 'dist');
@@ -66,6 +66,16 @@ for (const p of pagesToCheck) {
   const html = fs.readFileSync(filePath, 'utf-8');
   assert(!html.includes('backdrop-filter'), `${p} contains NO backdrop-filter`);
   assert(!html.includes('fonts.googleapis.com'), `${p} contains NO fonts.googleapis.com`);
+}
+
+// 3. Check mobile smooth scroll in generator client bundles
+const astroDir = path.join(distDir, '_astro');
+const bundleFiles = fs.readdirSync(astroDir);
+const genBundles = bundleFiles.filter(f => (f.includes('UuidGenerator') || f.includes('GuidGenerator') || f.includes('Base64UuidGenerator')) && f.endsWith('.js'));
+assert(genBundles.length >= 3, 'All 3 generator client bundles found in dist/_astro');
+for (const b of genBundles) {
+  const code = fs.readFileSync(path.join(astroDir, b), 'utf-8');
+  assert(code.includes('smooth') && code.includes('max-width: 768px'), `${b} contains mobile-only smooth scroll logic`);
 }
 
 console.log(`\nPerformance Verification Results: ${passed} passed, ${failed} failed.`);

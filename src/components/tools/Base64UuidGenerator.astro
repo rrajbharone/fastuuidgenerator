@@ -883,7 +883,26 @@ const initialHex = initialUuid.replace(/-/g, '');
       processUuidToB64(newUuid);
     }
 
-    if (btnGenerate) btnGenerate.addEventListener('click', generateNew);
+    const encodeResultsBox = document.getElementById('encode-results-box') as HTMLElement;
+
+    function scrollToResultsOnMobile() {
+      if (window.matchMedia('(max-width: 768px)').matches && encodeResultsBox) {
+        const headerOffset = 76;
+        const elementPosition = encodeResultsBox.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: 'smooth',
+        });
+      }
+    }
+
+    if (btnGenerate) {
+      btnGenerate.addEventListener('click', () => {
+        generateNew();
+        scrollToResultsOnMobile();
+      });
+    }
     if (versionSelect) versionSelect.addEventListener('change', generateNew);
 
     if (uuidInput) {

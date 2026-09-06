@@ -340,7 +340,24 @@ const initialGuid = formatUUID(generateUUIDv4(), { braces: true, casing: 'upperc
       render(guids);
     }
 
-    btnGenerate.addEventListener('click', run);
+    const resultsArea = document.querySelector('#guid-generator-tool .generator-results-area') as HTMLElement;
+
+    function scrollToResultsOnMobile() {
+      if (window.matchMedia('(max-width: 768px)').matches && resultsArea) {
+        const headerOffset = 76;
+        const elementPosition = resultsArea.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: 'smooth',
+        });
+      }
+    }
+
+    btnGenerate.addEventListener('click', () => {
+      run();
+      scrollToResultsOnMobile();
+    });
     if (formatSelect) formatSelect.addEventListener('change', run);
     if (qtyInput) qtyInput.addEventListener('change', run);
 
