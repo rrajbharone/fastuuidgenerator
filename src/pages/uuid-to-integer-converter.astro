@@ -1,0 +1,27 @@
+---
+import { getTranslations } from '../i18n/utils';
+import ToolLayout from '../layouts/ToolLayout.astro';
+import UuidToIntegerConverter from '../components/tools/UuidToIntegerConverter.astro';
+
+const lang = 'en';
+const t = getTranslations(lang);
+const canonicalPath = '/uuid-to-integer-converter/';
+---
+
+<ToolLayout
+  title={t.seo.uuidToIntegerTitle}
+  description={t.seo.uuidToIntegerDescription}
+  heroTitle={t.uuidToInteger.title}
+  heroSubtitle={t.uuidToInteger.subtitle}
+  lang={lang}
+  canonicalPath={canonicalPath}
+  faqs={t.uuidToInteger.faqs}
+  showPopularTools={true}
+  showDefaultEducational={false}
+  breadcrumbs={[
+    { name: t.site.name, url: 'https://fastuuidgenerator.com/' },
+    { name: t.nav.uuidToInteger, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <UuidToIntegerConverter t={t} lang={lang} />
+</ToolLayout>

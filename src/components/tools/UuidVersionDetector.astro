@@ -1,0 +1,1122 @@
+---
+import type { TranslationDictionary } from '../../i18n/schema';
+import type { LanguageCode } from '../../i18n/languages';
+import {
+  detectUuidVersion,
+  SAMPLE_UUID_V1,
+  SAMPLE_UUID_V3,
+  SAMPLE_UUID_V4,
+  SAMPLE_UUID_V5,
+  SAMPLE_UUID_V6,
+  SAMPLE_UUID_V7,
+  SAMPLE_UUID_V8,
+  NIL_UUID,
+} from '../../utils/uuid';
+
+interface Props {
+  t: TranslationDictionary;
+  lang: LanguageCode;
+}
+
+const { t, lang } = Astro.props;
+
+// Initial sample detection (UUID v7 standard)
+const initialUuid = SAMPLE_UUID_V7;
+const initialRes = detectUuidVersion(initialUuid);
+---
+
+<div class="glass-panel tool-card" id="uuid-version-detector-tool">
+  <!-- Top Action Bar & Sample Selectors -->
+  <div class="tool-controls-bar">
+    <div class="control-left">
+      <label for="detector-input-field" class="control-label">
+        {t.uuidVersionDetector.uuidInputLabel}
+      </label>
+    </div>
+
+    <div class="action-buttons-group">
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-v7" title="Sample UUID Version 7">
+        <span>{t.uuidVersionDetector.sampleV7Label}</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-v4" title="Sample UUID Version 4">
+        <span>{t.uuidVersionDetector.sampleV4Label}</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-v1" title="Sample UUID Version 1">
+        <span>{t.uuidVersionDetector.sampleV1Label}</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-v5" title="Sample UUID Version 5">
+        <span>{t.uuidVersionDetector.sampleV5Label}</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-v6" title="Sample UUID Version 6">
+        <span>{t.uuidVersionDetector.sampleV6Label}</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-v8" title="Sample UUID Version 8">
+        <span>{t.uuidVersionDetector.sampleV8Label}</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-v3" title="Sample UUID Version 3">
+        <span>{t.uuidVersionDetector.sampleV3Label}</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-nil" title="Nil UUID (All Zeros)">
+        <span>{t.uuidVersionDetector.sampleNilLabel}</span>
+      </button>
+
+      <button type="button" class="btn btn-outline btn-sm" id="btn-detector-clear">
+        <span>{t.uuidVersionDetector.clearButton}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Primary Input Field -->
+  <div class="input-field-group">
+    <div class="input-with-action">
+      <input
+        type="text"
+        id="detector-input-field"
+        class="input-control input-mono"
+        placeholder={t.uuidVersionDetector.uuidInputPlaceholder}
+        value={initialUuid}
+        spellcheck="false"
+        autocomplete="off"
+      />
+      <button type="button" class="btn btn-primary" id="btn-detector-detect">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>{t.uuidVersionDetector.detectButton}</span>
+      </button>
+    </div>
+    <div id="detector-error-msg" class="inline-error-msg" style="display: none;">
+      {t.uuidVersionDetector.invalidUuidError}
+    </div>
+  </div>
+
+  <!-- Detection Results Container -->
+  <div class="results-container" id="detector-results-box">
+    <!-- Status Banner -->
+    <div class="detector-banner" id="detector-status-banner">
+      <div class="banner-info-left">
+        <div class="banner-badge-group">
+          <span class="badge badge-brand" id="det-version-badge">
+            {initialRes.version !== null ? `Version ${initialRes.version}` : initialRes.versionName}
+          </span>
+          <span class="badge badge-success" id="det-variant-badge">
+            {initialRes.variant}
+          </span>
+        </div>
+        <div class="banner-text">
+          <strong id="det-version-name" class="banner-title">
+            {initialRes.versionName}
+          </strong>
+          <p id="det-version-desc" class="banner-desc">
+            {initialRes.versionDescription}
+          </p>
+        </div>
+      </div>
+      <div class="banner-privacy-badge">
+        <span class="privacy-note">{t.common.privacyNotice}</span>
+      </div>
+    </div>
+
+    <!-- Technical Details Grid -->
+    <div class="detector-grid">
+      <!-- 1. Version & Type -->
+      <div class="glass-panel-subtle det-detail-card">
+        <span class="det-detail-label">{t.uuidVersionDetector.versionTypeLabel}</span>
+        <strong id="det-version-type" class="det-detail-value input-mono">
+          {initialRes.versionType}
+        </strong>
+      </div>
+
+      <!-- 2. Variant -->
+      <div class="glass-panel-subtle det-detail-card">
+        <span class="det-detail-label">{t.uuidVersionDetector.variantLabel}</span>
+        <strong id="det-variant-desc" class="det-detail-value input-mono">
+          {initialRes.variantDescription}
+        </strong>
+      </div>
+
+      <!-- 3. Version Nibble (Char 13, Bits 48-51) -->
+      <div class="glass-panel-subtle det-detail-card">
+        <span class="det-detail-label">{t.uuidVersionDetector.versionNibbleLabel}</span>
+        <div class="det-nibble-row">
+          <strong id="det-nibble-hex" class="det-nibble-hex input-mono">
+            0x{initialRes.versionNibbleHex.toUpperCase()}
+          </strong>
+          <span class="badge badge-brand input-mono" id="det-nibble-bits">
+            bits: {initialRes.versionNibbleBits}
+          </span>
+          <span class="det-subtle-hint">Bit 48–51</span>
+        </div>
+      </div>
+
+      <!-- 4. Variant Pattern (Char 17, Bits 64-67) -->
+      <div class="glass-panel-subtle det-detail-card">
+        <span class="det-detail-label">{t.uuidVersionDetector.bitPatternLabel}</span>
+        <div class="det-nibble-row">
+          <strong id="det-variant-hex" class="det-nibble-hex input-mono">
+            0x{initialRes.variantNibbleHex.toUpperCase()}
+          </strong>
+          <span class="badge badge-neutral input-mono" id="det-variant-bits">
+            high bits: {initialRes.variantBits}
+          </span>
+          <span class="det-subtle-hint">Bit 64–65</span>
+        </div>
+      </div>
+
+      <!-- 5. Canonical UUID Format with 1-Click Copy -->
+      <div class="glass-panel-subtle det-detail-card det-span-2">
+        <div class="det-detail-header-row">
+          <span class="det-detail-label">{t.uuidVersionDetector.canonicalUuidLabel}</span>
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm copy-btn"
+            id="btn-copy-canonical"
+            data-target="det-canonical-val"
+            aria-label={t.uuidVersionDetector.copyButton}
+          >
+            <span class="copy-label">{t.uuidVersionDetector.copyButton}</span>
+          </button>
+        </div>
+        <strong id="det-canonical-val" class="det-detail-value input-mono" style="color: var(--brand-primary);">
+          {initialRes.cleanCanonical}
+        </strong>
+      </div>
+
+      <!-- 6. Governing RFC Specification -->
+      <div class="glass-panel-subtle det-detail-card det-span-2">
+        <span class="det-detail-label">{t.uuidVersionDetector.rfcStandardLabel}</span>
+        <strong id="det-rfc-standard" class="det-detail-value input-mono">
+          {initialRes.rfcStandard}
+        </strong>
+      </div>
+    </div>
+
+    <!-- Structural Bit Breakdown Visualizer -->
+    <div class="glass-panel-subtle breakdown-card">
+      <div class="breakdown-header">
+        <h3 class="breakdown-title">{t.uuidVersionDetector.bitBreakdownTitle}</h3>
+        <p class="breakdown-desc">{t.uuidVersionDetector.bitBreakdownDesc}</p>
+      </div>
+
+      <div class="breakdown-visualizer-wrap">
+        <div class="breakdown-blocks" id="breakdown-blocks">
+          <!-- Chunks: time_low (8) - time_mid (4) - [V]time_hi (4) - [v]clock_seq (4) - node (12) -->
+          <div class="chunk-box chunk-time-low">
+            <span class="chunk-name">time_low (32-bit)</span>
+            <code class="chunk-val input-mono" id="chunk-p1">018f6c38</code>
+          </div>
+          <span class="chunk-hyphen">-</span>
+          <div class="chunk-box chunk-time-mid">
+            <span class="chunk-name">time_mid (16-bit)</span>
+            <code class="chunk-val input-mono" id="chunk-p2">8c50</code>
+          </div>
+          <span class="chunk-hyphen">-</span>
+          <div class="chunk-box chunk-time-hi highlight-version">
+            <span class="chunk-name">version & hi (16-bit)</span>
+            <code class="chunk-val input-mono" id="chunk-p3">
+              <span class="highlight-nibble" id="nibble-ver-hl">7</span>dc8
+            </code>
+            <span class="chunk-callout" id="nibble-ver-callout">Version = 7</span>
+          </div>
+          <span class="chunk-hyphen">-</span>
+          <div class="chunk-box chunk-clock-seq highlight-variant">
+            <span class="chunk-name">variant & seq (16-bit)</span>
+            <code class="chunk-val input-mono" id="chunk-p4">
+              <span class="highlight-nibble" id="nibble-var-hl">9</span>366
+            </code>
+            <span class="chunk-callout" id="nibble-var-callout">Variant = RFC</span>
+          </div>
+          <span class="chunk-hyphen">-</span>
+          <div class="chunk-box chunk-node">
+            <span class="chunk-name">node / rand (48-bit)</span>
+            <code class="chunk-val input-mono" id="chunk-p5">4f4c2c51eb67</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Educational SEO Content Section: Exactly 8 Comprehensive Cards with 100% Multilingual Parity -->
+<div class="educational-section-wrapper">
+  <div class="educational-header">
+    <span class="badge badge-brand">{t.educational.technicalReferenceBadge}</span>
+    <h2 class="educational-title">{t.uuidVersionDetector.whatIsTitle}</h2>
+    <p class="educational-subtitle">{t.uuidVersionDetector.subtitle}</p>
+  </div>
+
+  <div class="educational-grid">
+    <!-- Card 1: What Is a UUID Version Detector? -->
+    <div class="glass-panel edu-card" id="card-what-is-detector">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidVersionDetector.whatIsTitle}</h3>
+      <p class="edu-card-text">{t.uuidVersionDetector.whatIsContent}</p>
+    </div>
+
+    <!-- Card 2: How UUID Version Detection Works -->
+    <div class="glass-panel edu-card" id="card-how-it-works">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="9" x2="20" y2="9"></line>
+          <line x1="4" y1="15" x2="20" y2="15"></line>
+          <line x1="10" y1="3" x2="8" y2="21"></line>
+          <line x1="16" y1="3" x2="14" y2="21"></line>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidVersionDetector.howItWorksTitle}</h3>
+      <p class="edu-card-text">{t.uuidVersionDetector.howItWorksContent}</p>
+    </div>
+
+    <!-- Card 3: Where the Version and Variant Are Stored -->
+    <div class="glass-panel edu-card" id="card-where-stored">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidVersionDetector.whereStoredTitle}</h3>
+      <p class="edu-card-text">{t.uuidVersionDetector.whereStoredContent}</p>
+    </div>
+
+    <!-- Card 4: Detailed Differences Between UUID Versions -->
+    <div class="glass-panel edu-card" id="card-version-differences">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidVersionDetector.versionDifferencesTitle}</h3>
+      <p class="edu-card-text">{t.uuidVersionDetector.versionDifferencesContent}</p>
+    </div>
+
+    <!-- Card 5: UUID Version vs UUID Variant -->
+    <div class="glass-panel edu-card" id="card-version-vs-variant">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidVersionDetector.versionVsVariantTitle}</h3>
+      <p class="edu-card-text">{t.uuidVersionDetector.versionVsVariantContent}</p>
+    </div>
+
+    <!-- Card 6: Why Detecting the Correct Version Matters -->
+    <div class="glass-panel edu-card" id="card-why-it-matters">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidVersionDetector.whyItMattersTitle}</h3>
+      <p class="edu-card-text">{t.uuidVersionDetector.whyItMattersContent}</p>
+    </div>
+
+    <!-- Card 7: How to Manually Identify the Version -->
+    <div class="glass-panel edu-card" id="card-how-to-identify">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 16 16 12 12 8"></polyline>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidVersionDetector.howToIdentifyTitle}</h3>
+      <p class="edu-card-text">{t.uuidVersionDetector.howToIdentifyContent}</p>
+    </div>
+
+    <!-- Card 8: Practical Use Cases for Version Detection -->
+    <div class="glass-panel edu-card" id="card-practical-use-cases">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidVersionDetector.practicalUseCasesTitle}</h3>
+      <p class="edu-card-text">{t.uuidVersionDetector.practicalUseCasesContent}</p>
+    </div>
+  </div>
+
+  <!-- FAQ Accordion Section: Exactly 8 Technical FAQs with 100% Multilingual Parity -->
+  <section class="faq-section-wrapper" aria-labelledby="uuid-detector-faq-heading">
+    <div class="faq-header">
+      <h2 id="uuid-detector-faq-heading" class="faq-heading">{t.uuidVersionDetector.faqTitle}</h2>
+      <p class="faq-subheading">Comprehensive answers to common technical questions about RFC 4122 and RFC 9562 UUID version detection, variant bits, and parsing algorithms.</p>
+    </div>
+
+    <div class="faq-accordion-list">
+      {t.uuidVersionDetector.faqs.map((faq, index) => (
+        <details class="faq-item" id={`uuid-detector-faq-${index + 1}`}>
+          <summary class="faq-question">
+            <span>{faq.question}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+</div>
+
+<style>
+  .tool-controls-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .control-label {
+    font-size: 0.925rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .action-buttons-group {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .input-field-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .input-with-action {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .input-with-action input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .inline-error-msg {
+    margin-top: 0.5rem;
+    padding: 0.65rem 0.9rem;
+    background: var(--accent-danger-bg);
+    border: 1px solid var(--accent-danger-border);
+    color: var(--accent-danger);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Status Banner */
+  .detector-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .banner-info-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .banner-badge-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .banner-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: block;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .banner-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-top: 0.25rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .banner-privacy-badge {
+    align-self: flex-start;
+  }
+
+  .privacy-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* Detector Grid */
+  .detector-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .det-span-2 {
+    grid-column: span 2;
+  }
+
+  .det-detail-card {
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .det-detail-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .det-detail-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .det-detail-value {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .det-nibble-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .det-nibble-hex {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--brand-primary);
+  }
+
+  .det-subtle-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  /* Structural Breakdown Visualizer */
+  .breakdown-card {
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+  }
+
+  .breakdown-header {
+    margin-bottom: 1rem;
+  }
+
+  .breakdown-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .breakdown-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .breakdown-visualizer-wrap {
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .breakdown-blocks {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 600px;
+  }
+
+  .chunk-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.6rem 0.75rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    flex: 1;
+    min-width: 0;
+    position: relative;
+  }
+
+  .chunk-name {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+  }
+
+  .chunk-val {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .chunk-hyphen {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    user-select: none;
+  }
+
+  .highlight-version {
+    border-color: var(--brand-primary);
+    background: rgba(37, 99, 235, 0.05);
+  }
+
+  .highlight-variant {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
+  }
+
+  .highlight-nibble {
+    background: var(--brand-primary);
+    color: #ffffff;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+
+  .highlight-variant .highlight-nibble {
+    background: #10b981;
+  }
+
+  .chunk-callout {
+    font-size: 0.65rem;
+    font-weight: 700;
+    margin-top: 0.3rem;
+    color: var(--brand-primary);
+    white-space: nowrap;
+  }
+
+  .highlight-variant .chunk-callout {
+    color: #10b981;
+  }
+
+  /* Educational Section */
+  .educational-section-wrapper {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .educational-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .educational-title {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    margin: 0.75rem 0 0.5rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .educational-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .educational-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .edu-card {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .edu-icon-wrapper {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--brand-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .edu-card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    margin: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .edu-card-text {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* FAQ Accordion */
+  .faq-section-wrapper {
+    margin-top: 1.5rem;
+  }
+
+  .faq-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 2rem;
+  }
+
+  .faq-heading {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .faq-subheading {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .faq-accordion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 840px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--bg-glass);
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .faq-item[open] {
+    border-color: var(--brand-primary);
+  }
+
+  .faq-question {
+    padding: 1.1rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    list-style: none;
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--brand-primary);
+  }
+
+  .faq-answer {
+    padding: 0 1.25rem 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.925rem;
+    line-height: 1.65;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 0.85rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .faq-answer p {
+    margin: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 860px) {
+    .detector-grid {
+      grid-template-columns: 1fr;
+    }
+    .det-span-2 {
+      grid-column: span 1;
+    }
+    .educational-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .input-with-action {
+      flex-direction: column;
+    }
+    .input-with-action .btn {
+      width: 100%;
+    }
+    .action-buttons-group {
+      width: 100%;
+    }
+    .action-buttons-group .btn {
+      flex: 1 1 auto;
+      text-align: center;
+      justify-content: center;
+    }
+    .educational-title {
+      font-size: 1.5rem;
+    }
+    .educational-grid {
+      gap: 1rem;
+    }
+    .edu-card {
+      padding: 1.15rem;
+    }
+    .faq-heading {
+      font-size: 1.45rem;
+    }
+    .faq-question {
+      padding: 0.95rem 1rem;
+      font-size: 0.925rem;
+    }
+    .faq-answer {
+      padding: 0.75rem 1rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+</style>
+
+<script>
+  import {
+    detectUuidVersion,
+    SAMPLE_UUID_V1,
+    SAMPLE_UUID_V3,
+    SAMPLE_UUID_V4,
+    SAMPLE_UUID_V5,
+    SAMPLE_UUID_V6,
+    SAMPLE_UUID_V7,
+    SAMPLE_UUID_V8,
+    NIL_UUID,
+  } from '../../utils/uuid';
+
+  function initUuidVersionDetectorTool() {
+    const input = document.getElementById('detector-input-field') as HTMLInputElement | null;
+    const btnDetect = document.getElementById('btn-detector-detect');
+    const btnClear = document.getElementById('btn-detector-clear');
+    const errorMsg = document.getElementById('detector-error-msg');
+    const resultsBox = document.getElementById('detector-results-box');
+
+    // Preset buttons
+    const btnV1 = document.getElementById('btn-sample-v1');
+    const btnV3 = document.getElementById('btn-sample-v3');
+    const btnV4 = document.getElementById('btn-sample-v4');
+    const btnV5 = document.getElementById('btn-sample-v5');
+    const btnV6 = document.getElementById('btn-sample-v6');
+    const btnV7 = document.getElementById('btn-sample-v7');
+    const btnV8 = document.getElementById('btn-sample-v8');
+    const btnNil = document.getElementById('btn-sample-nil');
+
+    // Display fields
+    const verBadge = document.getElementById('det-version-badge');
+    const varBadge = document.getElementById('det-variant-badge');
+    const verName = document.getElementById('det-version-name');
+    const verDesc = document.getElementById('det-version-desc');
+    const verType = document.getElementById('det-version-type');
+    const varDesc = document.getElementById('det-variant-desc');
+    const nibbleHex = document.getElementById('det-nibble-hex');
+    const nibbleBits = document.getElementById('det-nibble-bits');
+    const variantHex = document.getElementById('det-variant-hex');
+    const variantBits = document.getElementById('det-variant-bits');
+    const canonicalVal = document.getElementById('det-canonical-val');
+    const rfcStandard = document.getElementById('det-rfc-standard');
+
+    // Breakdown elements
+    const chunkP1 = document.getElementById('chunk-p1');
+    const chunkP2 = document.getElementById('chunk-p2');
+    const chunkP3 = document.getElementById('chunk-p3');
+    const chunkP4 = document.getElementById('chunk-p4');
+    const chunkP5 = document.getElementById('chunk-p5');
+    const nibbleVerHl = document.getElementById('nibble-ver-hl');
+    const nibbleVarHl = document.getElementById('nibble-var-hl');
+    const nibbleVerCallout = document.getElementById('nibble-ver-callout');
+    const nibbleVarCallout = document.getElementById('nibble-var-callout');
+
+    if (!input || !resultsBox) return;
+
+    function processDetection(val: string) {
+      const trimmed = val.trim();
+      if (!trimmed) {
+        if (errorMsg) errorMsg.style.display = 'none';
+        resultsBox!.style.display = 'none';
+        return;
+      }
+
+      const res = detectUuidVersion(trimmed);
+      if (!res.isValid) {
+        if (errorMsg) {
+          errorMsg.textContent = res.error || 'Invalid UUID format.';
+          errorMsg.style.display = 'block';
+        }
+        resultsBox!.style.display = 'none';
+        return;
+      }
+
+      if (errorMsg) errorMsg.style.display = 'none';
+      resultsBox!.style.display = 'flex';
+
+      // Update badges and titles
+      if (verBadge) {
+        verBadge.textContent = res.version !== null ? `Version ${res.version}` : res.versionName;
+      }
+      if (varBadge) {
+        varBadge.textContent = res.variant;
+      }
+      if (verName) {
+        verName.textContent = res.versionName;
+      }
+      if (verDesc) {
+        verDesc.textContent = res.versionDescription;
+      }
+      if (verType) {
+        verType.textContent = res.versionType;
+      }
+      if (varDesc) {
+        varDesc.textContent = res.variantDescription;
+      }
+      if (nibbleHex) {
+        nibbleHex.textContent = `0x${res.versionNibbleHex.toUpperCase()}`;
+      }
+      if (nibbleBits) {
+        nibbleBits.textContent = `bits: ${res.versionNibbleBits}`;
+      }
+      if (variantHex) {
+        variantHex.textContent = `0x${res.variantNibbleHex.toUpperCase()}`;
+      }
+      if (variantBits) {
+        variantBits.textContent = `high bits: ${res.variantBits}`;
+      }
+      if (canonicalVal) {
+        canonicalVal.textContent = res.cleanCanonical;
+      }
+      if (rfcStandard) {
+        rfcStandard.textContent = res.rfcStandard;
+      }
+
+      // Update Breakdown blocks
+      if (res.cleanCanonical && res.cleanCanonical.includes('-')) {
+        const parts = res.cleanCanonical.split('-');
+        if (parts.length === 5) {
+          if (chunkP1) chunkP1.textContent = parts[0];
+          if (chunkP2) chunkP2.textContent = parts[1];
+          if (chunkP3 && nibbleVerHl) {
+            chunkP3.innerHTML = `<span class="highlight-nibble" id="nibble-ver-hl">${parts[2].charAt(0)}</span>${parts[2].slice(1)}`;
+          }
+          if (chunkP4 && nibbleVarHl) {
+            chunkP4.innerHTML = `<span class="highlight-nibble" id="nibble-var-hl">${parts[3].charAt(0)}</span>${parts[3].slice(1)}`;
+          }
+          if (chunkP5) chunkP5.textContent = parts[4];
+
+          if (nibbleVerCallout) {
+            nibbleVerCallout.textContent = res.version !== null ? `Version = ${res.version}` : (res.isNil ? 'Nil (0)' : 'Max (f)');
+          }
+          if (nibbleVarCallout) {
+            nibbleVarCallout.textContent = `Variant = ${res.variantCode.toUpperCase()}`;
+          }
+        }
+      }
+    }
+
+    // Input listeners
+    input.addEventListener('input', () => {
+      processDetection(input.value);
+    });
+
+    if (btnDetect) {
+      btnDetect.addEventListener('click', () => {
+        processDetection(input.value);
+      });
+    }
+
+    if (btnClear) {
+      btnClear.addEventListener('click', () => {
+        input.value = '';
+        processDetection('');
+        input.focus();
+      });
+    }
+
+    // Preset handlers
+    function applySample(sampleValue: string) {
+      if (input) {
+        input.value = sampleValue;
+        processDetection(sampleValue);
+      }
+    }
+
+    if (btnV1) btnV1.addEventListener('click', () => applySample(SAMPLE_UUID_V1));
+    if (btnV3) btnV3.addEventListener('click', () => applySample(SAMPLE_UUID_V3));
+    if (btnV4) btnV4.addEventListener('click', () => applySample(SAMPLE_UUID_V4));
+    if (btnV5) btnV5.addEventListener('click', () => applySample(SAMPLE_UUID_V5));
+    if (btnV6) btnV6.addEventListener('click', () => applySample(SAMPLE_UUID_V6));
+    if (btnV7) btnV7.addEventListener('click', () => applySample(SAMPLE_UUID_V7));
+    if (btnV8) btnV8.addEventListener('click', () => applySample(SAMPLE_UUID_V8));
+    if (btnNil) btnNil.addEventListener('click', () => applySample(NIL_UUID));
+
+    // Copy Handler
+    const copyBtns = document.querySelectorAll('#uuid-version-detector-tool .copy-btn');
+    copyBtns.forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const targetId = btn.getAttribute('data-target');
+        if (!targetId) return;
+        const targetEl = document.getElementById(targetId);
+        if (!targetEl) return;
+
+        const textToCopy = targetEl.textContent?.trim() || '';
+        if (!textToCopy) return;
+
+        try {
+          await navigator.clipboard.writeText(textToCopy);
+          const label = btn.querySelector('.copy-label');
+          const original = label ? label.textContent : '';
+          if (label) label.textContent = 'Copied!';
+          btn.classList.add('btn-success');
+          setTimeout(() => {
+            if (label) label.textContent = original;
+            btn.classList.remove('btn-success');
+          }, 1800);
+        } catch {
+          // Fallback selection
+          const textarea = document.createElement('textarea');
+          textarea.value = textToCopy;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          try {
+            document.execCommand('copy');
+            const label = btn.querySelector('.copy-label');
+            const original = label ? label.textContent : '';
+            if (label) label.textContent = 'Copied!';
+            setTimeout(() => {
+              if (label) label.textContent = original;
+            }, 1800);
+          } finally {
+            document.body.removeChild(textarea);
+          }
+        }
+      });
+    });
+
+    // Run initial detection
+    if (input.value) {
+      processDetection(input.value);
+    }
+  }
+
+  initUuidVersionDetectorTool();
+  document.addEventListener('astro:page-load', initUuidVersionDetectorTool);
+</script>

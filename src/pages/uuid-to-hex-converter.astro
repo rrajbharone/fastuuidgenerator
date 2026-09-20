@@ -1,0 +1,27 @@
+---
+import { getTranslations } from '../i18n/utils';
+import ToolLayout from '../layouts/ToolLayout.astro';
+import UuidToHexConverter from '../components/tools/UuidToHexConverter.astro';
+
+const lang = 'en';
+const t = getTranslations(lang);
+const canonicalPath = '/uuid-to-hex-converter/';
+---
+
+<ToolLayout
+  title={t.seo.uuidToHexTitle}
+  description={t.seo.uuidToHexDescription}
+  heroTitle={t.uuidToHex.title}
+  heroSubtitle={t.uuidToHex.subtitle}
+  lang={lang}
+  canonicalPath={canonicalPath}
+  faqs={t.uuidToHex.faqs}
+  showPopularTools={true}
+  showDefaultEducational={false}
+  breadcrumbs={[
+    { name: t.site.name, url: 'https://fastuuidgenerator.com/' },
+    { name: t.nav.uuidToHex, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <UuidToHexConverter t={t} lang={lang} />
+</ToolLayout>

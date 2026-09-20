@@ -1,0 +1,1082 @@
+---
+import type { TranslationDictionary } from '../../i18n/schema';
+import type { LanguageCode } from '../../i18n/languages';
+import { uuidToInteger, formatIntegerWithCommas } from '../../utils/uuid';
+
+interface Props {
+  t: TranslationDictionary;
+  lang: LanguageCode;
+}
+
+const { t, lang } = Astro.props;
+
+// Initial sample values (RFC 4122 sample)
+const initialUuid = '550e8400-e29b-41d4-a716-446655440000';
+const initialIntRes = uuidToInteger(initialUuid);
+const initialRawInt = initialIntRes.isValid ? initialIntRes.rawInteger : '113059749145936325402354257176981405696';
+const initialFormattedInt = initialIntRes.isValid ? initialIntRes.formattedInteger : formatIntegerWithCommas(initialRawInt);
+const initialHex = '550e8400e29b41d4a716446655440000';
+---
+
+<div class="glass-panel tool-card" id="uuid-to-integer-tool">
+  <!-- Mode Switcher Tabs -->
+  <div class="mode-tabs-nav" role="tablist" aria-label={t.uuidToInteger.conversionModeLabel}>
+    <button
+      type="button"
+      class="mode-tab-btn active"
+      id="tab-mode-uuid-to-int"
+      role="tab"
+      aria-selected="true"
+      aria-controls="panel-mode-uuid-to-int"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12h16"></path>
+        <path d="m14 6 6 6-6 6"></path>
+      </svg>
+      <span>{t.uuidToInteger.modeUuidToInt}</span>
+    </button>
+
+    <button
+      type="button"
+      class="mode-tab-btn"
+      id="tab-mode-int-to-uuid"
+      role="tab"
+      aria-selected="false"
+      aria-controls="panel-mode-int-to-uuid"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 12H4"></path>
+        <path d="m10 18-6-6 6-6"></path>
+      </svg>
+      <span>{t.uuidToInteger.modeIntToUuid}</span>
+    </button>
+  </div>
+
+  <!-- PANEL 1: UUID -> Integer -->
+  <div class="tab-panel" id="panel-mode-uuid-to-int" role="tabpanel" aria-labelledby="tab-mode-uuid-to-int">
+    <div class="tool-controls-bar">
+      <div class="control-left">
+        <label for="uuid-source-input" class="control-label">
+          {t.uuidToInteger.uuidInputLabel}
+        </label>
+      </div>
+
+      <div class="action-buttons-group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-uuid-v4">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          </svg>
+          <span>{t.uuidToInteger.sampleButton}</span>
+        </button>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-uuid-v7">
+          <span>Sample v7</span>
+        </button>
+
+        <button type="button" class="btn btn-outline btn-sm" id="btn-clear-uuid-to-int">
+          <span>{t.uuidToInteger.clearButton}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live UUID Input -->
+    <div class="input-field-group">
+      <input
+        type="text"
+        id="uuid-source-input"
+        class="input-control input-mono"
+        placeholder={t.uuidToInteger.uuidInputPlaceholder}
+        value={initialUuid}
+        spellcheck="false"
+        autocomplete="off"
+      />
+      <div id="uuid-to-int-error" class="inline-error-msg" style="display: none;">
+        {t.uuidToInteger.invalidUuidError}
+      </div>
+    </div>
+
+    <!-- Output Representations -->
+    <div class="results-container" id="uuid-to-int-results-box">
+      <div class="results-header-row">
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="badge badge-brand">{t.uuidToInteger.resultsLabel}</span>
+          <span class="badge badge-success">128-bit Unsigned Integer</span>
+          <span class="badge badge-neutral" id="uuid-digits-badge">39 digits</span>
+        </div>
+        <span class="privacy-note">{t.common.privacyNotice}</span>
+      </div>
+
+      <div class="outputs-stack">
+        <!-- 1. Raw Exact Decimal Integer (Primary Output) -->
+        <div class="output-card highlight-card">
+          <div class="output-meta">
+            <div class="output-title-group">
+              <span class="output-title">{t.uuidToInteger.rawIntegerLabel}</span>
+              <span class="badge badge-brand">No Separators • Raw Digits</span>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm copy-btn" data-target="out-raw-integer" aria-label={t.uuidToInteger.copyButton}>
+              <span class="copy-label">{t.uuidToInteger.copyButton}</span>
+            </button>
+          </div>
+          <div class="output-value-box">
+            <code class="output-text input-mono" id="out-raw-integer">{initialRawInt}</code>
+          </div>
+        </div>
+
+        <!-- 2. Formatted Integer with Commas -->
+        <div class="output-card">
+          <div class="output-meta">
+            <div class="output-title-group">
+              <span class="output-title">{t.uuidToInteger.formattedIntegerLabel}</span>
+              <span class="badge badge-neutral">Thousands Separators</span>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm copy-btn" data-target="out-formatted-integer" aria-label={t.uuidToInteger.copyButton}>
+              <span class="copy-label">{t.uuidToInteger.copyButton}</span>
+            </button>
+          </div>
+          <div class="output-value-box">
+            <code class="output-text input-mono" id="out-formatted-integer">{initialFormattedInt}</code>
+          </div>
+        </div>
+
+        <!-- 3. Hexadecimal Representation -->
+        <div class="output-card">
+          <div class="output-meta">
+            <div class="output-title-group">
+              <span class="output-title">{t.uuidToInteger.rawHexLabel}</span>
+              <span class="badge badge-neutral">32 hex characters</span>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm copy-btn" data-target="out-raw-hex" aria-label={t.uuidToInteger.copyButton}>
+              <span class="copy-label">{t.uuidToInteger.copyButton}</span>
+            </button>
+          </div>
+          <div class="output-value-box">
+            <code class="output-text input-mono" id="out-raw-hex">{initialHex}</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: Integer -> UUID -->
+  <div class="tab-panel" id="panel-mode-int-to-uuid" role="tabpanel" aria-labelledby="tab-mode-int-to-uuid" style="display: none;">
+    <div class="tool-controls-bar">
+      <div class="control-left">
+        <label for="integer-source-input" class="control-label">
+          {t.uuidToInteger.integerInputLabel}
+        </label>
+      </div>
+
+      <div class="action-buttons-group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-integer">
+          <span>{t.uuidToInteger.sampleButton}</span>
+        </button>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-sample-max-integer">
+          <span>Max Integer</span>
+        </button>
+
+        <button type="button" class="btn btn-outline btn-sm" id="btn-clear-int-to-uuid">
+          <span>{t.uuidToInteger.clearButton}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Integer Input -->
+    <div class="input-field-group">
+      <input
+        type="text"
+        id="integer-source-input"
+        class="input-control input-mono"
+        placeholder={t.uuidToInteger.integerInputPlaceholder}
+        spellcheck="false"
+        autocomplete="off"
+      />
+      <div id="int-to-uuid-error" class="inline-error-msg" style="display: none;">
+        {t.uuidToInteger.invalidIntegerError}
+      </div>
+    </div>
+
+    <!-- Decoded UUID Outputs -->
+    <div class="results-container" id="int-to-uuid-results-box" style="display: none;">
+      <div class="results-header-row">
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="badge badge-success">✓ Converted Successfully</span>
+          <span class="badge badge-brand">RFC 8-4-4-4-12 Canonical</span>
+        </div>
+        <span class="privacy-note">128 bits reconstructed</span>
+      </div>
+
+      <div class="outputs-stack">
+        <!-- 1. Canonical UUID (Standard) -->
+        <div class="output-card highlight-card">
+          <div class="output-meta">
+            <div class="output-title-group">
+              <span class="output-title">{t.uuidToInteger.canonicalUuidLabel}</span>
+              <span class="badge badge-brand">Standard Lowercase</span>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm copy-btn" data-target="out-canonical-uuid" aria-label={t.uuidToInteger.copyButton}>
+              <span class="copy-label">{t.uuidToInteger.copyButton}</span>
+            </button>
+          </div>
+          <div class="output-value-box">
+            <code class="output-text input-mono" id="out-canonical-uuid"></code>
+          </div>
+        </div>
+
+        <!-- 2. Uppercase UUID -->
+        <div class="output-card">
+          <div class="output-meta">
+            <div class="output-title-group">
+              <span class="output-title">{t.uuidToInteger.uppercaseUuidLabel}</span>
+              <span class="badge badge-neutral">Windows / C# Standard</span>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm copy-btn" data-target="out-uppercase-uuid" aria-label={t.uuidToInteger.copyButton}>
+              <span class="copy-label">{t.uuidToInteger.copyButton}</span>
+            </button>
+          </div>
+          <div class="output-value-box">
+            <code class="output-text input-mono" id="out-uppercase-uuid"></code>
+          </div>
+        </div>
+
+        <!-- 3. Hex (No Hyphens) -->
+        <div class="output-card">
+          <div class="output-meta">
+            <div class="output-title-group">
+              <span class="output-title">{t.uuidToInteger.rawHexLabel}</span>
+              <span class="badge badge-neutral">32 hex characters</span>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm copy-btn" data-target="out-int-hex" aria-label={t.uuidToInteger.copyButton}>
+              <span class="copy-label">{t.uuidToInteger.copyButton}</span>
+            </button>
+          </div>
+          <div class="output-value-box">
+            <code class="output-text input-mono" id="out-int-hex"></code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Educational SEO Content Section: Exactly 8 Technical Cards -->
+<div class="educational-section-wrapper">
+  <div class="educational-header">
+    <span class="badge badge-brand">{t.educational.technicalReferenceBadge}</span>
+    <h2 class="educational-title">{t.uuidToInteger.whatIsTitle}</h2>
+    <p class="educational-subtitle">{t.uuidToInteger.subtitle}</p>
+  </div>
+
+  <div class="educational-grid">
+    <!-- Card 1: What is a UUID to Integer Converter -->
+    <div class="glass-panel edu-card" id="card-what-is-uuid-to-integer">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidToInteger.whatIsTitle}</h3>
+      <p class="edu-card-text">{t.uuidToInteger.whatIsContent}</p>
+    </div>
+
+    <!-- Card 2: What is a 128-Bit Integer -->
+    <div class="glass-panel edu-card" id="card-what-is-integer">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="9" x2="20" y2="9"></line>
+          <line x1="4" y1="15" x2="20" y2="15"></line>
+          <line x1="10" y1="3" x2="8" y2="21"></line>
+          <line x1="16" y1="3" x2="14" y2="21"></line>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidToInteger.whatIsIntegerTitle}</h3>
+      <p class="edu-card-text">{t.uuidToInteger.whatIsIntegerContent}</p>
+    </div>
+
+    <!-- Card 3: How to Convert UUID to Integer -->
+    <div class="glass-panel edu-card" id="card-how-to-convert">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 16 16 12 12 8"></polyline>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidToInteger.howToConvertTitle}</h3>
+      <ol class="edu-steps-list">
+        <li>{t.uuidToInteger.howToConvertStep1}</li>
+        <li>{t.uuidToInteger.howToConvertStep2}</li>
+        <li>{t.uuidToInteger.howToConvertStep3}</li>
+        <li>{t.uuidToInteger.howToConvertStep4}</li>
+      </ol>
+    </div>
+
+    <!-- Card 4: Step-by-Step Conversion Example -->
+    <div class="glass-panel edu-card" id="card-conversion-example">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidToInteger.exampleTitle}</h3>
+      <p class="edu-card-text">{t.uuidToInteger.exampleContent}</p>
+    </div>
+
+    <!-- Card 5: Why Convert UUID to Integer -->
+    <div class="glass-panel edu-card" id="card-why-convert">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidToInteger.whyConvertTitle}</h3>
+      <p class="edu-card-text">{t.uuidToInteger.whyConvertContent}</p>
+    </div>
+
+    <!-- Card 6: UUID String vs 128-Bit Integer Comparison -->
+    <div class="glass-panel edu-card" id="card-uuid-vs-integer">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidToInteger.uuidVsIntegerTitle}</h3>
+      <p class="edu-card-text">{t.uuidToInteger.uuidVsIntegerContent}</p>
+    </div>
+
+    <!-- Card 7: Is Conversion Safe and Reversible? -->
+    <div class="glass-panel edu-card" id="card-is-safe">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">{t.uuidToInteger.isSafeTitle}</h3>
+      <p class="edu-card-text">{t.uuidToInteger.isSafeContent}</p>
+    </div>
+
+    <!-- Card 8: Technical Specifications & Bounds -->
+    <div class="glass-panel edu-card" id="card-technical-specs">
+      <div class="edu-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+      </div>
+      <h3 class="edu-card-title">128-Bit Integer Range & Bounds</h3>
+      <p class="edu-card-text">
+        Every UUID spans exactly 128 binary bits (16 octets). The minimum representation is Nil (<code>0</code>) and the maximum is <code>340,282,366,920,938,463,463,374,607,431,768,211,455</code> (2<sup>128</sup> - 1). This tool uses native arbitrary-precision <code>BigInt</code> arithmetic for 100% mathematical fidelity.
+      </p>
+    </div>
+  </div>
+
+  <!-- FAQ Accordion Section -->
+  <section class="faq-section-wrapper" aria-labelledby="uuid-int-faq-heading">
+    <div class="faq-header">
+      <h2 id="uuid-int-faq-heading" class="faq-heading">{t.uuidToInteger.faqTitle}</h2>
+      <p class="faq-subheading">Comprehensive answers to common questions about 128-bit UUID to decimal integer conversion and database compatibility.</p>
+    </div>
+
+    <div class="faq-accordion-list">
+      {t.uuidToInteger.faqs.map((faq, index) => (
+        <details class="faq-item" id={`uuid-int-faq-${index + 1}`}>
+          <summary class="faq-question">
+            <span>{faq.question}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+</div>
+
+<style>
+  .mode-tabs-nav {
+    display: flex;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    overflow-x: auto;
+  }
+
+  .mode-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.15rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .mode-tab-btn:hover {
+    background: #e2e8f0;
+    color: var(--text-primary);
+    border-color: var(--border-subtle);
+  }
+
+  [data-theme="dark"] .mode-tab-btn:hover {
+    background: #334155;
+  }
+
+  .mode-tab-btn.active {
+    background: var(--brand-primary);
+    color: #ffffff !important;
+    border-color: var(--brand-primary);
+    box-shadow: 0 2px 8px var(--brand-glow);
+  }
+
+  .tool-controls-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .control-left {
+    flex: 1;
+    min-width: 220px;
+  }
+
+  .control-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+  }
+
+  .action-buttons-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .input-field-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .inline-error-msg {
+    color: var(--accent-danger, #ef4444);
+    font-size: 0.825rem;
+    margin-top: 0.4rem;
+    font-weight: 500;
+  }
+
+  .results-container {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-glass);
+  }
+
+  .results-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .privacy-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .outputs-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .output-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    transition: border-color 0.15s ease;
+  }
+
+  .output-card.highlight-card {
+    background: var(--bg-elevated);
+    border-color: var(--brand-primary);
+    box-shadow: 0 2px 10px var(--brand-glow);
+  }
+
+  .output-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .output-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .output-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+  }
+
+  .output-value-box {
+    background: var(--bg-glass-subtle);
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    overflow-x: auto;
+  }
+
+  .output-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    word-break: break-all;
+    user-select: all;
+  }
+
+  /* Educational Section */
+  .educational-section-wrapper {
+    margin-top: 3.5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .educational-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 2.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .educational-title {
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin: 0.6rem 0 0.5rem;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .educational-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .educational-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .edu-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .edu-card:hover {
+    border-color: var(--border-focus);
+    transform: translateY(-2px);
+  }
+
+  .edu-icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--brand-glow);
+    color: var(--brand-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-glass);
+    flex-shrink: 0;
+  }
+
+  .edu-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: var(--text-primary);
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .edu-card-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
+    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .edu-steps-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .edu-steps-list li {
+    margin-bottom: 0.5rem;
+    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .edu-card code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    padding: 0.15em 0.35em;
+    border-radius: var(--radius-sm);
+    background: var(--bg-glass-subtle);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    max-width: 100%;
+    display: inline;
+  }
+
+  /* FAQ Section */
+  .faq-section-wrapper {
+    margin-top: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-glass);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .faq-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 2rem;
+    padding: 0 0.5rem;
+  }
+
+  .faq-heading {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .faq-subheading {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .faq-accordion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .faq-item {
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    padding: 0;
+    transition: border-color 0.15s ease;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .faq-item:hover {
+    border-color: var(--border-focus);
+  }
+
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 1.25rem;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 1rem;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 1.25rem 1.15rem;
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 0.25rem;
+    padding-top: 0.85rem;
+    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .faq-answer p {
+    margin: 0;
+    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  @media (max-width: 768px) {
+    .tool-controls-bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .action-buttons-group {
+      width: 100%;
+    }
+    .action-buttons-group .btn {
+      flex: 1;
+    }
+    .edu-card {
+      padding: 1.25rem;
+    }
+    .educational-section-wrapper {
+      margin-top: 2.5rem;
+    }
+    .educational-header {
+      margin-bottom: 1.75rem;
+    }
+    .educational-title {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .educational-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .edu-card {
+      padding: 1.15rem;
+    }
+    .edu-card-title {
+      font-size: 1.05rem;
+    }
+    .edu-card-text,
+    .edu-steps-list {
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .faq-heading {
+      font-size: 1.45rem;
+    }
+    .faq-question {
+      padding: 0.95rem 1rem;
+      font-size: 0.925rem;
+    }
+    .faq-answer {
+      padding: 0.75rem 1rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+</style>
+
+<script>
+  import {
+    uuidToInteger,
+    integerToUuid,
+    formatIntegerWithCommas,
+    generateUUIDv4,
+    generateUUIDv7,
+    MAX_UUID_BIGINT,
+  } from '../../utils/uuid';
+
+  function initUuidToIntegerTool() {
+    // Mode tabs
+    const tabUuidToInt = document.getElementById('tab-mode-uuid-to-int');
+    const tabIntToUuid = document.getElementById('tab-mode-int-to-uuid');
+    const panelUuidToInt = document.getElementById('panel-mode-uuid-to-int');
+    const panelIntToUuid = document.getElementById('panel-mode-int-to-uuid');
+
+    // Tab 1 controls
+    const uuidInput = document.getElementById('uuid-source-input') as HTMLInputElement | null;
+    const btnSampleV4 = document.getElementById('btn-sample-uuid-v4');
+    const btnSampleV7 = document.getElementById('btn-sample-uuid-v7');
+    const btnClearUuidToInt = document.getElementById('btn-clear-uuid-to-int');
+    const uuidToIntError = document.getElementById('uuid-to-int-error');
+    const uuidToIntResultsBox = document.getElementById('uuid-to-int-results-box');
+
+    const outRawInteger = document.getElementById('out-raw-integer');
+    const outFormattedInteger = document.getElementById('out-formatted-integer');
+    const outRawHex = document.getElementById('out-raw-hex');
+    const digitsBadge = document.getElementById('uuid-digits-badge');
+
+    // Tab 2 controls
+    const integerInput = document.getElementById('integer-source-input') as HTMLInputElement | null;
+    const btnSampleInteger = document.getElementById('btn-sample-integer');
+    const btnSampleMaxInteger = document.getElementById('btn-sample-max-integer');
+    const btnClearIntToUuid = document.getElementById('btn-clear-int-to-uuid');
+    const intToUuidError = document.getElementById('int-to-uuid-error');
+    const intToUuidResultsBox = document.getElementById('int-to-uuid-results-box');
+
+    const outCanonicalUuid = document.getElementById('out-canonical-uuid');
+    const outUppercaseUuid = document.getElementById('out-uppercase-uuid');
+    const outIntHex = document.getElementById('out-int-hex');
+
+    if (!tabUuidToInt || !tabIntToUuid) return;
+
+    // Tab Switching
+    tabUuidToInt.addEventListener('click', () => {
+      tabUuidToInt.classList.add('active');
+      tabUuidToInt.setAttribute('aria-selected', 'true');
+      tabIntToUuid.classList.remove('active');
+      tabIntToUuid.setAttribute('aria-selected', 'false');
+
+      if (panelUuidToInt) panelUuidToInt.style.display = 'block';
+      if (panelIntToUuid) panelIntToUuid.style.display = 'none';
+    });
+
+    tabIntToUuid.addEventListener('click', () => {
+      tabIntToUuid.classList.add('active');
+      tabIntToUuid.setAttribute('aria-selected', 'true');
+      tabUuidToInt.classList.remove('active');
+      tabUuidToInt.setAttribute('aria-selected', 'false');
+
+      if (panelIntToUuid) panelIntToUuid.style.display = 'block';
+      if (panelUuidToInt) panelUuidToInt.style.display = 'none';
+    });
+
+    // Copy Handler Helper
+    // CRITICAL: When copying from an element like out-raw-integer, it copies exact unformatted digits.
+    document.querySelectorAll('.copy-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        if (!targetId) return;
+        const targetEl = document.getElementById(targetId);
+        if (!targetEl) return;
+        const text = (targetEl.textContent || '').trim();
+        if (!text) return;
+
+        navigator.clipboard.writeText(text).then(() => {
+          const label = btn.querySelector('.copy-label');
+          if (label) {
+            const prev = label.textContent;
+            label.textContent = 'Copied!';
+            setTimeout(() => {
+              label.textContent = prev;
+            }, 1500);
+          }
+        });
+      });
+    });
+
+    // Process UUID -> Integer
+    function processUuidToInt(val: string) {
+      const trimmed = val.trim();
+      if (!trimmed) {
+        if (uuidToIntError) uuidToIntError.style.display = 'none';
+        if (uuidToIntResultsBox) uuidToIntResultsBox.style.display = 'none';
+        return;
+      }
+
+      const res = uuidToInteger(trimmed);
+      if (!res.isValid) {
+        if (uuidToIntError) {
+          uuidToIntError.textContent = res.error || 'Invalid UUID format';
+          uuidToIntError.style.display = 'block';
+        }
+        if (uuidToIntResultsBox) uuidToIntResultsBox.style.display = 'none';
+        return;
+      }
+
+      if (uuidToIntError) uuidToIntError.style.display = 'none';
+      if (uuidToIntResultsBox) uuidToIntResultsBox.style.display = 'block';
+
+      if (outRawInteger) outRawInteger.textContent = res.rawInteger;
+      if (outFormattedInteger) outFormattedInteger.textContent = res.formattedInteger;
+      if (outRawHex) outRawHex.textContent = res.rawHex;
+      if (digitsBadge) digitsBadge.textContent = `${res.rawInteger.length} digits`;
+    }
+
+    if (uuidInput) {
+      uuidInput.addEventListener('input', () => {
+        processUuidToInt(uuidInput.value);
+      });
+    }
+
+    if (btnSampleV4) {
+      btnSampleV4.addEventListener('click', () => {
+        const v4 = generateUUIDv4();
+        if (uuidInput) {
+          uuidInput.value = v4;
+          processUuidToInt(v4);
+        }
+      });
+    }
+
+    if (btnSampleV7) {
+      btnSampleV7.addEventListener('click', () => {
+        const v7 = generateUUIDv7();
+        if (uuidInput) {
+          uuidInput.value = v7;
+          processUuidToInt(v7);
+        }
+      });
+    }
+
+    if (btnClearUuidToInt) {
+      btnClearUuidToInt.addEventListener('click', () => {
+        if (uuidInput) {
+          uuidInput.value = '';
+          processUuidToInt('');
+        }
+      });
+    }
+
+    // Process Integer -> UUID
+    function processIntToUuid(val: string) {
+      const trimmed = val.trim();
+      if (!trimmed) {
+        if (intToUuidError) intToUuidError.style.display = 'none';
+        if (intToUuidResultsBox) intToUuidResultsBox.style.display = 'none';
+        return;
+      }
+
+      const res = integerToUuid(trimmed);
+      if (!res.isValid) {
+        if (intToUuidError) {
+          intToUuidError.textContent = res.error || 'Invalid integer';
+          intToUuidError.style.display = 'block';
+        }
+        if (intToUuidResultsBox) intToUuidResultsBox.style.display = 'none';
+        return;
+      }
+
+      if (intToUuidError) intToUuidError.style.display = 'none';
+      if (intToUuidResultsBox) intToUuidResultsBox.style.display = 'block';
+
+      if (outCanonicalUuid) outCanonicalUuid.textContent = res.canonicalUuid;
+      if (outUppercaseUuid) outUppercaseUuid.textContent = res.canonicalUuid.toUpperCase();
+      if (outIntHex) outIntHex.textContent = res.rawHex;
+    }
+
+    if (integerInput) {
+      integerInput.addEventListener('input', () => {
+        processIntToUuid(integerInput.value);
+      });
+    }
+
+    if (btnSampleInteger) {
+      btnSampleInteger.addEventListener('click', () => {
+        const sampleVal = '113059749145936325402354257176981405696';
+        if (integerInput) {
+          integerInput.value = sampleVal;
+          processIntToUuid(sampleVal);
+        }
+      });
+    }
+
+    if (btnSampleMaxInteger) {
+      btnSampleMaxInteger.addEventListener('click', () => {
+        const maxVal = MAX_UUID_BIGINT.toString();
+        if (integerInput) {
+          integerInput.value = maxVal;
+          processIntToUuid(maxVal);
+        }
+      });
+    }
+
+    if (btnClearIntToUuid) {
+      btnClearIntToUuid.addEventListener('click', () => {
+        if (integerInput) {
+          integerInput.value = '';
+          processIntToUuid('');
+        }
+      });
+    }
+
+    // Initialize with preset value if present
+    if (uuidInput && uuidInput.value) {
+      processUuidToInt(uuidInput.value);
+    }
+  }
+
+  initUuidToIntegerTool();
+  document.addEventListener('astro:page-load', initUuidToIntegerTool);
+</script>

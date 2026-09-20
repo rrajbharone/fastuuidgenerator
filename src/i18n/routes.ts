@@ -9,6 +9,9 @@ export type ToolKey =
   | 'base64-uuid-generator'
   | 'uuid-validator'
   | 'uuid-decoder'
+  | 'uuid-to-integer-converter'
+  | 'uuid-to-hex-converter'
+  | 'uuid-version-detector'
   | 'tools';
 
 export const TOOL_KEYS: ToolKey[] = [
@@ -20,6 +23,9 @@ export const TOOL_KEYS: ToolKey[] = [
   'base64-uuid-generator',
   'uuid-validator',
   'uuid-decoder',
+  'uuid-to-integer-converter',
+  'uuid-to-hex-converter',
+  'uuid-version-detector',
   'tools',
 ];
 
@@ -36,6 +42,9 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'base64-uuid-generator': 'base64-uuid-generator',
     'uuid-validator': 'uuid-validator',
     'uuid-decoder': 'uuid-decoder',
+    'uuid-to-integer-converter': 'uuid-to-integer-converter',
+    'uuid-to-hex-converter': 'uuid-to-hex-converter',
+    'uuid-version-detector': 'uuid-version-detector',
     'tools': 'tools',
   },
   es: {
@@ -47,6 +56,9 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'base64-uuid-generator': 'generador-uuid-base64',
     'uuid-validator': 'validador-uuid',
     'uuid-decoder': 'decodificador-uuid',
+    'uuid-to-integer-converter': 'convertidor-uuid-a-entero',
+    'uuid-to-hex-converter': 'convertidor-uuid-a-hex',
+    'uuid-version-detector': 'detector-de-version-uuid',
     'tools': 'herramientas',
   },
   pt: {
@@ -58,6 +70,9 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'base64-uuid-generator': 'gerador-uuid-base64',
     'uuid-validator': 'validador-uuid',
     'uuid-decoder': 'decodificador-uuid',
+    'uuid-to-integer-converter': 'conversor-uuid-para-inteiro',
+    'uuid-to-hex-converter': 'conversor-uuid-para-hex',
+    'uuid-version-detector': 'detector-de-versao-uuid',
     'tools': 'ferramentas',
   },
   fr: {
@@ -69,6 +84,9 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'base64-uuid-generator': 'generateur-uuid-base64',
     'uuid-validator': 'validateur-uuid',
     'uuid-decoder': 'decodeur-uuid',
+    'uuid-to-integer-converter': 'convertisseur-uuid-en-entier',
+    'uuid-to-hex-converter': 'convertisseur-uuid-en-hex',
+    'uuid-version-detector': 'detecteur-de-version-uuid',
     'tools': 'outils',
   },
   de: {
@@ -80,6 +98,9 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'base64-uuid-generator': 'base64-uuid-generator',
     'uuid-validator': 'uuid-validator',
     'uuid-decoder': 'uuid-decoder',
+    'uuid-to-integer-converter': 'uuid-in-integer-konverter',
+    'uuid-to-hex-converter': 'uuid-in-hex-konverter',
+    'uuid-version-detector': 'uuid-versions-detektor',
     'tools': 'tools',
   },
   id: {
@@ -91,6 +112,9 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'base64-uuid-generator': 'pembuat-uuid-base64',
     'uuid-validator': 'validator-uuid',
     'uuid-decoder': 'dekoder-uuid',
+    'uuid-to-integer-converter': 'konverter-uuid-ke-integer',
+    'uuid-to-hex-converter': 'konverter-uuid-ke-hex',
+    'uuid-version-detector': 'detektor-versi-uuid',
     'tools': 'alat',
   },
   tr: {
@@ -102,6 +126,9 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'base64-uuid-generator': 'base64-uuid-olusturucu',
     'uuid-validator': 'uuid-dogrulayici',
     'uuid-decoder': 'uuid-kod-cozucu',
+    'uuid-to-integer-converter': 'uuid-integer-donusturucu',
+    'uuid-to-hex-converter': 'uuid-hex-donusturucu',
+    'uuid-version-detector': 'uuid-versiyon-tespit-edici',
     'tools': 'araclar',
   },
   it: {
@@ -113,6 +140,9 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'base64-uuid-generator': 'generatore-uuid-base64',
     'uuid-validator': 'validatore-uuid',
     'uuid-decoder': 'decodificatore-uuid',
+    'uuid-to-integer-converter': 'convertitore-uuid-in-intero',
+    'uuid-to-hex-converter': 'convertitore-uuid-in-hex',
+    'uuid-version-detector': 'rilevatore-versione-uuid',
     'tools': 'strumenti',
   },
 };
