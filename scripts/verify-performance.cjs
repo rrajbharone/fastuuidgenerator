@@ -28,6 +28,15 @@ assert(!indexHtml.includes('background-attachment: fixed'), 'index.html contains
 assert(!indexHtml.includes('fonts.googleapis.com'), 'index.html contains NO external fonts.googleapis.com');
 assert(!indexHtml.includes('fonts.gstatic.com'), 'index.html contains NO external fonts.gstatic.com');
 
+// Assert self-hosted Inter font preload for 0 CLS
+assert(indexHtml.includes('rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin'), 'index.html preloads local Inter 400 woff2 font');
+
+// Assert self-hosted font files exist in dist/fonts
+const fontsDir = path.join(distDir, 'fonts');
+assert(fs.existsSync(path.join(fontsDir, 'inter-latin-400-normal.woff2')), 'dist/fonts contains inter-latin-400-normal.woff2');
+assert(fs.existsSync(path.join(fontsDir, 'inter-latin-500-normal.woff2')), 'dist/fonts contains inter-latin-500-normal.woff2');
+assert(fs.existsSync(path.join(fontsDir, 'inter-latin-600-normal.woff2')), 'dist/fonts contains inter-latin-600-normal.woff2');
+
 // Assert functional integrity of UUID Generator
 assert(indexHtml.includes('id="btn-generate"'), 'UUID Generator has Generate button');
 assert(indexHtml.includes('id="btn-copy-all"'), 'UUID Generator has Copy All button');

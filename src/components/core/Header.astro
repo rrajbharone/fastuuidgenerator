@@ -35,6 +35,8 @@ const mobileNavItems = [
   { href: getLocalizedPath('uuid-to-integer-converter', currentLang), label: t.nav.uuidToInteger },
   { href: getLocalizedPath('uuid-to-hex-converter', currentLang), label: t.nav.uuidToHex },
   { href: getLocalizedPath('uuid-version-detector', currentLang), label: t.nav.uuidVersionDetector },
+  { href: getLocalizedPath('uuid-v5-generator', currentLang), label: t.nav.uuidV5 },
+  { href: getLocalizedPath('uuid-v8-generator', currentLang), label: t.nav.uuidV8 },
   { href: '/blog/', label: t.nav.blog },
   { href: getLocalizedPath('tools', currentLang), label: t.nav.tools },
 ];
@@ -142,7 +144,7 @@ const homeHref = getLocalizedPath('', currentLang);
     align-items: center;
     gap: 0.65rem;
     font-size: 1.2rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text-primary);
     text-decoration: none;
     flex-shrink: 0;
@@ -158,7 +160,7 @@ const homeHref = getLocalizedPath('', currentLang);
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    font-weight: 800;
+    font-weight: 600;
     font-size: 1rem;
     box-shadow: 0 2px 8px var(--brand-glow);
     flex-shrink: 0;
@@ -166,7 +168,7 @@ const homeHref = getLocalizedPath('', currentLang);
 
   .brand-name {
     letter-spacing: -0.02em;
-    font-weight: 700;
+    font-weight: 600;
   }
 
   .nav-right {
@@ -231,7 +233,7 @@ const homeHref = getLocalizedPath('', currentLang);
 
   .mobile-nav-section-title {
     font-size: 0.75rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--text-muted);
@@ -297,7 +299,7 @@ const homeHref = getLocalizedPath('', currentLang);
     .brand-name {
       display: inline-block;
       font-size: 1.05rem;
-      font-weight: 700;
+      font-weight: 600;
       white-space: nowrap;
     }
   }

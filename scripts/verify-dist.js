@@ -17,6 +17,8 @@ const expectedTools = [
   'uuid-to-integer-converter',
   'uuid-to-hex-converter',
   'uuid-version-detector',
+  'uuid-v5-generator',
+  'uuid-v8-generator',
   'tools'
 ];
 
@@ -36,6 +38,8 @@ const toolSlugs = {
     'uuid-to-integer-converter': 'uuid-to-integer-converter',
     'uuid-to-hex-converter': 'uuid-to-hex-converter',
     'uuid-version-detector': 'uuid-version-detector',
+    'uuid-v5-generator': 'uuid-v5-generator',
+    'uuid-v8-generator': 'uuid-v8-generator',
     'tools': 'tools',
   },
   es: {
@@ -50,6 +54,8 @@ const toolSlugs = {
     'uuid-to-integer-converter': 'convertidor-uuid-a-entero',
     'uuid-to-hex-converter': 'convertidor-uuid-a-hex',
     'uuid-version-detector': 'detector-de-version-uuid',
+    'uuid-v5-generator': 'generador-uuid-v5',
+    'uuid-v8-generator': 'generador-uuid-v8',
     'tools': 'herramientas',
   },
   pt: {
@@ -64,6 +70,8 @@ const toolSlugs = {
     'uuid-to-integer-converter': 'conversor-uuid-para-inteiro',
     'uuid-to-hex-converter': 'conversor-uuid-para-hex',
     'uuid-version-detector': 'detector-de-versao-uuid',
+    'uuid-v5-generator': 'gerador-uuid-v5',
+    'uuid-v8-generator': 'gerador-uuid-v8',
     'tools': 'ferramentas',
   },
   fr: {
@@ -78,6 +86,8 @@ const toolSlugs = {
     'uuid-to-integer-converter': 'convertisseur-uuid-en-entier',
     'uuid-to-hex-converter': 'convertisseur-uuid-en-hex',
     'uuid-version-detector': 'detecteur-de-version-uuid',
+    'uuid-v5-generator': 'generateur-uuid-v5',
+    'uuid-v8-generator': 'generateur-uuid-v8',
     'tools': 'outils',
   },
   de: {
@@ -92,6 +102,8 @@ const toolSlugs = {
     'uuid-to-integer-converter': 'uuid-in-integer-konverter',
     'uuid-to-hex-converter': 'uuid-in-hex-konverter',
     'uuid-version-detector': 'uuid-versions-detektor',
+    'uuid-v5-generator': 'uuid-v5-generator',
+    'uuid-v8-generator': 'uuid-v8-generator',
     'tools': 'tools',
   },
   id: {
@@ -106,6 +118,8 @@ const toolSlugs = {
     'uuid-to-integer-converter': 'konverter-uuid-ke-integer',
     'uuid-to-hex-converter': 'konverter-uuid-ke-hex',
     'uuid-version-detector': 'detektor-versi-uuid',
+    'uuid-v5-generator': 'pembuat-uuid-v5',
+    'uuid-v8-generator': 'pembuat-uuid-v8',
     'tools': 'alat',
   },
   tr: {
@@ -120,6 +134,8 @@ const toolSlugs = {
     'uuid-to-integer-converter': 'uuid-integer-donusturucu',
     'uuid-to-hex-converter': 'uuid-hex-donusturucu',
     'uuid-version-detector': 'uuid-versiyon-tespit-edici',
+    'uuid-v5-generator': 'uuid-v5-olusturucu',
+    'uuid-v8-generator': 'uuid-v8-olusturucu',
     'tools': 'araclar',
   },
   it: {
@@ -134,8 +150,32 @@ const toolSlugs = {
     'uuid-to-integer-converter': 'convertitore-uuid-in-intero',
     'uuid-to-hex-converter': 'convertitore-uuid-in-hex',
     'uuid-version-detector': 'rilevatore-versione-uuid',
+    'uuid-v5-generator': 'generatore-uuid-v5',
+    'uuid-v8-generator': 'generatore-uuid-v8',
     'tools': 'strumenti',
   },
+};
+
+const uuidV5Headings = {
+  en: 'What Is a UUID v5?',
+  es: '¿Qué es un UUID v5?',
+  pt: 'O Que É um UUID v5?',
+  fr: 'Qu’est-ce qu’un UUID v5 ?',
+  de: 'Was ist eine UUID v5?',
+  id: 'Apa Itu UUID v5?',
+  tr: 'UUID v5 Nedir?',
+  it: 'Che Cos’è un UUID v5?',
+};
+
+const uuidV8Headings = {
+  en: 'What Is a UUID v8?',
+  es: '¿Qué es un UUID v8?',
+  pt: 'O Que É um UUID v8?',
+  fr: 'Qu’est-ce qu’un UUID v8 ?',
+  de: 'Was ist eine UUID v8?',
+  id: 'Apa Itu UUID v8?',
+  tr: 'UUID v8 Nedir?',
+  it: 'Cos’è un UUID v8?',
 };
 
 const expectedHeadings = {
@@ -239,52 +279,38 @@ for (const tool of expectedTools) {
     // Check content isolation for Base64 UUID Generator
     if (tool === 'base64-uuid-generator') {
       assert(html.includes(base64Headings.en), `English Base64 tool contains dedicated heading "${base64Headings.en}"`);
-      assert(html.includes('id="card-what-is-base64-uuid"'), 'English Base64 tool contains Card 1: What is Base64 UUID');
-      assert(html.includes('id="card-how-it-works"'), 'English Base64 tool contains Card 2: How It Works');
-      assert(html.includes('id="card-standard-vs-urlsafe"'), 'English Base64 tool contains Card 3: Standard vs URL-Safe');
-      assert(html.includes('id="card-key-use-cases"'), 'English Base64 tool contains Card 4: Key Use Cases');
-      assert(html.includes('id="card-convert-uuid-to-base64"'), 'English Base64 tool contains Card 5: How to Convert UUID to Base64');
-      assert(html.includes('id="card-convert-base64-to-uuid"'), 'English Base64 tool contains Card 6: How to Convert Base64 Back to UUID');
-      assert(html.includes('id="card-why-use-base64"'), 'English Base64 tool contains Card 7: Why Use Base64 UUIDs');
-      assert(html.includes('id="card-where-base64-used"'), 'English Base64 tool contains Card 8: Where Are Base64 UUIDs Used');
-      assert(html.includes('id="card-base64-vs-standard"'), 'English Base64 tool contains Card 9: Base64 UUID vs Standard UUID');
+      assert(html.includes('id="article-base64-uuid"'), 'English Base64 tool contains technical article');
+      assert(!html.includes('id="card-what-is-base64-uuid"'), 'English Base64 tool does NOT put technical content inside cards');
       assert(!html.includes('base64-guide-container'), 'English Base64 tool does NOT contain separate guide section');
       assert(!html.includes('id="tools-showcase-heading"'), 'English Base64 tool does NOT contain generic popular tools showcase');
       assert(!html.includes(expectedHeadings.en), 'English Base64 tool does NOT contain generic "Everything You Need to Know" section');
       assert(!html.includes('UUID vs GUID: Standards and Interoperability'), 'English Base64 tool does NOT contain generic UUID vs GUID section');
     } else if (tool === 'uuid-to-integer-converter') {
       assert(html.includes(uuidToIntHeadings.en), `English UUID to Integer tool contains dedicated heading "${uuidToIntHeadings.en}"`);
-      assert(html.includes('id="card-what-is-uuid-to-integer"'), 'English UUID to Integer tool contains Card 1: What is UUID to Integer');
-      assert(html.includes('id="card-what-is-integer"'), 'English UUID to Integer tool contains Card 2: What is Integer');
-      assert(html.includes('id="card-how-to-convert"'), 'English UUID to Integer tool contains Card 3: How to Convert');
-      assert(html.includes('id="card-conversion-example"'), 'English UUID to Integer tool contains Card 4: Conversion Example');
-      assert(html.includes('id="card-why-convert"'), 'English UUID to Integer tool contains Card 5: Why Convert');
-      assert(html.includes('id="card-uuid-vs-integer"'), 'English UUID to Integer tool contains Card 6: UUID vs Integer');
-      assert(html.includes('id="card-is-safe"'), 'English UUID to Integer tool contains Card 7: Is Safe');
-      assert(html.includes('id="card-technical-specs"'), 'English UUID to Integer tool contains Card 8: Technical Specs');
+      assert(html.includes('id="article-uuid-to-integer"'), 'English UUID to Integer tool contains technical article');
+      assert(!html.includes('id="card-what-is-uuid-to-integer"'), 'English UUID to Integer tool does NOT put technical content inside cards');
       assert(!html.includes(expectedHeadings.en), 'English UUID to Integer tool does NOT contain generic "Everything You Need to Know" section');
     } else if (tool === 'uuid-to-hex-converter') {
       assert(html.includes(uuidToHexHeadings.en), `English UUID to Hex tool contains dedicated heading "${uuidToHexHeadings.en}"`);
-      assert(html.includes('id="card-what-is-uuid"'), 'English UUID to Hex tool contains Card 1: What is UUID');
-      assert(html.includes('id="card-what-is-hex"'), 'English UUID to Hex tool contains Card 2: What is Hex');
-      assert(html.includes('id="card-how-to-convert"'), 'English UUID to Hex tool contains Card 3: How to Convert');
-      assert(html.includes('id="card-conversion-example"'), 'English UUID to Hex tool contains Card 4: Conversion Example');
-      assert(html.includes('id="card-uuid-vs-hex"'), 'English UUID to Hex tool contains Card 5: UUID vs Hex');
-      assert(html.includes('id="card-why-convert"'), 'English UUID to Hex tool contains Card 6: Why Convert');
-      assert(html.includes('id="card-how-to-reverse"'), 'English UUID to Hex tool contains Card 7: How to Reverse');
-      assert(html.includes('id="card-practical-use-cases"'), 'English UUID to Hex tool contains Card 8: Practical Use Cases');
+      assert(html.includes('id="article-uuid-to-hex"'), 'English UUID to Hex tool contains technical article');
+      assert(!html.includes('id="card-what-is-uuid"'), 'English UUID to Hex tool does NOT put technical content inside cards');
       assert(!html.includes(expectedHeadings.en), 'English UUID to Hex tool does NOT contain generic "Everything You Need to Know" section');
     } else if (tool === 'uuid-version-detector') {
       assert(html.includes(uuidVersionDetectorHeadings.en), `English UUID Version Detector tool contains dedicated heading "${uuidVersionDetectorHeadings.en}"`);
-      assert(html.includes('id="card-what-is-detector"'), 'English UUID Version Detector tool contains Card 1: What is Detector');
-      assert(html.includes('id="card-how-it-works"'), 'English UUID Version Detector tool contains Card 2: How It Works');
-      assert(html.includes('id="card-where-stored"'), 'English UUID Version Detector tool contains Card 3: Where Stored');
-      assert(html.includes('id="card-version-differences"'), 'English UUID Version Detector tool contains Card 4: Version Differences');
-      assert(html.includes('id="card-version-vs-variant"'), 'English UUID Version Detector tool contains Card 5: Version vs Variant');
-      assert(html.includes('id="card-why-it-matters"'), 'English UUID Version Detector tool contains Card 6: Why It Matters');
-      assert(html.includes('id="card-how-to-identify"'), 'English UUID Version Detector tool contains Card 7: How to Identify');
-      assert(html.includes('id="card-practical-use-cases"'), 'English UUID Version Detector tool contains Card 8: Practical Use Cases');
+      assert(html.includes('id="article-uuid-version-detector"'), 'English UUID Version Detector tool contains technical article');
+      assert(!html.includes('id="card-what-is-detector"'), 'English UUID Version Detector tool does NOT put technical content inside cards');
       assert(!html.includes(expectedHeadings.en), 'English UUID Version Detector tool does NOT contain generic "Everything You Need to Know" section');
+    } else if (tool === 'uuid-v5-generator') {
+      assert(html.includes(uuidV5Headings.en), `English UUID v5 Generator tool contains dedicated heading "${uuidV5Headings.en}"`);
+      assert(html.includes('id="article-uuid-v5"'), 'English UUID v5 Generator tool contains technical article');
+      assert(!html.includes('id="card-what-is-v5"'), 'English UUID v5 Generator tool does NOT put technical content inside cards');
+      assert(!html.includes(expectedHeadings.en), 'English UUID v5 Generator tool does NOT contain generic "Everything You Need to Know" section');
+    } else if (tool === 'uuid-v8-generator') {
+      assert(html.includes(uuidV8Headings.en), `English UUID v8 Generator tool contains dedicated heading "${uuidV8Headings.en}"`);
+      assert(html.includes('id="uuid-v8-generator-tool"'), 'English UUID v8 Generator tool contains interactive tool card');
+      assert(html.includes('id="article-uuid-v8"'), 'English UUID v8 Generator tool contains technical article');
+      assert(!html.includes('id="card-what-is-v8"'), 'English UUID v8 Generator tool does NOT put technical content inside cards');
+      assert(!html.includes(expectedHeadings.en), 'English UUID v8 Generator tool does NOT contain generic "Everything You Need to Know" section');
     } else if (tool === 'tools') {
       assert(html.includes('id="tools-showcase-heading"'), 'English Tools page contains tools showcase');
       assert(!html.includes(expectedHeadings.en), 'English Tools page does NOT contain generic "Everything You Need to Know" section');
@@ -391,50 +417,36 @@ for (const lang of nonEnglishLanguages) {
       // Check content isolation for Base64 UUID Generator
       if (tool === 'base64-uuid-generator') {
         assert(html.includes(base64Headings[lang]), `${lang}/${slug} contains dedicated heading "${base64Headings[lang]}"`);
-        assert(html.includes('id="card-what-is-base64-uuid"'), `${lang}/${slug} contains Card 1: What is Base64 UUID`);
-        assert(html.includes('id="card-how-it-works"'), `${lang}/${slug} contains Card 2: How It Works`);
-        assert(html.includes('id="card-standard-vs-urlsafe"'), `${lang}/${slug} contains Card 3: Standard vs URL-Safe`);
-        assert(html.includes('id="card-key-use-cases"'), `${lang}/${slug} contains Card 4: Key Use Cases`);
-        assert(html.includes('id="card-convert-uuid-to-base64"'), `${lang}/${slug} contains Card 5: How to Convert UUID to Base64`);
-        assert(html.includes('id="card-convert-base64-to-uuid"'), `${lang}/${slug} contains Card 6: How to Convert Base64 Back to UUID`);
-        assert(html.includes('id="card-why-use-base64"'), `${lang}/${slug} contains Card 7: Why Use Base64 UUIDs`);
-        assert(html.includes('id="card-where-base64-used"'), `${lang}/${slug} contains Card 8: Where Are Base64 UUIDs Used`);
-        assert(html.includes('id="card-base64-vs-standard"'), `${lang}/${slug} contains Card 9: Base64 UUID vs Standard UUID`);
+        assert(html.includes('id="article-base64-uuid"'), `${lang}/${slug} contains technical article`);
+        assert(!html.includes('id="card-what-is-base64-uuid"'), `${lang}/${slug} does NOT put technical content inside cards`);
         assert(!html.includes('base64-guide-container'), `${lang}/${slug} does NOT contain separate guide section`);
         assert(!html.includes('id="tools-showcase-heading"'), `${lang}/${slug} does NOT contain generic popular tools showcase`);
         assert(!html.includes(expectedHeadings[lang]), `${lang}/${slug} does NOT contain generic "Everything You Need to Know" section`);
       } else if (tool === 'uuid-to-integer-converter') {
         assert(html.includes(uuidToIntHeadings[lang]), `${lang}/${slug} contains dedicated heading "${uuidToIntHeadings[lang]}"`);
-        assert(html.includes('id="card-what-is-uuid-to-integer"'), `${lang}/${slug} contains Card 1: What is UUID to Integer`);
-        assert(html.includes('id="card-what-is-integer"'), `${lang}/${slug} contains Card 2: What is Integer`);
-        assert(html.includes('id="card-how-to-convert"'), `${lang}/${slug} contains Card 3: How to Convert`);
-        assert(html.includes('id="card-conversion-example"'), `${lang}/${slug} contains Card 4: Conversion Example`);
-        assert(html.includes('id="card-why-convert"'), `${lang}/${slug} contains Card 5: Why Convert`);
-        assert(html.includes('id="card-uuid-vs-integer"'), `${lang}/${slug} contains Card 6: UUID vs Integer`);
-        assert(html.includes('id="card-is-safe"'), `${lang}/${slug} contains Card 7: Is Safe`);
-        assert(html.includes('id="card-technical-specs"'), `${lang}/${slug} contains Card 8: Technical Specs`);
+        assert(html.includes('id="article-uuid-to-integer"'), `${lang}/${slug} contains technical article`);
+        assert(!html.includes('id="card-what-is-uuid-to-integer"'), `${lang}/${slug} does NOT put technical content inside cards`);
         assert(!html.includes(expectedHeadings[lang]), `${lang}/${slug} does NOT contain generic "Everything You Need to Know" section`);
       } else if (tool === 'uuid-to-hex-converter') {
         assert(html.includes(uuidToHexHeadings[lang]), `${lang}/${slug} contains dedicated heading "${uuidToHexHeadings[lang]}"`);
-        assert(html.includes('id="card-what-is-uuid"'), `${lang}/${slug} contains Card 1: What is UUID`);
-        assert(html.includes('id="card-what-is-hex"'), `${lang}/${slug} contains Card 2: What is Hex`);
-        assert(html.includes('id="card-how-to-convert"'), `${lang}/${slug} contains Card 3: How to Convert`);
-        assert(html.includes('id="card-conversion-example"'), `${lang}/${slug} contains Card 4: Conversion Example`);
-        assert(html.includes('id="card-uuid-vs-hex"'), `${lang}/${slug} contains Card 5: UUID vs Hex`);
-        assert(html.includes('id="card-why-convert"'), `${lang}/${slug} contains Card 6: Why Convert`);
-        assert(html.includes('id="card-how-to-reverse"'), `${lang}/${slug} contains Card 7: How to Reverse`);
-        assert(html.includes('id="card-practical-use-cases"'), `${lang}/${slug} contains Card 8: Practical Use Cases`);
+        assert(html.includes('id="article-uuid-to-hex"'), `${lang}/${slug} contains technical article`);
+        assert(!html.includes('id="card-what-is-uuid"'), `${lang}/${slug} does NOT put technical content inside cards`);
         assert(!html.includes(expectedHeadings[lang]), `${lang}/${slug} does NOT contain generic "Everything You Need to Know" section`);
       } else if (tool === 'uuid-version-detector') {
         assert(html.includes(uuidVersionDetectorHeadings[lang]), `${lang}/${slug} contains dedicated heading "${uuidVersionDetectorHeadings[lang]}"`);
-        assert(html.includes('id="card-what-is-detector"'), `${lang}/${slug} contains Card 1: What is Detector`);
-        assert(html.includes('id="card-how-it-works"'), `${lang}/${slug} contains Card 2: How It Works`);
-        assert(html.includes('id="card-where-stored"'), `${lang}/${slug} contains Card 3: Where Stored`);
-        assert(html.includes('id="card-version-differences"'), `${lang}/${slug} contains Card 4: Version Differences`);
-        assert(html.includes('id="card-version-vs-variant"'), `${lang}/${slug} contains Card 5: Version vs Variant`);
-        assert(html.includes('id="card-why-it-matters"'), `${lang}/${slug} contains Card 6: Why It Matters`);
-        assert(html.includes('id="card-how-to-identify"'), `${lang}/${slug} contains Card 7: How to Identify`);
-        assert(html.includes('id="card-practical-use-cases"'), `${lang}/${slug} contains Card 8: Practical Use Cases`);
+        assert(html.includes('id="article-uuid-version-detector"'), `${lang}/${slug} contains technical article`);
+        assert(!html.includes('id="card-what-is-detector"'), `${lang}/${slug} does NOT put technical content inside cards`);
+        assert(!html.includes(expectedHeadings[lang]), `${lang}/${slug} does NOT contain generic "Everything You Need to Know" section`);
+      } else if (tool === 'uuid-v5-generator') {
+        assert(html.includes(uuidV5Headings[lang]), `${lang}/${slug} contains dedicated heading "${uuidV5Headings[lang]}"`);
+        assert(html.includes('id="article-uuid-v5"'), `${lang}/${slug} contains technical article`);
+        assert(!html.includes('id="card-what-is-v5"'), `${lang}/${slug} does NOT put technical content inside cards`);
+        assert(!html.includes(expectedHeadings[lang]), `${lang}/${slug} does NOT contain generic "Everything You Need to Know" section`);
+      } else if (tool === 'uuid-v8-generator') {
+        assert(html.includes(uuidV8Headings[lang]), `${lang}/${slug} contains dedicated heading "${uuidV8Headings[lang]}"`);
+        assert(html.includes('id="uuid-v8-generator-tool"'), `${lang}/${slug} contains interactive tool card`);
+        assert(html.includes('id="article-uuid-v8"'), `${lang}/${slug} contains technical article`);
+        assert(!html.includes('id="card-what-is-v8"'), `${lang}/${slug} does NOT put technical content inside cards`);
         assert(!html.includes(expectedHeadings[lang]), `${lang}/${slug} does NOT contain generic "Everything You Need to Know" section`);
       } else if (tool === 'tools') {
         assert(html.includes('id="tools-showcase-heading"'), `${lang}/${slug} contains tools showcase`);
@@ -506,7 +518,7 @@ for (const page of englishOnlyPages) {
   }
 }
 
-// 3a. Verify /tools/ dedicated page displays all 10 tools
+// 3a. Verify /tools/ dedicated page displays all 11 tools
 const toolsHtml = fs.readFileSync(path.join(distDir, 'tools', 'index.html'), 'utf-8');
 assert(toolsHtml.includes('href="/base64-uuid-generator/"'), '/tools page contains Base64 UUID Generator');
 assert(toolsHtml.includes('href="/bulk-uuid-generator/"'), '/tools page contains Bulk UUID Generator');
@@ -518,7 +530,9 @@ assert(toolsHtml.includes('href="/uuid-decoder/"'), '/tools page contains UUID D
 assert(toolsHtml.includes('href="/uuid-to-integer-converter/"'), '/tools page contains UUID to Integer Converter');
 assert(toolsHtml.includes('href="/uuid-to-hex-converter/"'), '/tools page contains UUID to Hex Converter');
 assert(toolsHtml.includes('href="/uuid-version-detector/"'), '/tools page contains UUID Version Detector');
-assert(!toolsHtml.includes('class="more-tools-btn"'), '/tools page does not have More Tools button (already shows all 10)');
+assert(toolsHtml.includes('href="/uuid-v5-generator/"'), '/tools page contains UUID v5 Generator');
+assert(toolsHtml.includes('href="/uuid-v8-generator/"'), '/tools page contains UUID v8 Generator');
+assert(!toolsHtml.includes('class="more-tools-btn"'), '/tools page does not have More Tools button (already shows all 12)');
 
 // 3b. Verify blog posts exist and are ordered Newest to Oldest on /blog/
 const blogDir = path.join(distDir, 'blog');
@@ -558,6 +572,12 @@ assert(fs.existsSync(enUuidToHexRedirectPath), 'Legacy /en/uuid-to-hex-converter
 
 const enUuidVersionDetectorRedirectPath = path.join(distDir, 'en', 'uuid-version-detector', 'index.html');
 assert(fs.existsSync(enUuidVersionDetectorRedirectPath), 'Legacy /en/uuid-version-detector redirect page exists');
+
+const enUuidV5RedirectPath = path.join(distDir, 'en', 'uuid-v5-generator', 'index.html');
+assert(fs.existsSync(enUuidV5RedirectPath), 'Legacy /en/uuid-v5-generator redirect page exists');
+
+const enUuidV8RedirectPath = path.join(distDir, 'en', 'uuid-v8-generator', 'index.html');
+assert(fs.existsSync(enUuidV8RedirectPath), 'Legacy /en/uuid-v8-generator redirect page exists');
 
 // 5. Verify sitemap and robots.txt
 assert(fs.existsSync(path.join(distDir, 'robots.txt')), 'robots.txt exists in dist');

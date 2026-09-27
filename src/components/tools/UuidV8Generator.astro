@@ -1,0 +1,1409 @@
+---
+import type { TranslationDictionary } from '../../i18n/schema';
+import type { LanguageCode } from '../../i18n/languages';
+import { generateUUIDv8 } from '../../utils/uuid';
+
+interface Props {
+  t: TranslationDictionary;
+  lang: LanguageCode;
+}
+
+const { t, lang } = Astro.props;
+
+// Initial server-side generation
+const initialResult = generateUUIDv8({ mode: 'random' });
+---
+
+<!-- 1. Interactive Tool Container (Standard glass-panel tool-card) -->
+<div class="glass-panel tool-card" id="uuid-v8-generator-tool">
+  <!-- Top Action & Mode Bar -->
+  <div class="tool-controls-bar">
+    <div class="control-left">
+      <span class="control-label">{t.uuidV8Generator.title}</span>
+    </div>
+
+    <div class="mode-switch-group" role="radiogroup" aria-label="UUID v8 Generation Mode">
+      <button
+        type="button"
+        class="btn btn-secondary btn-sm mode-btn active"
+        id="btn-mode-random"
+        aria-pressed="true"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+          <path d="M16 8h.01"></path>
+          <path d="M8 8h.01"></path>
+          <path d="M8 16h.01"></path>
+          <path d="M16 16h.01"></path>
+          <path d="M12 12h.01"></path>
+        </svg>
+        <span>{t.uuidV8Generator.modeRandom}</span>
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-secondary btn-sm mode-btn"
+        id="btn-mode-custom"
+        aria-pressed="false"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        <span>{t.uuidV8Generator.modeCustom}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Custom Hex Controls (Visible when Custom mode selected) -->
+  <div id="v8-custom-container" class="custom-inputs-section" style="display: none;">
+    <div class="presets-row">
+      <span class="preset-label">Presets:</span>
+      <div class="action-buttons-group">
+        <button type="button" class="btn btn-secondary btn-sm preset-btn" id="btn-preset-timestamp">
+          <span>{t.uuidV8Generator.presetTimestamp}</span>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm preset-btn" id="btn-preset-device">
+          <span>{t.uuidV8Generator.presetDeviceId}</span>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm preset-btn" id="btn-preset-max">
+          <span>{t.uuidV8Generator.presetMaxMask}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-field-group">
+      <div class="input-header-row">
+        <label for="v8-custom-hex-input" class="control-label">
+          {t.uuidV8Generator.customHexLabel}
+        </label>
+        <span id="v8-hex-counter" class="char-counter">0 / 32 hex chars</span>
+      </div>
+      <input
+        type="text"
+        id="v8-custom-hex-input"
+        class="input-control input-mono"
+        placeholder={t.uuidV8Generator.customHexPlaceholder}
+        maxlength="32"
+        spellcheck="false"
+        autocomplete="off"
+      />
+      <p class="input-help-text">{t.uuidV8Generator.customHexHelp}</p>
+      <div id="v8-hex-error" class="inline-error-msg" style="display: none;"></div>
+    </div>
+
+    <div class="padding-field-group">
+      <span class="control-label">{t.uuidV8Generator.paddingLabel}</span>
+      <div class="radio-options-row">
+        <label class="radio-option">
+          <input type="radio" name="v8-padding" value="zero" checked />
+          <span>{t.uuidV8Generator.paddingZero}</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="v8-padding" value="random" />
+          <span>{t.uuidV8Generator.paddingRandom}</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Primary Action Buttons -->
+  <div class="generate-action-bar">
+    <button type="button" class="btn btn-primary" id="btn-v8-generate">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+      </svg>
+      <span>{t.uuidV8Generator.generateButton}</span>
+    </button>
+
+    <button type="button" class="btn btn-outline" id="btn-v8-clear">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+      <span>{t.uuidV8Generator.clearButton}</span>
+    </button>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-container" id="v8-results-area">
+    <div class="results-header">
+      <span class="control-label">{t.uuidV8Generator.resultsLabel}</span>
+      <div class="badges-row">
+        <span class="badge badge-brand">{t.uuidV8Generator.versionBadge}</span>
+        <span class="badge badge-success">{t.uuidV8Generator.variantBadge}</span>
+      </div>
+    </div>
+
+    <!-- 1. Canonical UUID (RFC 9562 8-4-4-4-12) -->
+    <div class="output-card highlight-card">
+      <div class="output-card-header">
+        <span class="output-title">{t.uuidV8Generator.canonicalUuidLabel}</span>
+        <button type="button" class="btn btn-secondary btn-sm copy-btn" data-target="out-v8-canonical" title="Copy Canonical UUID">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">{t.uuidV8Generator.copyButton}</span>
+        </button>
+      </div>
+      <div class="output-value-box">
+        <span id="out-v8-canonical" class="output-text output-mono">{initialResult.uuid}</span>
+      </div>
+    </div>
+
+    <!-- 2. Additional Formats Grid -->
+    <div class="formats-grid">
+      <!-- Uppercase -->
+      <div class="output-card">
+        <div class="output-card-header">
+          <span class="output-title">{t.uuidV8Generator.uppercaseUuidLabel}</span>
+          <button type="button" class="btn btn-secondary btn-sm copy-btn" data-target="out-v8-uppercase" title="Copy Uppercase UUID">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="copy-text">{t.uuidV8Generator.copyButton}</span>
+          </button>
+        </div>
+        <div class="output-value-box">
+          <span id="out-v8-uppercase" class="output-text output-mono">{initialResult.uuid.toUpperCase()}</span>
+        </div>
+      </div>
+
+      <!-- Raw Hex (32 chars) -->
+      <div class="output-card">
+        <div class="output-card-header">
+          <span class="output-title">{t.uuidV8Generator.rawHexLabel}</span>
+          <button type="button" class="btn btn-secondary btn-sm copy-btn" data-target="out-v8-raw" title="Copy Raw Hex">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="copy-text">{t.uuidV8Generator.copyButton}</span>
+          </button>
+        </div>
+        <div class="output-value-box">
+          <span id="out-v8-raw" class="output-text output-mono">{initialResult.rawHex}</span>
+        </div>
+      </div>
+
+      <!-- URN format -->
+      <div class="output-card full-width-card">
+        <div class="output-card-header">
+          <span class="output-title">{t.uuidV8Generator.urnLabel}</span>
+          <button type="button" class="btn btn-secondary btn-sm copy-btn" data-target="out-v8-urn" title="Copy URN">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="copy-text">{t.uuidV8Generator.copyButton}</span>
+          </button>
+        </div>
+        <div class="output-value-box">
+          <span id="out-v8-urn" class="output-text output-mono">{`urn:uuid:${initialResult.uuid}`}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. RFC 9562 Section 5.8 Field Breakdown -->
+    <div class="breakdown-wrapper">
+      <h3 class="breakdown-title">{t.uuidV8Generator.fieldBreakdownTitle}</h3>
+      <div class="breakdown-table-container">
+        <table class="breakdown-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Bits</th>
+              <th>Octets</th>
+              <th>Value (Hex)</th>
+              <th>Specification Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="breakdown-row">
+              <td class="cell-field" data-label="Field"><code>custom_a</code></td>
+              <td class="cell-bits" data-label="Bits">48 bits (bits 0–47)</td>
+              <td class="cell-octets" data-label="Octets">0–5</td>
+              <td class="cell-val" data-label="Value (Hex)"><span id="out-v8-custom-a" class="field-val">{initialResult.customA}</span></td>
+              <td class="cell-desc" data-label="Role">{t.uuidV8Generator.customADesc}</td>
+            </tr>
+            <tr class="breakdown-row ver-row">
+              <td class="cell-field" data-label="Field"><code>ver</code></td>
+              <td class="cell-bits" data-label="Bits">4 bits (bits 48–51)</td>
+              <td class="cell-octets" data-label="Octets">6 (bits 4–7)</td>
+              <td class="cell-val" data-label="Value (Hex)"><span id="out-v8-ver" class="field-val badge-ver">{initialResult.versionNibble}</span></td>
+              <td class="cell-desc" data-label="Role">{t.uuidV8Generator.verDesc}</td>
+            </tr>
+            <tr class="breakdown-row">
+              <td class="cell-field" data-label="Field"><code>custom_b</code></td>
+              <td class="cell-bits" data-label="Bits">12 bits (bits 52–63)</td>
+              <td class="cell-octets" data-label="Octets">6–7</td>
+              <td class="cell-val" data-label="Value (Hex)"><span id="out-v8-custom-b" class="field-val">{initialResult.customB}</span></td>
+              <td class="cell-desc" data-label="Role">{t.uuidV8Generator.customBDesc}</td>
+            </tr>
+            <tr class="breakdown-row var-row">
+              <td class="cell-field" data-label="Field"><code>var</code></td>
+              <td class="cell-bits" data-label="Bits">2 bits (bits 64–65)</td>
+              <td class="cell-octets" data-label="Octets">8 (bits 6–7)</td>
+              <td class="cell-val" data-label="Value (Hex)"><span id="out-v8-var" class="field-val badge-var">{initialResult.variantNibble}</span></td>
+              <td class="cell-desc" data-label="Role">{t.uuidV8Generator.varDesc}</td>
+            </tr>
+            <tr class="breakdown-row">
+              <td class="cell-field" data-label="Field"><code>custom_c</code></td>
+              <td class="cell-bits" data-label="Bits">62 bits (bits 66–127)</td>
+              <td class="cell-octets" data-label="Octets">8–15</td>
+              <td class="cell-val" data-label="Value (Hex)"><span id="out-v8-custom-c" class="field-val">{initialResult.customC}</span></td>
+              <td class="cell-desc" data-label="Role">{t.uuidV8Generator.customCDesc}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Binary view -->
+      <div class="binary-box">
+        <span class="binary-label">{t.uuidV8Generator.binaryLabel}:</span>
+        <code id="out-v8-binary" class="binary-code">{initialResult.binary}</code>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Educational & Technical Article Content
+     STRICT REQUIREMENT #6:
+     Rendered as a clean, normal readable technical article (normal typography: <h2>, <h3>, <p>, <ul>, <code>, <pre>).
+     NO cards, NO bordered boxes around paragraphs/headings.
+-->
+<article class="technical-article" id="article-uuid-v8">
+  <header class="article-header">
+    <h2 class="article-title">{t.uuidV8Generator.whatIsTitle}</h2>
+  </header>
+
+  <section class="article-body">
+    <p class="article-lead">{t.uuidV8Generator.whatIsContentP1}</p>
+    <p>{t.uuidV8Generator.whatIsContentP2}</p>
+
+    <!-- How UUID v8 Works -->
+    <h2>{t.uuidV8Generator.howItWorksTitle}</h2>
+    <p>{t.uuidV8Generator.howItWorksContentP1}</p>
+    <p>{t.uuidV8Generator.howItWorksContentP2}</p>
+
+    <h3>{t.uuidV8Generator.structureSubheading}</h3>
+    <ul class="spec-list">
+      <li><strong>custom_a:</strong> {t.uuidV8Generator.structureCustomA}</li>
+      <li><strong>ver:</strong> {t.uuidV8Generator.structureVer}</li>
+      <li><strong>custom_b:</strong> {t.uuidV8Generator.structureCustomB}</li>
+      <li><strong>var:</strong> {t.uuidV8Generator.structureVar}</li>
+      <li><strong>custom_c:</strong> {t.uuidV8Generator.structureCustomC}</li>
+    </ul>
+
+    <!-- Bit Layout Table inside the article -->
+    <div class="article-table-wrapper">
+      <table class="article-spec-table">
+        <thead>
+          <tr>
+            <th>Octet Range</th>
+            <th>Field Identifier</th>
+            <th>Bit Length</th>
+            <th>RFC 9562 Invariant / Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>00 – 05</code></td>
+            <td><code>custom_a</code></td>
+            <td>48 bits</td>
+            <td>Custom timestamp, shard prefix, or high-order enterprise identifier.</td>
+          </tr>
+          <tr>
+            <td><code>06 (high 4)</code></td>
+            <td><code>ver</code></td>
+            <td>4 bits</td>
+            <td><strong>Permanently 0b1000 (hex 8)</strong> — identifying Version 8.</td>
+          </tr>
+          <tr>
+            <td><code>06 (low 4) + 07</code></td>
+            <td><code>custom_b</code></td>
+            <td>12 bits</td>
+            <td>Sub-millisecond sequence counter, environment flags, or entity code.</td>
+          </tr>
+          <tr>
+            <td><code>08 (high 2)</code></td>
+            <td><code>var</code></td>
+            <td>2 bits</td>
+            <td><strong>Permanently 0b10</strong> — standard RFC 9562 / IETF Variant 1.</td>
+          </tr>
+          <tr>
+            <td><code>08 (low 6) + 09–15</code></td>
+            <td><code>custom_c</code></td>
+            <td>62 bits</td>
+            <td>Cryptographic CSPRNG entropy, monotonic incrementor, or worker node ID.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- What Makes UUID v8 Different -->
+    <h2>{t.uuidV8Generator.whatMakesDifferentTitle}</h2>
+    <p>{t.uuidV8Generator.whatMakesDifferentP1}</p>
+    <p>{t.uuidV8Generator.whatMakesDifferentP2}</p>
+
+    <!-- UUID v8 vs UUID v4 -->
+    <h2>{t.uuidV8Generator.v8VsV4Title}</h2>
+    <p>{t.uuidV8Generator.v8VsV4P1}</p>
+    <p>{t.uuidV8Generator.v8VsV4P2}</p>
+
+    <!-- UUID v8 vs UUID v7 -->
+    <h2>{t.uuidV8Generator.v8VsV7Title}</h2>
+    <p>{t.uuidV8Generator.v8VsV7P1}</p>
+    <p>{t.uuidV8Generator.v8VsV7P2}</p>
+
+    <!-- When to Use -->
+    <h2>{t.uuidV8Generator.whenToUseTitle}</h2>
+    <p>{t.uuidV8Generator.whenToUseP1}</p>
+    <ul class="usage-list">
+      <li><strong>Custom Epochs & High-Precision Timestamps:</strong> {t.uuidV8Generator.whenToUseItem1}</li>
+      <li><strong>Database Partitioning & Multi-Tenant Sharding:</strong> {t.uuidV8Generator.whenToUseItem2}</li>
+      <li><strong>Legacy GUID Migration & Enterprise Systems:</strong> {t.uuidV8Generator.whenToUseItem3}</li>
+      <li><strong>Cryptographic Nonces with Embedded Telemetry:</strong> {t.uuidV8Generator.whenToUseItem4}</li>
+    </ul>
+
+    <!-- When to Avoid -->
+    <h2>{t.uuidV8Generator.whenAvoidTitle ? t.uuidV8Generator.whenAvoidTitle : t.uuidV8Generator.whenToAvoidTitle}</h2>
+    <p>{t.uuidV8Generator.whenToAvoidP1}</p>
+    <ul class="avoidance-list">
+      <li><strong>Public APIs & Third-Party Integrations:</strong> {t.uuidV8Generator.whenToAvoidItem1}</li>
+      <li><strong>Standard Web Application Primary Keys:</strong> {t.uuidV8Generator.whenToAvoidItem2}</li>
+      <li><strong>Security-Critical Opaque Identifiers:</strong> {t.uuidV8Generator.whenToAvoidItem3}</li>
+      <li><strong>Interoperability Without a Shared Schema:</strong> {t.uuidV8Generator.whenToAvoidItem4}</li>
+    </ul>
+
+    <!-- Architecture Layout Examples -->
+    <h2>{t.uuidV8Generator.examplesTitle}</h2>
+    <p>{t.uuidV8Generator.examplesP1}</p>
+    <ul class="examples-list">
+      <li>{t.uuidV8Generator.examplesItem1}</li>
+      <li>{t.uuidV8Generator.examplesItem2}</li>
+      <li>{t.uuidV8Generator.examplesItem3}</li>
+    </ul>
+
+    <!-- 10 Technical FAQs -->
+    <h2>{t.uuidV8Generator.faqTitle}</h2>
+    <div class="faq-container">
+      {t.uuidV8Generator.faqs.map((faq, index) => (
+        <details class="faq-item" id={`faq-${index + 1}`}>
+          <summary class="faq-question">
+            <span>{faq.question}</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-chevron">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+</article>
+
+<style>
+  /* ==========================================================================
+     UUID v8 Generator Styles
+     1. Tool Card: Standard glass-panel tool-card
+     2. Article: Clean readable typography (NO CARDS, NO BOXES)
+     ========================================================================== */
+
+  .tool-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .tool-controls-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .control-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .control-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+  }
+
+  .mode-switch-group {
+    display: inline-flex;
+    background: var(--bg-secondary);
+    padding: 0.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    gap: 0.25rem;
+  }
+
+  .mode-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .mode-btn.active {
+    background: var(--bg-primary);
+    color: var(--brand-primary) !important;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .custom-inputs-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .presets-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .preset-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .action-buttons-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .input-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .input-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .char-counter {
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+  }
+
+  .input-help-text {
+    font-size: 0.825rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .inline-error-msg {
+    color: var(--accent-danger);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+  }
+
+  .padding-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .radio-options-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .radio-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .generate-action-bar {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  /* Results area */
+  .results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-top: 0.75rem;
+  }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .badges-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .output-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .highlight-card {
+    background: var(--bg-primary);
+    border: 1.5px solid var(--brand-primary);
+    box-shadow: 0 2px 10px var(--brand-glow);
+  }
+
+  .output-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .output-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .output-value-box {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+
+  .output-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .highlight-card .output-text {
+    font-size: 1.35rem;
+    color: var(--brand-primary);
+  }
+
+  .formats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .full-width-card {
+    grid-column: 1 / -1;
+  }
+
+  /* Field breakdown table */
+  .breakdown-wrapper {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .breakdown-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .breakdown-table-container {
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .breakdown-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+
+  .breakdown-table th,
+  .breakdown-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    overflow-wrap: anywhere;
+  }
+
+  .breakdown-table th {
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .breakdown-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .field-val {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    padding: 0.2rem 0.45rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .badge-ver {
+    color: #ffffff;
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+  }
+
+  .badge-var {
+    color: #ffffff;
+    background: var(--accent-success);
+    border-color: var(--accent-success);
+  }
+
+  .ver-row td {
+    background: var(--brand-glow);
+  }
+
+  .var-row td {
+    background: var(--accent-success-bg);
+  }
+
+  .binary-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.85rem 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .binary-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .binary-code {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    letter-spacing: 0.06em;
+  }
+
+  /* ==========================================================================
+     TECHNICAL ARTICLE CONTENT STYLES
+     Clean, classic technical publication typography.
+     NO cards, NO boxes around sections/headings/paragraphs!
+     ========================================================================== */
+
+  .technical-article {
+    width: 100%;
+    max-width: 860px;
+    margin: 4rem auto 2rem;
+    color: var(--text-primary);
+    line-height: 1.75;
+  }
+
+  .technical-article h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+    margin-top: 2.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border-subtle);
+    line-height: 1.3;
+  }
+
+  .technical-article h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.35;
+  }
+
+  .technical-article p {
+    font-size: 1.025rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+
+  .technical-article .article-lead {
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    line-height: 1.8;
+  }
+
+  .technical-article ul {
+    margin: 1rem 0 1.75rem 1.5rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .technical-article li {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .technical-article strong {
+    color: var(--text-primary);
+  }
+
+  .technical-article code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+  }
+
+  .article-table-wrapper {
+    overflow-x: auto;
+    margin: 1.75rem 0 2rem;
+  }
+
+  .article-spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.925rem;
+  }
+
+  .article-spec-table th,
+  .article-spec-table td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+    line-height: 1.6;
+  }
+
+  .article-spec-table th {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  /* FAQs in article (Clean details accordion, standard look) */
+  .faq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 1.5rem;
+  }
+
+  .faq-item {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+
+  .faq-item:hover {
+    border-color: var(--border-focus);
+  }
+
+  .faq-question {
+    padding: 1.1rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    user-select: none;
+    list-style: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    transition: transform 0.2s ease;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--brand-primary);
+  }
+
+  .faq-answer {
+    padding: 0 1.25rem 1.25rem;
+  }
+
+  .faq-answer p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ==========================================================================
+     MOBILE RESPONSIVENESS (<= 640px and <= 768px)
+     Desktop (> 640px) is completely unchanged.
+     ========================================================================== */
+
+  @media (max-width: 768px) {
+    .tool-card {
+      padding: 1.25rem;
+    }
+    .highlight-card .output-text {
+      font-size: 1.15rem;
+    }
+    .technical-article h2 {
+      font-size: 1.5rem;
+    }
+    .technical-article h3 {
+      font-size: 1.18rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .tool-card {
+      padding: 1rem 0.85rem;
+      gap: 1.25rem;
+    }
+
+    /* 1. Stack Secure Random and Custom Hexadecimal buttons vertically */
+    .tool-controls-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+
+    .control-left {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .mode-switch-group {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.35rem;
+      gap: 0.5rem;
+    }
+
+    .mode-btn {
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      line-height: 1.35;
+      white-space: normal;
+      min-height: 46px; /* comfortable touch target */
+      border-radius: var(--radius-sm);
+    }
+
+    .mode-btn svg {
+      flex-shrink: 0;
+    }
+
+    .mode-btn span {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    /* Custom input controls */
+    .custom-inputs-section {
+      padding: 1rem 0.75rem;
+      gap: 1rem;
+    }
+
+    .presets-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem;
+    }
+
+    .action-buttons-group {
+      width: 100%;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .preset-btn {
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+      white-space: normal;
+      line-height: 1.3;
+      padding: 0.55rem 0.75rem;
+    }
+
+    .radio-options-row {
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    /* Action buttons: Generate & Clear full width on mobile */
+    .generate-action-bar {
+      flex-direction: column;
+      width: 100%;
+      gap: 0.5rem;
+    }
+
+    .generate-action-bar .btn {
+      width: 100%;
+      justify-content: center;
+      padding: 0.75rem 1rem;
+      min-height: 44px;
+    }
+
+    /* Results Header and Badges */
+    .results-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .badges-row {
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .output-card {
+      padding: 0.85rem 1rem;
+    }
+
+    .output-card-header {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .highlight-card .output-text {
+      font-size: 1.05rem;
+    }
+
+    .output-text {
+      font-size: 0.95rem;
+    }
+
+    /* Formats Grid */
+    .formats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* 2. Responsive RFC 9562 Field Breakdown (Stacked Cards on Mobile) */
+    .breakdown-table-container {
+      border: none;
+      background: transparent;
+      overflow: visible;
+    }
+
+    .breakdown-table,
+    .breakdown-table tbody {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      width: 100%;
+    }
+
+    .breakdown-table thead {
+      display: none; /* Hide multi-column header on mobile */
+    }
+
+    .breakdown-table tr.breakdown-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1rem 0.9rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      width: 100%;
+      box-sizing: border-box;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .breakdown-table tr.breakdown-row.ver-row {
+      background: var(--brand-glow);
+      border-color: var(--brand-primary);
+    }
+
+    .breakdown-table tr.breakdown-row.var-row {
+      background: var(--accent-success-bg);
+      border-color: var(--accent-success-border);
+    }
+
+    .breakdown-table td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0;
+      border: none;
+      font-size: 0.875rem;
+      line-height: 1.4;
+      width: 100%;
+      box-sizing: border-box;
+      gap: 0.5rem;
+    }
+
+    .breakdown-table td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .breakdown-table td.cell-field {
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .breakdown-table td.cell-field code {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .breakdown-table td.cell-val {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+    }
+
+    .breakdown-table td.cell-val .field-val {
+      width: 100%;
+      box-sizing: border-box;
+      text-align: left;
+      padding: 0.35rem 0.55rem;
+      font-size: 0.85rem;
+      overflow-wrap: anywhere;
+      word-break: break-all;
+    }
+
+    .breakdown-table td.cell-desc {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      padding-top: 0.45rem;
+      border-top: 1px dashed var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    /* Binary box */
+    .binary-box {
+      padding: 0.75rem 0.85rem;
+    }
+
+    .binary-code {
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    /* Technical article mobile typography */
+    .technical-article {
+      margin-top: 2.5rem;
+    }
+
+    .technical-article h2 {
+      font-size: 1.35rem;
+      margin-top: 2rem;
+    }
+
+    .technical-article h3 {
+      font-size: 1.15rem;
+    }
+
+    .technical-article p,
+    .technical-article li {
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .technical-article ul {
+      margin-left: 1.15rem;
+    }
+
+    .faq-question {
+      padding: 0.95rem 1rem;
+      font-size: 0.925rem;
+    }
+
+    .faq-answer {
+      padding: 0 1rem 1rem;
+    }
+
+    .faq-answer p {
+      font-size: 0.875rem;
+    }
+  }
+
+  /* Extra small screens (<= 360px) */
+  @media (max-width: 360px) {
+    .tool-card {
+      padding: 0.75rem 0.65rem;
+    }
+
+    .mode-btn {
+      font-size: 0.825rem;
+      padding: 0.65rem 0.75rem;
+    }
+
+    .highlight-card .output-text {
+      font-size: 0.925rem;
+    }
+  }
+</style>
+
+<script>
+  import { generateUUIDv8 } from '../../utils/uuid';
+
+  function initUuidV8Tool() {
+    const btnModeRandom = document.getElementById('btn-mode-random');
+    const btnModeCustom = document.getElementById('btn-mode-custom');
+    const customContainer = document.getElementById('v8-custom-container');
+    const customHexInput = document.getElementById('v8-custom-hex-input') as HTMLInputElement | null;
+    const hexCounter = document.getElementById('v8-hex-counter');
+    const hexError = document.getElementById('v8-hex-error');
+
+    const btnPresetTimestamp = document.getElementById('btn-preset-timestamp');
+    const btnPresetDevice = document.getElementById('btn-preset-device');
+    const btnPresetMax = document.getElementById('btn-preset-max');
+
+    const btnGenerate = document.getElementById('btn-v8-generate');
+    const btnClear = document.getElementById('btn-v8-clear');
+
+    const outCanonical = document.getElementById('out-v8-canonical');
+    const outUppercase = document.getElementById('out-v8-uppercase');
+    const outRaw = document.getElementById('out-v8-raw');
+    const outUrn = document.getElementById('out-v8-urn');
+    const outCustomA = document.getElementById('out-v8-custom-a');
+    const outVer = document.getElementById('out-v8-ver');
+    const outCustomB = document.getElementById('out-v8-custom-b');
+    const outVar = document.getElementById('out-v8-var');
+    const outCustomC = document.getElementById('out-v8-custom-c');
+    const outBinary = document.getElementById('out-v8-binary');
+
+    let currentMode: 'random' | 'custom' = 'random';
+
+    function setMode(mode: 'random' | 'custom') {
+      currentMode = mode;
+      if (mode === 'random') {
+        btnModeRandom?.classList.add('active');
+        btnModeRandom?.setAttribute('aria-pressed', 'true');
+        btnModeCustom?.classList.remove('active');
+        btnModeCustom?.setAttribute('aria-pressed', 'false');
+        if (customContainer) customContainer.style.display = 'none';
+        if (hexError) hexError.style.display = 'none';
+      } else {
+        btnModeCustom?.classList.add('active');
+        btnModeCustom?.setAttribute('aria-pressed', 'true');
+        btnModeRandom?.classList.remove('active');
+        btnModeRandom?.setAttribute('aria-pressed', 'false');
+        if (customContainer) customContainer.style.display = 'flex';
+        customHexInput?.focus();
+      }
+    }
+
+    btnModeRandom?.addEventListener('click', () => {
+      setMode('random');
+      runGeneration();
+    });
+
+    btnModeCustom?.addEventListener('click', () => {
+      setMode('custom');
+      runGeneration();
+    });
+
+    // Update hex character counter
+    customHexInput?.addEventListener('input', () => {
+      const len = customHexInput.value.length;
+      if (hexCounter) {
+        hexCounter.textContent = `${len} / 32 hex chars`;
+      }
+      if (hexError) {
+        hexError.style.display = 'none';
+      }
+    });
+
+    // Presets
+    btnPresetTimestamp?.addEventListener('click', () => {
+      const tsHex = Date.now().toString(16).padStart(12, '0');
+      if (customHexInput) {
+        customHexInput.value = tsHex;
+        if (hexCounter) hexCounter.textContent = `${tsHex.length} / 32 hex chars`;
+      }
+      runGeneration();
+    });
+
+    btnPresetDevice?.addEventListener('click', () => {
+      const deviceHex = '001122334455';
+      if (customHexInput) {
+        customHexInput.value = deviceHex;
+        if (hexCounter) hexCounter.textContent = `${deviceHex.length} / 32 hex chars`;
+      }
+      runGeneration();
+    });
+
+    btnPresetMax?.addEventListener('click', () => {
+      const maxHex = 'ffffffffffffffffffffffffffffffff';
+      if (customHexInput) {
+        customHexInput.value = maxHex;
+        if (hexCounter) hexCounter.textContent = `${maxHex.length} / 32 hex chars`;
+      }
+      runGeneration();
+    });
+
+    function getPaddingStrategy(): 'zero' | 'random' {
+      const radio = document.querySelector('input[name="v8-padding"]:checked') as HTMLInputElement | null;
+      return (radio?.value as 'zero' | 'random') || 'zero';
+    }
+
+    function runGeneration() {
+      try {
+        if (hexError) hexError.style.display = 'none';
+
+        let res;
+        if (currentMode === 'random') {
+          res = generateUUIDv8({ mode: 'random' });
+        } else {
+          const rawInput = customHexInput?.value || '';
+          const padding = getPaddingStrategy();
+          res = generateUUIDv8({
+            mode: 'custom',
+            customHex: rawInput,
+            paddingStrategy: padding,
+          });
+        }
+
+        if (outCanonical) outCanonical.textContent = res.uuid;
+        if (outUppercase) outUppercase.textContent = res.uuid.toUpperCase();
+        if (outRaw) outRaw.textContent = res.rawHex;
+        if (outUrn) outUrn.textContent = `urn:uuid:${res.uuid}`;
+        if (outCustomA) outCustomA.textContent = res.customA;
+        if (outVer) outVer.textContent = res.versionNibble;
+        if (outCustomB) outCustomB.textContent = res.customB;
+        if (outVar) outVar.textContent = res.variantNibble;
+        if (outCustomC) outCustomC.textContent = res.customC;
+        if (outBinary) outBinary.textContent = res.binary;
+      } catch (err: any) {
+        if (hexError) {
+          hexError.textContent = err.message || 'Invalid input';
+          hexError.style.display = 'block';
+        }
+      }
+    }
+
+    btnGenerate?.addEventListener('click', runGeneration);
+
+    btnClear?.addEventListener('click', () => {
+      if (customHexInput) {
+        customHexInput.value = '';
+        if (hexCounter) hexCounter.textContent = '0 / 32 hex chars';
+      }
+      if (hexError) hexError.style.display = 'none';
+      setMode('random');
+      runGeneration();
+    });
+
+    // Copy functionality
+    const copyButtons = document.querySelectorAll('#uuid-v8-generator-tool .copy-btn');
+    copyButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        if (!targetId) return;
+        const targetElem = document.getElementById(targetId);
+        if (!targetElem) return;
+
+        const textToCopy = targetElem.textContent || '';
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const labelSpan = btn.querySelector('.copy-text');
+          const originalText = labelSpan?.textContent || '';
+          if (labelSpan) labelSpan.textContent = 'Copied!';
+          btn.classList.add('copied');
+
+          setTimeout(() => {
+            if (labelSpan) labelSpan.textContent = originalText;
+            btn.classList.remove('copied');
+          }, 1800);
+        });
+      });
+    });
+  }
+
+  // Initialize immediately or on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initUuidV8Tool);
+  } else {
+    initUuidV8Tool();
+  }
+</script>

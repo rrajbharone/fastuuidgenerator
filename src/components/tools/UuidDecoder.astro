@@ -12,7 +12,7 @@ const { t, lang } = Astro.props;
 
 <div class="glass-panel tool-card" id="uuid-decoder-tool">
   <div style="margin-bottom: 1.5rem;">
-    <label for="decoder-input" style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">
+    <label for="decoder-input" style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem;">
       {t.decoder.title}
     </label>
     <div class="tool-input-row">
@@ -43,7 +43,7 @@ const { t, lang } = Astro.props;
 
     <!-- Timestamp Box (Shown if time-based) -->
     <div id="timestamp-box" class="glass-panel-subtle" style="padding: 1.25rem; margin-bottom: 1.25rem; border-left: 4px solid var(--brand-primary); display: none;">
-      <div style="font-size: 0.85rem; font-weight: 600; color: var(--brand-primary); margin-bottom: 0.5rem;">
+      <div style="font-size: 0.85rem; font-weight: 500; color: var(--brand-primary); margin-bottom: 0.5rem;">
         ⏱ {t.decoder.timestampUtc}
       </div>
       <div class="timestamp-grid">

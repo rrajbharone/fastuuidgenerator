@@ -269,143 +269,41 @@ const initialHex = initialUuid.replace(/-/g, '');
   </div>
 </div>
 
-<!-- Educational SEO Content Section: Exactly 9 Cards -->
-<div class="educational-section-wrapper">
-  <div class="educational-header">
-    <span class="badge badge-brand">{t.educational.technicalReferenceBadge}</span>
-    <h2 class="educational-title">{t.base64Generator.whatIsTitle}</h2>
-    <p class="educational-subtitle">{t.base64Generator.subtitle}</p>
-  </div>
+<!-- Educational Technical Article Content (Clean normal layout, NOT cards) -->
+<article class="technical-article" id="article-base64-uuid">
+  <header class="article-header">
+    <h2 class="article-title">{t.base64Generator.whatIsTitle}</h2>
+  </header>
 
-  <!-- 9 High-Value Base64 UUID Information Cards in Single Grid -->
-  <div class="educational-grid">
-    <!-- Card 1: What is Base64 UUID -->
-    <div class="glass-panel edu-card" id="card-what-is-base64-uuid">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.base64Generator.whatIsTitle}</h3>
-      <p class="edu-card-text">{t.base64Generator.whatIsContent}</p>
-    </div>
+  <section class="article-body">
+    <p class="article-lead">{t.base64Generator.whatIsContent}</p>
 
-    <!-- Card 2: How It Works -->
-    <div class="glass-panel edu-card" id="card-how-it-works">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.base64Generator.howItWorksTitle}</h3>
-      <p class="edu-card-text">{t.base64Generator.howItWorksContent}</p>
-    </div>
+    <h2>{t.base64Generator.howItWorksTitle}</h2>
+    <p>{t.base64Generator.howItWorksContent}</p>
 
-    <!-- Card 3: Standard vs URL-Safe -->
-    <div class="glass-panel edu-card" id="card-standard-vs-urlsafe">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="2" y1="12" x2="22" y2="12"></line>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.base64Generator.standardVsUrlSafeTitle}</h3>
-      <p class="edu-card-text">{t.base64Generator.standardVsUrlSafeContent}</p>
-    </div>
+    <h2>{t.base64Generator.standardVsUrlSafeTitle}</h2>
+    <p>{t.base64Generator.standardVsUrlSafeContent}</p>
 
-    <!-- Card 4: Key Use Cases -->
-    <div class="glass-panel edu-card" id="card-key-use-cases">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.base64Generator.useCasesTitle}</h3>
-      <p class="edu-card-text">{t.base64Generator.useCasesContent}</p>
-    </div>
+    <h2>{t.base64Generator.convertUuidTitle}</h2>
+    <p>{t.base64Generator.convertUuidContent}</p>
 
-    <!-- Card 5: How to Convert UUID to Base64 -->
-    <div class="glass-panel edu-card" id="card-convert-uuid-to-base64">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 16 16 12 12 8"></polyline>
-          <line x1="8" y1="12" x2="16" y2="12"></line>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.base64Generator.convertUuidTitle}</h3>
-      <p class="edu-card-text">{t.base64Generator.convertUuidContent}</p>
-    </div>
+    <h2>{t.base64Generator.convertBase64Title}</h2>
+    <p>{t.base64Generator.convertBase64Content}</p>
 
-    <!-- Card 6: How to Convert Base64 Back to UUID -->
-    <div class="glass-panel edu-card" id="card-convert-base64-to-uuid">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="1 4 1 10 7 10"></polyline>
-          <polyline points="23 20 23 14 17 14"></polyline>
-          <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.base64Generator.convertBase64Title}</h3>
-      <p class="edu-card-text">{t.base64Generator.convertBase64Content}</p>
-    </div>
+    <h2>{t.base64Generator.useCasesTitle}</h2>
+    <p>{t.base64Generator.useCasesContent}</p>
 
-    <!-- Card 7: Why Use Base64 UUIDs -->
-    <div class="glass-panel edu-card" id="card-why-use-base64">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.base64Generator.whyUseTitle}</h3>
-      <p class="edu-card-text">{t.base64Generator.whyUseContent}</p>
-    </div>
+    <h2>{t.base64Generator.whyUseTitle}</h2>
+    <p>{t.base64Generator.whyUseContent}</p>
 
-    <!-- Card 8: Where Are Base64 UUIDs Used -->
-    <div class="glass-panel edu-card" id="card-where-base64-used">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-          <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-          <line x1="6" y1="6" x2="6.01" y2="6"></line>
-          <line x1="6" y1="18" x2="6.01" y2="18"></line>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.base64Generator.whereUsedTitle}</h3>
-      <p class="edu-card-text">{t.base64Generator.whereUsedContent}</p>
-    </div>
+    <h2>{t.base64Generator.whereUsedTitle}</h2>
+    <p>{t.base64Generator.whereUsedContent}</p>
 
-    <!-- Card 9: Base64 UUID vs Standard UUID -->
-    <div class="glass-panel edu-card" id="card-base64-vs-standard">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" y1="21" x2="4" y2="14"></line>
-          <line x1="4" y1="10" x2="4" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="12"></line>
-          <line x1="12" y1="8" x2="12" y2="3"></line>
-          <line x1="20" y1="21" x2="20" y2="16"></line>
-          <line x1="20" y1="12" x2="20" y2="3"></line>
-          <line x1="1" y1="14" x2="7" y2="14"></line>
-          <line x1="9" y1="8" x2="15" y2="8"></line>
-          <line x1="17" y1="16" x2="23" y2="16"></line>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.base64Generator.comparisonTitle}</h3>
-      <p class="edu-card-text">{t.base64Generator.comparisonContent}</p>
-    </div>
-  </div>
+    <h2>{t.base64Generator.comparisonTitle}</h2>
+    <p>{t.base64Generator.comparisonContent}</p>
 
-  <!-- FAQ Accordion Section -->
-  <section class="faq-section-wrapper" aria-labelledby="base64-faq-heading">
-    <div class="faq-header">
-      <h2 id="base64-faq-heading" class="faq-heading">{t.base64Generator.faqTitle}</h2>
-      <p class="faq-subheading">Instant answers to technical questions regarding Base64 UUID encoding, decoding, and URL safety.</p>
-    </div>
-
-    <div class="faq-accordion-list">
+    <h2>{t.base64Generator.faqTitle}</h2>
+    <div class="faq-container">
       {t.base64Generator.faqs.map((faq, index) => (
         <details class="faq-item" id={`base64-faq-${index + 1}`}>
           <summary class="faq-question">
@@ -421,7 +319,7 @@ const initialHex = initialUuid.replace(/-/g, '');
       ))}
     </div>
   </section>
-</div>
+</article>
 
 <style>
   .mode-tabs-nav {
@@ -439,7 +337,7 @@ const initialHex = initialUuid.replace(/-/g, '');
     gap: 0.5rem;
     padding: 0.6rem 1.15rem;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 500;
     font-family: var(--font-sans);
     border-radius: var(--radius-md);
     background: var(--bg-secondary);
@@ -484,7 +382,7 @@ const initialHex = initialUuid.replace(/-/g, '');
   .control-label {
     display: block;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 0.4rem;
     color: var(--text-primary);
     font-family: var(--font-sans);
@@ -569,7 +467,7 @@ const initialHex = initialUuid.replace(/-/g, '');
 
   .output-title {
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-primary);
     font-family: var(--font-sans);
   }
@@ -589,168 +487,6 @@ const initialHex = initialUuid.replace(/-/g, '');
     user-select: all;
   }
 
-  /* Educational Section: 9 Cards Grid Styling */
-  .educational-section-wrapper {
-    margin-top: 3.5rem;
-  }
-
-  .educational-header {
-    text-align: center;
-    max-width: 720px;
-    margin: 0 auto 2.5rem;
-  }
-
-  .educational-title {
-    font-size: 1.85rem;
-    font-weight: 700;
-    margin: 0.6rem 0 0.5rem;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
-  }
-
-  .educational-subtitle {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  .educational-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.25rem;
-    margin-bottom: 3.5rem;
-  }
-
-  .edu-card {
-    padding: 1.65rem;
-    display: flex;
-    flex-direction: column;
-    border-radius: var(--radius-lg);
-    background: var(--bg-glass);
-    border: 1px solid var(--border-glass);
-    transition: transform 0.15s ease, border-color 0.15s ease;
-  }
-
-  .edu-card:hover {
-    border-color: var(--border-focus);
-    transform: translateY(-2px);
-  }
-
-  .edu-icon-wrapper {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-md);
-    background: var(--brand-glow);
-    color: var(--brand-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-    border: 1px solid var(--border-glass);
-    flex-shrink: 0;
-  }
-
-  .edu-card-title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-    color: var(--text-primary);
-    line-height: 1.4;
-  }
-
-  .edu-card-text {
-    font-size: 0.925rem;
-    color: var(--text-secondary);
-    line-height: 1.65;
-    margin: 0;
-  }
-
-  /* FAQ Accordion Styling */
-  .faq-section-wrapper {
-    margin: 3.5rem 0;
-    padding-top: 1rem;
-    font-family: var(--font-sans);
-  }
-
-  .faq-header {
-    text-align: center;
-    max-width: 680px;
-    margin: 0 auto 2rem;
-  }
-
-  .faq-heading {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: var(--text-primary);
-    font-family: var(--font-sans);
-  }
-
-  .faq-subheading {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    font-family: var(--font-sans);
-  }
-
-  .faq-accordion-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-width: 820px;
-    margin: 0 auto;
-  }
-
-  .faq-item {
-    background: var(--bg-glass);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    transition: border-color 0.15s ease;
-    font-family: var(--font-sans);
-  }
-
-  .faq-item[open] {
-    border-color: var(--border-focus);
-    background: var(--bg-elevated);
-  }
-
-  .faq-question {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.1rem 1.25rem;
-    font-weight: 600;
-    font-size: 1rem;
-    color: var(--text-primary);
-    cursor: pointer;
-    user-select: none;
-    list-style: none;
-    font-family: var(--font-sans);
-  }
-
-  .faq-question::-webkit-details-marker {
-    display: none;
-  }
-
-  .faq-chevron {
-    transition: transform 0.2s ease;
-    flex-shrink: 0;
-    color: var(--text-muted);
-  }
-
-  .faq-item[open] .faq-chevron {
-    transform: rotate(180deg);
-    color: var(--brand-primary);
-  }
-
-  .faq-answer {
-    padding: 0 1.25rem 1.25rem;
-    font-size: 0.925rem;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    font-family: var(--font-sans);
-  }
-
   @media (max-width: 640px) {
     .tool-controls-bar {
       flex-direction: column;
@@ -765,9 +501,6 @@ const initialHex = initialUuid.replace(/-/g, '');
     }
     .action-buttons-group .btn {
       flex: 1;
-    }
-    .edu-card {
-      padding: 1.25rem;
     }
   }
 </style>

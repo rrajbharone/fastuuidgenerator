@@ -12,6 +12,8 @@ export type ToolKey =
   | 'uuid-to-integer-converter'
   | 'uuid-to-hex-converter'
   | 'uuid-version-detector'
+  | 'uuid-v5-generator'
+  | 'uuid-v8-generator'
   | 'tools';
 
 export const TOOL_KEYS: ToolKey[] = [
@@ -26,6 +28,8 @@ export const TOOL_KEYS: ToolKey[] = [
   'uuid-to-integer-converter',
   'uuid-to-hex-converter',
   'uuid-version-detector',
+  'uuid-v5-generator',
+  'uuid-v8-generator',
   'tools',
 ];
 
@@ -45,6 +49,8 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'uuid-to-integer-converter': 'uuid-to-integer-converter',
     'uuid-to-hex-converter': 'uuid-to-hex-converter',
     'uuid-version-detector': 'uuid-version-detector',
+    'uuid-v5-generator': 'uuid-v5-generator',
+    'uuid-v8-generator': 'uuid-v8-generator',
     'tools': 'tools',
   },
   es: {
@@ -59,6 +65,8 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'uuid-to-integer-converter': 'convertidor-uuid-a-entero',
     'uuid-to-hex-converter': 'convertidor-uuid-a-hex',
     'uuid-version-detector': 'detector-de-version-uuid',
+    'uuid-v5-generator': 'generador-uuid-v5',
+    'uuid-v8-generator': 'generador-uuid-v8',
     'tools': 'herramientas',
   },
   pt: {
@@ -73,6 +81,8 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'uuid-to-integer-converter': 'conversor-uuid-para-inteiro',
     'uuid-to-hex-converter': 'conversor-uuid-para-hex',
     'uuid-version-detector': 'detector-de-versao-uuid',
+    'uuid-v5-generator': 'gerador-uuid-v5',
+    'uuid-v8-generator': 'gerador-uuid-v8',
     'tools': 'ferramentas',
   },
   fr: {
@@ -87,6 +97,8 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'uuid-to-integer-converter': 'convertisseur-uuid-en-entier',
     'uuid-to-hex-converter': 'convertisseur-uuid-en-hex',
     'uuid-version-detector': 'detecteur-de-version-uuid',
+    'uuid-v5-generator': 'generateur-uuid-v5',
+    'uuid-v8-generator': 'generateur-uuid-v8',
     'tools': 'outils',
   },
   de: {
@@ -101,6 +113,8 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'uuid-to-integer-converter': 'uuid-in-integer-konverter',
     'uuid-to-hex-converter': 'uuid-in-hex-konverter',
     'uuid-version-detector': 'uuid-versions-detektor',
+    'uuid-v5-generator': 'uuid-v5-generator',
+    'uuid-v8-generator': 'uuid-v8-generator',
     'tools': 'tools',
   },
   id: {
@@ -115,6 +129,8 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'uuid-to-integer-converter': 'konverter-uuid-ke-integer',
     'uuid-to-hex-converter': 'konverter-uuid-ke-hex',
     'uuid-version-detector': 'detektor-versi-uuid',
+    'uuid-v5-generator': 'pembuat-uuid-v5',
+    'uuid-v8-generator': 'pembuat-uuid-v8',
     'tools': 'alat',
   },
   tr: {
@@ -129,6 +145,8 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'uuid-to-integer-converter': 'uuid-integer-donusturucu',
     'uuid-to-hex-converter': 'uuid-hex-donusturucu',
     'uuid-version-detector': 'uuid-versiyon-tespit-edici',
+    'uuid-v5-generator': 'uuid-v5-olusturucu',
+    'uuid-v8-generator': 'uuid-v8-olusturucu',
     'tools': 'araclar',
   },
   it: {
@@ -143,6 +161,8 @@ export const TOOL_SLUGS: Record<LanguageCode, Record<ToolKey, string>> = {
     'uuid-to-integer-converter': 'convertitore-uuid-in-intero',
     'uuid-to-hex-converter': 'convertitore-uuid-in-hex',
     'uuid-version-detector': 'rilevatore-versione-uuid',
+    'uuid-v5-generator': 'generatore-uuid-v5',
+    'uuid-v8-generator': 'generatore-uuid-v8',
     'tools': 'strumenti',
   },
 };

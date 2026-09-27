@@ -1,4 +1,4 @@
-import { generateUUIDv4, generateUUIDv7, formatUUID, generateBulkUUIDs, validateUUID, decodeUUID, uuidToBase64, base64ToUuid, uuidToInteger, integerToUuid, formatIntegerWithCommas, MAX_UUID_BIGINT, uuidToHex, hexToUuid, detectUuidVersion, SAMPLE_UUID_V1, SAMPLE_UUID_V3, SAMPLE_UUID_V4, SAMPLE_UUID_V5, SAMPLE_UUID_V6, SAMPLE_UUID_V7, SAMPLE_UUID_V8 } from '../src/utils/uuid.ts';
+import { generateUUIDv4, generateUUIDv7, formatUUID, generateBulkUUIDs, validateUUID, decodeUUID, uuidToBase64, base64ToUuid, uuidToInteger, integerToUuid, formatIntegerWithCommas, MAX_UUID_BIGINT, uuidToHex, hexToUuid, detectUuidVersion, SAMPLE_UUID_V1, SAMPLE_UUID_V3, SAMPLE_UUID_V4, SAMPLE_UUID_V5, SAMPLE_UUID_V6, SAMPLE_UUID_V7, SAMPLE_UUID_V8, generateUUIDv5, NAMESPACE_DNS, NAMESPACE_URL, NAMESPACE_OID, NAMESPACE_X500, generateUUIDv8 } from '../src/utils/uuid.ts';
 
 console.log('--- Running Cryptographic & Algorithmic Unit Tests ---');
 
@@ -273,6 +273,105 @@ assert(!detectUuidVersion('').isValid, 'Empty input returns isValid: false');
 assert(!detectUuidVersion('abc').isValid, 'Short string returns isValid: false');
 assert(!detectUuidVersion('550e8400-e29b-41d4-a716-44665544000g').isValid, 'Non-hex char returns isValid: false');
 assert(!detectUuidVersion('550e8400-e29b-41d4-a716-4466554400000').isValid, '33-char string returns isValid: false');
+
+// Test 26: UUID v5 RFC 4122 Appendix B Test Vectors
+const v5DnsPython = generateUUIDv5(NAMESPACE_DNS, 'python.org');
+assert(v5DnsPython.isValid, 'UUID v5 DNS python.org is valid');
+assert(v5DnsPython.uuid === '886313e1-3b8a-5372-9b90-0c9aee199e5d', `UUID v5 DNS python.org matches RFC 4122 test vector (got ${v5DnsPython.uuid})`);
+assert(v5DnsPython.namespaceName === 'DNS', 'UUID v5 identifies DNS namespace');
+
+const v5DnsWidgets = generateUUIDv5(NAMESPACE_DNS, 'www.widgets.com');
+assert(v5DnsWidgets.isValid, 'UUID v5 DNS www.widgets.com is valid');
+assert(v5DnsWidgets.uuid === '21f7f8de-8051-5b89-8680-0195ef798b6a', `UUID v5 DNS www.widgets.com matches RFC 4122 test vector (got ${v5DnsWidgets.uuid})`);
+
+// Test 27: UUID v5 Standard Namespaces (URL, OID, X.500)
+const v5Url = generateUUIDv5(NAMESPACE_URL, 'https://example.com/api/v1');
+assert(v5Url.isValid && v5Url.namespaceName === 'URL', 'UUID v5 URL namespace is recognized');
+assert(/^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(v5Url.uuid), 'UUID v5 URL output conforms to v5 structure');
+
+const v5Oid = generateUUIDv5(NAMESPACE_OID, '1.3.6.1.4.1.343');
+assert(v5Oid.isValid && v5Oid.namespaceName === 'OID', 'UUID v5 OID namespace is recognized');
+
+const v5X500 = generateUUIDv5(NAMESPACE_X500, 'CN=John Doe, OU=Engineering');
+assert(v5X500.isValid && v5X500.namespaceName === 'X.500', 'UUID v5 X.500 namespace is recognized');
+
+// Test 28: UUID v5 Determinism & Unicode Handling
+const v5Unicode1 = generateUUIDv5(NAMESPACE_DNS, '🚀 FastUUID 128-bit 日本語 Café!');
+const v5Unicode2 = generateUUIDv5(NAMESPACE_DNS, '🚀 FastUUID 128-bit 日本語 Café!');
+assert(v5Unicode1.uuid === v5Unicode2.uuid, 'UUID v5 is 100% deterministic with multibyte UTF-8 Unicode');
+assert(v5Unicode1.uuid.charAt(14) === '5', 'UUID v5 octet 6 high nibble is 5');
+assert(['8', '9', 'a', 'b'].includes(v5Unicode1.uuid.charAt(19)), 'UUID v5 octet 8 high bits are RFC variant (8, 9, a, b)');
+
+// Test 29: UUID v5 Custom Namespace, Braced, URN, & Uppercase
+const customNs = '{550e8400-e29b-41d4-a716-446655440000}';
+const v5Custom = generateUUIDv5(customNs, 'user_record_99214');
+assert(v5Custom.isValid && v5Custom.namespaceName === 'Custom', 'UUID v5 custom namespace with braces is parsed');
+
+const customNsUrn = 'urn:uuid:550e8400-e29b-41d4-a716-446655440000';
+const v5CustomUrn = generateUUIDv5(customNsUrn, 'user_record_99214');
+assert(v5Custom.uuid === v5CustomUrn.uuid, 'UUID v5 produces identical result regardless of braces or URN prefix in namespace');
+
+// Test 30: UUID v5 Error Handling & Empty Inputs
+const v5EmptyName = generateUUIDv5(NAMESPACE_DNS, '');
+assert(v5EmptyName.isValid, 'UUID v5 allows empty name string per RFC specification');
+
+const v5InvalidNs = generateUUIDv5('invalid-not-a-uuid', 'my_name');
+assert(!v5InvalidNs.isValid && v5InvalidNs.error !== undefined, 'UUID v5 rejects invalid namespace with helpful error message');
+
+const v5ShortNs = generateUUIDv5('6ba7b810-9dad-11d1-80b4', 'test');
+assert(!v5ShortNs.isValid, 'UUID v5 rejects truncated namespace');
+
+// Test 31: UUID v8 Random Mode (122-bit CSPRNG) Structure & Field Validation
+const v8Rand1 = generateUUIDv8();
+assert(v8Rand1.isValid, 'UUID v8 random generation produces valid result');
+assert(/^[0-9a-f]{8}-[0-9a-f]{4}-8[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(v8Rand1.uuid), 'UUID v8 matches canonical RFC 9562 v8 regex');
+assert(v8Rand1.versionNibble === '8', 'UUID v8 version nibble is strictly 8');
+assert(['8', '9', 'a', 'b'].includes(v8Rand1.variantNibble), 'UUID v8 variant nibble conforms to RFC 9562 (8, 9, a, b)');
+assert(v8Rand1.binary.length === 128, 'UUID v8 binary representation is exactly 128 bits');
+assert(v8Rand1.customA.length === 13, 'UUID v8 customA is 8 chars + hyphen + 4 chars (13 chars)');
+assert(v8Rand1.customB.length === 3, 'UUID v8 customB is 3 chars');
+assert(v8Rand1.customC.length === 16, 'UUID v8 customC is 3 chars + hyphen + 12 chars');
+
+// Test 32: UUID v8 Uniqueness and Randomness
+const v8Rand2 = generateUUIDv8();
+assert(v8Rand1.uuid !== v8Rand2.uuid, 'Subsequent UUID v8 random generations produce distinct values');
+
+// Test 33: UUID v8 Custom Hex Mode - Strict Preservation of Version 8 & Variant Bits
+// Even if custom input attempts to set version to '4' or 'f' and variant to '0', RFC 9562 bits MUST be enforced
+const customInputAllF = 'ffffffffffffffffffffffffffffffff';
+const v8Forced = generateUUIDv8({ customHex: customInputAllF });
+assert(v8Forced.isValid, 'UUID v8 with 32 hex chars succeeds');
+assert(v8Forced.uuid.charAt(14) === '8', 'UUID v8 forces version nibble 8 even if input had f');
+assert(['8', '9', 'a', 'b'].includes(v8Forced.uuid.charAt(19)), 'UUID v8 forces RFC variant even if input had f');
+assert(v8Forced.customA === 'ffffffff-ffff', 'UUID v8 preserves custom_a bits');
+assert(v8Forced.customB === 'fff', 'UUID v8 preserves custom_b bits');
+
+// Test 34: UUID v8 Custom Hex Padding (Zero and Random)
+const shortPayload = '018f6c388c50'; // 12 hex chars
+const v8ZeroPad = generateUUIDv8({ customHex: shortPayload, padding: 'zero' });
+assert(v8ZeroPad.isValid, 'Short custom hex with zero padding succeeds');
+assert(v8ZeroPad.rawHex.startsWith('018f6c388c50'), 'Custom payload placed at start of UUID v8');
+assert(v8ZeroPad.rawHex.slice(12, 13) === '8', 'Version nibble 8 is enforced');
+assert(v8ZeroPad.rawHex.endsWith('000000000000'), 'Trailing custom bits are zero-padded');
+
+const v8RandPad = generateUUIDv8({ customHex: shortPayload, padding: 'random' });
+assert(v8RandPad.isValid, 'Short custom hex with random padding succeeds');
+assert(v8RandPad.rawHex.startsWith('018f6c388c50'), 'Custom payload placed at start with random padding');
+assert(v8RandPad.rawHex.slice(12, 13) === '8', 'Version nibble 8 is enforced with random padding');
+
+// Test 35: UUID v8 Custom Input Validation & Error Handling
+const v8Empty = generateUUIDv8({ customHex: '' });
+assert(!v8Empty.isValid && v8Empty.error !== undefined, 'UUID v8 rejects empty custom hex string');
+
+const v8InvalidChars = generateUUIDv8({ customHex: '018f6c38-8c50-8dc8-9366-4f4c2c51eb6g' });
+assert(!v8InvalidChars.isValid && v8InvalidChars.error !== undefined, 'UUID v8 rejects invalid hex character "g"');
+
+const v8TooLong = generateUUIDv8({ customHex: '0123456789abcdef0123456789abcdef01' }); // 34 chars
+assert(!v8TooLong.isValid && v8TooLong.error !== undefined, 'UUID v8 rejects custom hex longer than 32 characters');
+
+// Verification with detectUuidVersion
+const detGenV8 = detectUuidVersion(v8Rand1.uuid);
+assert(detGenV8.isValid && detGenV8.version === 8 && detGenV8.variantCode === 'rfc4122', 'detectUuidVersion recognizes newly generated UUID v8');
 
 console.log(`\nUnit Test Results: ${passed} passed, ${failed} failed.`);
 

@@ -1,0 +1,27 @@
+---
+import { getTranslations } from '../i18n/utils';
+import ToolLayout from '../layouts/ToolLayout.astro';
+import UuidV8Generator from '../components/tools/UuidV8Generator.astro';
+
+const lang = 'en';
+const t = getTranslations(lang);
+const canonicalPath = '/uuid-v8-generator/';
+---
+
+<ToolLayout
+  title={t.seo.uuidV8Title}
+  description={t.seo.uuidV8Description}
+  heroTitle={t.uuidV8Generator.title}
+  heroSubtitle={t.uuidV8Generator.subtitle}
+  lang={lang}
+  canonicalPath={canonicalPath}
+  faqs={t.uuidV8Generator.faqs}
+  showPopularTools={true}
+  showDefaultEducational={false}
+  breadcrumbs={[
+    { name: t.site.name, url: 'https://fastuuidgenerator.com/' },
+    { name: t.nav.uuidV8, url: `https://fastuuidgenerator.com${canonicalPath}` },
+  ]}
+>
+  <UuidV8Generator t={t} lang={lang} />
+</ToolLayout>

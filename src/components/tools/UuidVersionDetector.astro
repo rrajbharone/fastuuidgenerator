@@ -245,124 +245,38 @@ const initialRes = detectUuidVersion(initialUuid);
   </div>
 </div>
 
-<!-- Educational SEO Content Section: Exactly 8 Comprehensive Cards with 100% Multilingual Parity -->
-<div class="educational-section-wrapper">
-  <div class="educational-header">
-    <span class="badge badge-brand">{t.educational.technicalReferenceBadge}</span>
-    <h2 class="educational-title">{t.uuidVersionDetector.whatIsTitle}</h2>
-    <p class="educational-subtitle">{t.uuidVersionDetector.subtitle}</p>
-  </div>
+<!-- Educational Technical Article Content (Clean normal layout, NOT cards) -->
+<article class="technical-article" id="article-uuid-version-detector">
+  <header class="article-header">
+    <h2 class="article-title">{t.uuidVersionDetector.whatIsTitle}</h2>
+  </header>
 
-  <div class="educational-grid">
-    <!-- Card 1: What Is a UUID Version Detector? -->
-    <div class="glass-panel edu-card" id="card-what-is-detector">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.uuidVersionDetector.whatIsTitle}</h3>
-      <p class="edu-card-text">{t.uuidVersionDetector.whatIsContent}</p>
-    </div>
+  <section class="article-body">
+    <p class="article-lead">{t.uuidVersionDetector.whatIsContent}</p>
 
-    <!-- Card 2: How UUID Version Detection Works -->
-    <div class="glass-panel edu-card" id="card-how-it-works">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" y1="9" x2="20" y2="9"></line>
-          <line x1="4" y1="15" x2="20" y2="15"></line>
-          <line x1="10" y1="3" x2="8" y2="21"></line>
-          <line x1="16" y1="3" x2="14" y2="21"></line>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.uuidVersionDetector.howItWorksTitle}</h3>
-      <p class="edu-card-text">{t.uuidVersionDetector.howItWorksContent}</p>
-    </div>
+    <h2>{t.uuidVersionDetector.howItWorksTitle}</h2>
+    <p>{t.uuidVersionDetector.howItWorksContent}</p>
 
-    <!-- Card 3: Where the Version and Variant Are Stored -->
-    <div class="glass-panel edu-card" id="card-where-stored">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.uuidVersionDetector.whereStoredTitle}</h3>
-      <p class="edu-card-text">{t.uuidVersionDetector.whereStoredContent}</p>
-    </div>
+    <h2>{t.uuidVersionDetector.whereStoredTitle}</h2>
+    <p>{t.uuidVersionDetector.whereStoredContent}</p>
 
-    <!-- Card 4: Detailed Differences Between UUID Versions -->
-    <div class="glass-panel edu-card" id="card-version-differences">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.uuidVersionDetector.versionDifferencesTitle}</h3>
-      <p class="edu-card-text">{t.uuidVersionDetector.versionDifferencesContent}</p>
-    </div>
+    <h2>{t.uuidVersionDetector.versionDifferencesTitle}</h2>
+    <p>{t.uuidVersionDetector.versionDifferencesContent}</p>
 
-    <!-- Card 5: UUID Version vs UUID Variant -->
-    <div class="glass-panel edu-card" id="card-version-vs-variant">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.uuidVersionDetector.versionVsVariantTitle}</h3>
-      <p class="edu-card-text">{t.uuidVersionDetector.versionVsVariantContent}</p>
-    </div>
+    <h2>{t.uuidVersionDetector.versionVsVariantTitle}</h2>
+    <p>{t.uuidVersionDetector.versionVsVariantContent}</p>
 
-    <!-- Card 6: Why Detecting the Correct Version Matters -->
-    <div class="glass-panel edu-card" id="card-why-it-matters">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.uuidVersionDetector.whyItMattersTitle}</h3>
-      <p class="edu-card-text">{t.uuidVersionDetector.whyItMattersContent}</p>
-    </div>
+    <h2>{t.uuidVersionDetector.whyItMattersTitle}</h2>
+    <p>{t.uuidVersionDetector.whyItMattersContent}</p>
 
-    <!-- Card 7: How to Manually Identify the Version -->
-    <div class="glass-panel edu-card" id="card-how-to-identify">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 16 16 12 12 8"></polyline>
-          <line x1="8" y1="12" x2="16" y2="12"></line>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.uuidVersionDetector.howToIdentifyTitle}</h3>
-      <p class="edu-card-text">{t.uuidVersionDetector.howToIdentifyContent}</p>
-    </div>
+    <h2>{t.uuidVersionDetector.howToIdentifyTitle}</h2>
+    <p>{t.uuidVersionDetector.howToIdentifyContent}</p>
 
-    <!-- Card 8: Practical Use Cases for Version Detection -->
-    <div class="glass-panel edu-card" id="card-practical-use-cases">
-      <div class="edu-icon-wrapper">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="2" y1="12" x2="22" y2="12"></line>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-        </svg>
-      </div>
-      <h3 class="edu-card-title">{t.uuidVersionDetector.practicalUseCasesTitle}</h3>
-      <p class="edu-card-text">{t.uuidVersionDetector.practicalUseCasesContent}</p>
-    </div>
-  </div>
+    <h2>{t.uuidVersionDetector.practicalUseCasesTitle}</h2>
+    <p>{t.uuidVersionDetector.practicalUseCasesContent}</p>
 
-  <!-- FAQ Accordion Section: Exactly 8 Technical FAQs with 100% Multilingual Parity -->
-  <section class="faq-section-wrapper" aria-labelledby="uuid-detector-faq-heading">
-    <div class="faq-header">
-      <h2 id="uuid-detector-faq-heading" class="faq-heading">{t.uuidVersionDetector.faqTitle}</h2>
-      <p class="faq-subheading">Comprehensive answers to common technical questions about RFC 4122 and RFC 9562 UUID version detection, variant bits, and parsing algorithms.</p>
-    </div>
-
-    <div class="faq-accordion-list">
+    <h2>{t.uuidVersionDetector.faqTitle}</h2>
+    <div class="faq-container">
       {t.uuidVersionDetector.faqs.map((faq, index) => (
         <details class="faq-item" id={`uuid-detector-faq-${index + 1}`}>
           <summary class="faq-question">
@@ -378,7 +292,7 @@ const initialRes = detectUuidVersion(initialUuid);
       ))}
     </div>
   </section>
-</div>
+</article>
 
 <style>
   .tool-controls-bar {
@@ -467,7 +381,7 @@ const initialRes = detectUuidVersion(initialUuid);
 
   .banner-title {
     font-size: 1.2rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text-primary);
     display: block;
     overflow-wrap: anywhere;
@@ -524,7 +438,7 @@ const initialRes = detectUuidVersion(initialUuid);
 
   .det-detail-label {
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -547,7 +461,7 @@ const initialRes = detectUuidVersion(initialUuid);
 
   .det-nibble-hex {
     font-size: 1.15rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--brand-primary);
   }
 
@@ -568,7 +482,7 @@ const initialRes = detectUuidVersion(initialUuid);
 
   .breakdown-title {
     font-size: 1.05rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 0.25rem;
   }
@@ -607,7 +521,7 @@ const initialRes = detectUuidVersion(initialUuid);
 
   .chunk-name {
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-muted);
     margin-bottom: 0.25rem;
     white-space: nowrap;
@@ -615,14 +529,14 @@ const initialRes = detectUuidVersion(initialUuid);
 
   .chunk-val {
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-primary);
     white-space: nowrap;
   }
 
   .chunk-hyphen {
     font-size: 1.25rem;
-    font-weight: 700;
+    font-weight: 500;
     color: var(--text-muted);
     user-select: none;
   }
@@ -642,7 +556,7 @@ const initialRes = detectUuidVersion(initialUuid);
     color: #ffffff;
     padding: 0.1rem 0.3rem;
     border-radius: 3px;
-    font-weight: 700;
+    font-weight: 600;
   }
 
   .highlight-variant .highlight-nibble {
@@ -651,7 +565,7 @@ const initialRes = detectUuidVersion(initialUuid);
 
   .chunk-callout {
     font-size: 0.65rem;
-    font-weight: 700;
+    font-weight: 600;
     margin-top: 0.3rem;
     color: var(--brand-primary);
     white-space: nowrap;
@@ -661,194 +575,13 @@ const initialRes = detectUuidVersion(initialUuid);
     color: #10b981;
   }
 
-  /* Educational Section */
-  .educational-section-wrapper {
-    margin-top: 3.5rem;
-    padding-top: 2.5rem;
-    border-top: 1px solid var(--border-subtle);
-  }
-
-  .educational-header {
-    text-align: center;
-    max-width: 760px;
-    margin: 0 auto 2.5rem;
-  }
-
-  .educational-title {
-    font-size: 1.85rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
-    margin: 0.75rem 0 0.5rem;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  .educational-subtitle {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  .educational-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 3.5rem;
-  }
-
-  .edu-card {
-    padding: 1.5rem;
-    border-radius: var(--radius-lg);
-    background: var(--bg-glass);
-    border: 1px solid var(--border-glass);
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    min-width: 0;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  .edu-icon-wrapper {
-    width: 42px;
-    height: 42px;
-    border-radius: var(--radius-md);
-    background: rgba(37, 99, 235, 0.08);
-    color: var(--brand-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .edu-card-title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.01em;
-    margin: 0;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  .edu-card-text {
-    font-size: 0.925rem;
-    color: var(--text-secondary);
-    line-height: 1.65;
-    margin: 0;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  /* FAQ Accordion */
-  .faq-section-wrapper {
-    margin-top: 1.5rem;
-  }
-
-  .faq-header {
-    text-align: center;
-    max-width: 760px;
-    margin: 0 auto 2rem;
-  }
-
-  .faq-heading {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  .faq-subheading {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  .faq-accordion-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-width: 840px;
-    margin: 0 auto;
-  }
-
-  .faq-item {
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    background: var(--bg-glass);
-    overflow: hidden;
-    transition: border-color 0.2s ease;
-  }
-
-  .faq-item[open] {
-    border-color: var(--brand-primary);
-  }
-
-  .faq-question {
-    padding: 1.1rem 1.25rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    list-style: none;
-    user-select: none;
-  }
-
-  .faq-question::-webkit-details-marker {
-    display: none;
-  }
-
-  .faq-chevron {
-    color: var(--text-muted);
-    transition: transform 0.2s ease;
-    flex-shrink: 0;
-  }
-
-  .faq-item[open] .faq-chevron {
-    transform: rotate(180deg);
-    color: var(--brand-primary);
-  }
-
-  .faq-answer {
-    padding: 0 1.25rem 1.25rem;
-    color: var(--text-secondary);
-    font-size: 0.925rem;
-    line-height: 1.65;
-    border-top: 1px solid var(--border-subtle);
-    padding-top: 0.85rem;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  .faq-answer p {
-    margin: 0;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  /* Responsive Adjustments */
+  /* Responsive Adjustments for Tool UI */
   @media (max-width: 860px) {
     .detector-grid {
       grid-template-columns: 1fr;
     }
     .det-span-2 {
       grid-column: span 1;
-    }
-    .educational-grid {
-      grid-template-columns: 1fr;
     }
   }
 
@@ -866,26 +599,6 @@ const initialRes = detectUuidVersion(initialUuid);
       flex: 1 1 auto;
       text-align: center;
       justify-content: center;
-    }
-    .educational-title {
-      font-size: 1.5rem;
-    }
-    .educational-grid {
-      gap: 1rem;
-    }
-    .edu-card {
-      padding: 1.15rem;
-    }
-    .faq-heading {
-      font-size: 1.45rem;
-    }
-    .faq-question {
-      padding: 0.95rem 1rem;
-      font-size: 0.925rem;
-    }
-    .faq-answer {
-      padding: 0.75rem 1rem 1rem;
-      font-size: 0.875rem;
     }
   }
 </style>

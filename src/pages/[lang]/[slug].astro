@@ -13,6 +13,8 @@ import UuidDecoder from '../../components/tools/UuidDecoder.astro';
 import UuidToIntegerConverter from '../../components/tools/UuidToIntegerConverter.astro';
 import UuidToHexConverter from '../../components/tools/UuidToHexConverter.astro';
 import UuidVersionDetector from '../../components/tools/UuidVersionDetector.astro';
+import UuidV5Generator from '../../components/tools/UuidV5Generator.astro';
+import UuidV8Generator from '../../components/tools/UuidV8Generator.astro';
 
 export function getStaticPaths() {
   const paths = [];
@@ -140,6 +142,22 @@ const toolConfigs = {
     breadcrumbName: t.nav.uuidVersionDetector,
     faqs: t.uuidVersionDetector.faqs,
   },
+  'uuid-v5-generator': {
+    title: t.seo.uuidV5Title,
+    description: t.seo.uuidV5Description,
+    heroTitle: t.uuidV5Generator.title,
+    heroSubtitle: t.uuidV5Generator.subtitle,
+    breadcrumbName: t.nav.uuidV5,
+    faqs: t.uuidV5Generator.faqs,
+  },
+  'uuid-v8-generator': {
+    title: t.seo.uuidV8Title,
+    description: t.seo.uuidV8Description,
+    heroTitle: t.uuidV8Generator.title,
+    heroSubtitle: t.uuidV8Generator.subtitle,
+    breadcrumbName: t.nav.uuidV8,
+    faqs: t.uuidV8Generator.faqs,
+  },
   'tools': {
     title: t.seo.toolsTitle,
     description: t.seo.toolsDescription,
@@ -203,7 +221,7 @@ const config = toolConfigs[toolKey];
     canonicalPath={canonicalPath}
     faqs={config.faqs}
     showPopularTools={toolKey !== 'base64-uuid-generator'}
-    showDefaultEducational={toolKey !== 'base64-uuid-generator' && toolKey !== 'uuid-to-integer-converter' && toolKey !== 'uuid-to-hex-converter' && toolKey !== 'uuid-version-detector'}
+    showDefaultEducational={toolKey !== 'base64-uuid-generator' && toolKey !== 'uuid-to-integer-converter' && toolKey !== 'uuid-to-hex-converter' && toolKey !== 'uuid-version-detector' && toolKey !== 'uuid-v5-generator' && toolKey !== 'uuid-v8-generator'}
     breadcrumbs={[
       { name: t.site.name, url: `https://fastuuidgenerator.com/${lang}/` },
       { name: config.breadcrumbName, url: `https://fastuuidgenerator.com${canonicalPath}` },
@@ -241,6 +259,12 @@ const config = toolConfigs[toolKey];
     )}
     {toolKey === 'uuid-version-detector' && (
       <UuidVersionDetector t={t} lang={lang} />
+    )}
+    {toolKey === 'uuid-v5-generator' && (
+      <UuidV5Generator t={t} lang={lang} />
+    )}
+    {toolKey === 'uuid-v8-generator' && (
+      <UuidV8Generator t={t} lang={lang} />
     )}
   </ToolLayout>
 )}

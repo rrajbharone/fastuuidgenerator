@@ -1027,4 +1027,362 @@ export function detectUuidVersion(input: string): UuidVersionDetectionResult {
   };
 }
 
+/**
+ * Standard RFC 4122 / RFC 9562 Predefined Namespaces
+ */
+export const NAMESPACE_DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
+export const NAMESPACE_URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
+export const NAMESPACE_OID = '6ba7b812-9dad-11d1-80b4-00c04fd430c8';
+export const NAMESPACE_X500 = '6ba7b814-9dad-11d1-80b4-00c04fd430c8';
+
+export interface UuidV5Result {
+  isValid: boolean;
+  uuid: string;
+  uppercaseUuid: string;
+  namespace: string;
+  namespaceName: 'DNS' | 'URL' | 'OID' | 'X.500' | 'Custom' | 'Invalid';
+  name: string;
+  sha1DigestHex: string;
+  error?: string;
+}
+
+/**
+ * Parses any valid UUID representation into a 16-byte Uint8Array (big-endian/network byte order).
+ */
+export function uuidToBytes(uuidStr: string): Uint8Array | null {
+  const clean = uuidStr
+    .replace(/^urn:uuid:/i, '')
+    .replace(/[{}"'\s-]/g, '')
+    .toLowerCase();
+
+  if (clean.length !== 32 || !/^[0-9a-f]{32}$/.test(clean)) {
+    return null;
+  }
+
+  const bytes = new Uint8Array(16);
+  for (let i = 0; i < 16; i++) {
+    bytes[i] = parseInt(clean.slice(i * 2, i * 2 + 2), 16);
+  }
+  return bytes;
+}
+
+/**
+ * Synchronous FIPS 180-1 / RFC 3174 compliant SHA-1 cryptographic digest implementation.
+ * Zero-dependency, runs universally in both Node.js and all browser environments.
+ */
+export function sha1(bytes: Uint8Array): Uint8Array {
+  const K = [0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6];
+  let H0 = 0x67452301;
+  let H1 = 0xefcdab89;
+  let H2 = 0x98badcfe;
+  let H3 = 0x10325476;
+  let H4 = 0xc3d2e1f0;
+
+  const byteLen = bytes.length;
+  const bitLen = byteLen * 8;
+  const withOne = byteLen + 1;
+  const padLen = withOne % 64 <= 56 ? 56 - (withOne % 64) : 64 + 56 - (withOne % 64);
+  const totalLen = withOne + padLen + 8;
+
+  const padded = new Uint8Array(totalLen);
+  padded.set(bytes);
+  padded[byteLen] = 0x80;
+
+  // 64-bit big-endian length
+  const view = new DataView(padded.buffer);
+  const highBits = Math.floor(bitLen / 0x100000000);
+  const lowBits = bitLen >>> 0;
+  view.setUint32(totalLen - 8, highBits, false);
+  view.setUint32(totalLen - 4, lowBits, false);
+
+  const W = new Uint32Array(80);
+
+  for (let i = 0; i < totalLen; i += 64) {
+    for (let t = 0; t < 16; t++) {
+      W[t] = view.getUint32(i + t * 4, false);
+    }
+    for (let t = 16; t < 80; t++) {
+      const val = W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16];
+      W[t] = (val << 1) | (val >>> 31);
+    }
+
+    let a = H0;
+    let b = H1;
+    let c = H2;
+    let d = H3;
+    let e = H4;
+
+    for (let t = 0; t < 80; t++) {
+      let f: number;
+      let k: number;
+      if (t < 20) {
+        f = (b & c) | (~b & d);
+        k = K[0];
+      } else if (t < 40) {
+        f = b ^ c ^ d;
+        k = K[1];
+      } else if (t < 60) {
+        f = (b & c) | (b & d) | (c & d);
+        k = K[2];
+      } else {
+        f = b ^ c ^ d;
+        k = K[3];
+      }
+
+      const temp = (((a << 5) | (a >>> 27)) + f + e + k + W[t]) >>> 0;
+      e = d;
+      d = c;
+      c = (b << 30) | (b >>> 2);
+      b = a;
+      a = temp;
+    }
+
+    H0 = (H0 + a) >>> 0;
+    H1 = (H1 + b) >>> 0;
+    H2 = (H2 + c) >>> 0;
+    H3 = (H3 + d) >>> 0;
+    H4 = (H4 + e) >>> 0;
+  }
+
+  const out = new Uint8Array(20);
+  const outView = new DataView(out.buffer);
+  outView.setUint32(0, H0, false);
+  outView.setUint32(4, H1, false);
+  outView.setUint32(8, H2, false);
+  outView.setUint32(12, H3, false);
+  outView.setUint32(16, H4, false);
+  return out;
+}
+
+/**
+ * Generates an RFC 4122 / RFC 9562 compliant UUID v5 from a namespace UUID and a string name.
+ */
+export function generateUUIDv5(namespace: string, name: string): UuidV5Result {
+  const trimmedNs = namespace.trim();
+  const nsBytes = uuidToBytes(trimmedNs);
+
+  if (!nsBytes) {
+    return {
+      isValid: false,
+      uuid: '',
+      uppercaseUuid: '',
+      namespace: trimmedNs,
+      namespaceName: 'Invalid',
+      name,
+      sha1DigestHex: '',
+      error: 'Invalid namespace UUID — Namespace must be a valid 128-bit hexadecimal UUID (e.g. 6ba7b810-9dad-11d1-80b4-00c04fd430c8).',
+    };
+  }
+
+  const cleanNs = trimmedNs.replace(/^urn:uuid:/i, '').replace(/[{}"'\s-]/g, '').toLowerCase();
+  const canonicalNs = `${cleanNs.slice(0, 8)}-${cleanNs.slice(8, 12)}-${cleanNs.slice(12, 16)}-${cleanNs.slice(16, 20)}-${cleanNs.slice(20, 32)}`;
+
+  let namespaceName: 'DNS' | 'URL' | 'OID' | 'X.500' | 'Custom' = 'Custom';
+  if (canonicalNs === NAMESPACE_DNS) namespaceName = 'DNS';
+  else if (canonicalNs === NAMESPACE_URL) namespaceName = 'URL';
+  else if (canonicalNs === NAMESPACE_OID) namespaceName = 'OID';
+  else if (canonicalNs === NAMESPACE_X500) namespaceName = 'X.500';
+
+  const nameBytes = new TextEncoder().encode(name);
+  const combined = new Uint8Array(16 + nameBytes.length);
+  combined.set(nsBytes, 0);
+  combined.set(nameBytes, 16);
+
+  const digest = sha1(combined);
+  const sha1Hex = Array.from(digest).map((b) => b.toString(16).padStart(2, '0')).join('');
+
+  // Truncate to first 16 bytes for UUID
+  const uuidBytes = new Uint8Array(digest.subarray(0, 16));
+
+  // Set version 5: bits 4-7 of time_hi_and_version to 0101 (0x50)
+  uuidBytes[6] = (uuidBytes[6] & 0x0f) | 0x50;
+
+  // Set variant RFC 4122/9562: bits 6-7 of clock_seq_hi_and_reserved to 10 (0x80)
+  uuidBytes[8] = (uuidBytes[8] & 0x3f) | 0x80;
+
+  const uuid = bytesToHex(uuidBytes);
+  const uppercaseUuid = uuid.toUpperCase();
+
+  return {
+    isValid: true,
+    uuid,
+    uppercaseUuid,
+    namespace: canonicalNs,
+    namespaceName,
+    name,
+    sha1DigestHex: sha1Hex,
+  };
+}
+
+export interface UuidV8Options {
+  customHex?: string;
+  padding?: 'zero' | 'random';
+}
+
+export interface UuidV8Result {
+  isValid: boolean;
+  uuid: string;
+  uppercaseUuid: string;
+  rawHex: string;
+  urn: string;
+  customA: string;
+  versionNibble: string;
+  customB: string;
+  variantNibble: string;
+  customC: string;
+  binary: string;
+  mode: 'random' | 'custom';
+  error?: string;
+}
+
+/**
+ * Generates an RFC 9562 compliant UUID v8 (custom / vendor-specific layout).
+ * Strictly enforces version 8 (0b1000) and RFC 9562 variant (0b10) bits.
+ * Supports cryptographically secure random generation (122-bit CSPRNG entropy)
+ * and custom hexadecimal payload embedding with zero or random padding.
+ */
+export function generateUUIDv8(options: UuidV8Options = {}): UuidV8Result {
+  const { customHex, padding = 'zero' } = options;
+  const isCustomMode = customHex !== undefined;
+
+  let bytes = new Uint8Array(16);
+
+  if (isCustomMode) {
+    const rawInput = customHex.trim();
+
+    if (!rawInput) {
+      return {
+        isValid: false,
+        uuid: '',
+        uppercaseUuid: '',
+        rawHex: '',
+        urn: '',
+        customA: '',
+        versionNibble: '8',
+        customB: '',
+        variantNibble: '',
+        customC: '',
+        binary: '',
+        mode: 'custom',
+        error: 'Please enter a hexadecimal string (up to 32 hexadecimal characters).',
+      };
+    }
+
+    // Check for invalid characters (excluding hyphens, spaces, brackets, and 0x prefix)
+    let cleaned = rawInput.replace(/^urn:uuid:/i, '').replace(/^0x/i, '').replace(/[{}"'\s-]/g, '');
+
+    if (!/^[0-9a-fA-F]*$/.test(cleaned)) {
+      return {
+        isValid: false,
+        uuid: '',
+        uppercaseUuid: '',
+        rawHex: '',
+        urn: '',
+        customA: '',
+        versionNibble: '8',
+        customB: '',
+        variantNibble: '',
+        customC: '',
+        binary: '',
+        mode: 'custom',
+        error: 'Invalid characters in custom hexadecimal input. Only hexadecimal characters [0-9, a-f, A-F] are allowed.',
+      };
+    }
+
+    if (cleaned.length > 32) {
+      return {
+        isValid: false,
+        uuid: '',
+        uppercaseUuid: '',
+        rawHex: '',
+        urn: '',
+        customA: '',
+        versionNibble: '8',
+        customB: '',
+        variantNibble: '',
+        customC: '',
+        binary: '',
+        mode: 'custom',
+        error: `Custom hexadecimal input is too long: got ${cleaned.length} characters (maximum 32 hexadecimal characters / 128 bits).`,
+      };
+    }
+
+    // Pad to 32 characters if needed
+    if (cleaned.length < 32) {
+      if (padding === 'random') {
+        const remainingChars = 32 - cleaned.length;
+        const randomBytesNeeded = Math.ceil(remainingChars / 2);
+        const randBuffer = new Uint8Array(randomBytesNeeded);
+        if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+          crypto.getRandomValues(randBuffer);
+        } else {
+          // Node fallback
+          const { randomBytes } = require('crypto');
+          randBuffer.set(randomBytes(randomBytesNeeded));
+        }
+        let randHex = '';
+        for (let i = 0; i < randBuffer.length; i++) {
+          randHex += randBuffer[i].toString(16).padStart(2, '0');
+        }
+        cleaned = (cleaned + randHex.slice(0, remainingChars)).toLowerCase();
+      } else {
+        cleaned = cleaned.padEnd(32, '0').toLowerCase();
+      }
+    } else {
+      cleaned = cleaned.toLowerCase();
+    }
+
+    for (let i = 0; i < 16; i++) {
+      bytes[i] = parseInt(cleaned.slice(i * 2, i * 2 + 2), 16);
+    }
+  } else {
+    // Cryptographically secure random generation (122 bits of CSPRNG entropy)
+    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+      crypto.getRandomValues(bytes);
+    } else {
+      const { randomBytes } = require('crypto');
+      bytes = new Uint8Array(randomBytes(16));
+    }
+  }
+
+  // Strictly enforce RFC 9562 Version 8 (0b1000 = 0x8) in octet 6 bits 4-7
+  bytes[6] = (bytes[6] & 0x0f) | 0x80;
+
+  // Strictly enforce RFC 9562 Variant (0b10 = 0x80) in octet 8 bits 6-7
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+  const uuid = bytesToHex(bytes);
+  const uppercaseUuid = uuid.toUpperCase();
+  const rawHex = uuid.replace(/-/g, '');
+  const urn = `urn:uuid:${uuid}`;
+
+  // Decompose RFC 9562 Section 5.8 fields
+  const customA = `${rawHex.slice(0, 8)}-${rawHex.slice(8, 12)}`; // 12 hex chars (48 bits)
+  const versionNibble = rawHex.slice(12, 13); // '8'
+  const customB = rawHex.slice(13, 16); // 3 hex chars (12 bits)
+  const variantNibble = rawHex.slice(16, 17); // '8', '9', 'a', or 'b'
+  const customC = `${rawHex.slice(17, 20)}-${rawHex.slice(20, 32)}`; // 15 hex chars (60 bits + 2 bits in variant nibble)
+
+  // 128-bit binary string representation formatted by RFC 9562 field boundaries
+  let binary = '';
+  for (let i = 0; i < 16; i++) {
+    binary += bytes[i].toString(2).padStart(8, '0');
+  }
+
+  return {
+    isValid: true,
+    uuid,
+    uppercaseUuid,
+    rawHex,
+    urn,
+    customA,
+    versionNibble,
+    customB,
+    variantNibble,
+    customC,
+    binary,
+    mode: isCustomMode ? 'custom' : 'random',
+  };
+}
+
 
